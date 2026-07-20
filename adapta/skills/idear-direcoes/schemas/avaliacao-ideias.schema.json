@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adapta-idea-review/v1",
+  "type": "object",
+  "required": ["reviewer", "status", "evidence", "assessments"],
+  "properties": {
+    "reviewer": {"type": "string", "minLength": 1},
+    "status": {"enum": ["completo", "parcial", "falhou"]},
+    "evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "assessments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate", "verdict", "reason", "confidence"],
+        "properties": {
+          "candidate": {"type": "string", "minLength": 1},
+          "verdict": {"enum": ["sobreviver", "fundir", "rejeitar", "confirmar"]},
+          "reason": {"type": "string", "minLength": 1},
+          "confidence": {"type": "integer", "enum": [0, 25, 50, 75, 100]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "failureReason": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "description": "Hooks advisory de contexto e memória do consultor; nunca aprovam gates ou publicam.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {"type":"command","command":"node \"${CLAUDE_PLUGIN_ROOT}/scripts/context-brief.mjs\" --workspace \"${CLAUDE_PROJECT_DIR:-.}\" --format hook","timeout":10}
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {"type":"command","command":"node \"${CLAUDE_PLUGIN_ROOT}/scripts/context-checkpoint.mjs\" --workspace \"${CLAUDE_PROJECT_DIR:-.}\" --reason pre-compact","timeout":10}
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {"type":"command","command":"node \"${CLAUDE_PLUGIN_ROOT}/scripts/context-checkpoint.mjs\" --workspace \"${CLAUDE_PROJECT_DIR:-.}\" --reason stop --if-needed","timeout":10,"async":true}
+        ]
+      }
+    ]
+  }
+}

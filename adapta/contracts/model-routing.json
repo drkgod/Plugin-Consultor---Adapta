@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "adapta-model-routing/v1",
+  "principle": "Selecionar capacidade por forma de trabalho, nunca por nome fixo de modelo.",
+  "tiers": {
+    "economico": {
+      "purpose": "extracao, classificacao, consistencia mecanica e formatacao",
+      "fallback": "herdar o modelo da sessao e limitar contexto/saida"
+    },
+    "equilibrado": {
+      "purpose": "geracao estruturada, revisao de fluxo, specs e sintese intermediaria",
+      "fallback": "herdar o modelo da sessao com schema e budget explicitos"
+    },
+    "profundo": {
+      "purpose": "arquitetura, adversarial, seguranca, causa raiz e decisoes de alto impacto",
+      "fallback": "herdar o modelo principal; nunca degradar silenciosamente"
+    }
+  },
+  "orchestrator": "profundo",
+  "jobs": {
+    "idear-direcoes": "profundo",
+    "definir-requisitos": "equilibrado",
+    "revisar-proposta": "profundo",
+    "analise-critica": "profundo",
+    "escopo-final": "profundo",
+    "gerar-specs": "equilibrado",
+    "gerar-tasks": "equilibrado",
+    "gerar-pasta-cliente": "profundo",
+    "concluir-task": "equilibrado",
+    "mapear-evolucoes": "equilibrado",
+    "liberar-fase": "profundo",
+    "aprendizado-continuo": "equilibrado",
+    "tldv": "economico",
+    "debugar": "profundo",
+    "gestao-contexto": "economico"
+  },
+  "runtimePolicy": {
+    "overrideAvailable": "mapear o tier para o modelo equivalente configurado no harness",
+    "overrideUnavailable": "herdar o modelo atual e controlar custo por paths, budget e retorno compacto",
+    "forbidden": ["adivinhar identificador de modelo", "trocar o orquestrador durante uma sintese", "usar tier economico em seguranca ou decisao irreversivel"]
+  }
+}

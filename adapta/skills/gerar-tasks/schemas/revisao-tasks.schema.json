@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adapta-task-decomposition-review/v1",
+  "type": "object",
+  "required": ["reviewer", "status", "findings", "evidence"],
+  "properties": {
+    "reviewer": {"type": "string", "minLength": 1},
+    "status": {"enum": ["completo", "parcial", "falhou"]},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "task", "invariant", "problem", "proof"],
+        "properties": {
+          "severity": {"enum": ["grave", "moderado", "baixo"]},
+          "task": {"type": "string", "minLength": 1},
+          "invariant": {"type": "string", "minLength": 1},
+          "problem": {"type": "string", "minLength": 1},
+          "proof": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "failureReason": {"type": "string"}
+  },
+  "additionalProperties": false
+}

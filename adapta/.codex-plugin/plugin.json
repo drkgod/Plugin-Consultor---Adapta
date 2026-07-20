@@ -1,0 +1,45 @@
+{
+  "name": "adapta",
+  "version": "0.7.0",
+  "description": "Jobs do consultor Adapta Native em arquitetura CE: skills canônicas, subagents contratados, hooks advisory, memória, roteamento por capacidade e handoff seguro.",
+  "author": {
+    "name": "Adapta Labs"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "adapta-native",
+    "consultoria",
+    "metodologia",
+    "planejamento",
+    "review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Adapta",
+    "shortDescription": "Ferramentas do consultor Adapta Native.",
+    "longDescription": "Opera a camada do consultor por jobs orquestradores e capacidades especializadas: ideacao, requisitos, revisao, SPECs e tasks possuem contratos proprios, com personas locais, subagents, contexto compacto, memoria e handoff seguro.",
+    "developerName": "Adapta Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use idear-direcoes quando houver alternativas reais; use definir-requisitos para fechar comportamento e limites; use revisar-proposta para o painel multipersona.",
+      "Rode analise-critica como orquestrador proporcional e gere o template da analise do consultor.",
+      "Consolide escopo-final em cinco fases com revisao documental multipersona.",
+      "Use gerar-specs para detalhar a fase em foco em modo onda, com SPECs, TDD acoplado, checklist e critérios de aceite; exija valor palpável na fase 1.",
+      "Depois use gerar-tasks para decompor as SPECs em unidades independentes e sincronizar fase, SPECs e matriz.",
+      "Use gerar-pasta-cliente com dry-run.",
+      "Use concluir-task para verificar uma entrega.",
+      "Use mapear-evolucoes e depois liberar-fase.",
+      "Use aprendizado-continuo para consultar, capturar, revisar, promover ou evoluir precedentes com grounding e privacidade.",
+      "Use tldv para organizar uma reuniao.",
+      "Use debugar para investigar uma falha.",
+      "Use gestao-contexto antes de fanout ou compactacao."
+    ],
+    "brandColor": "#0F766E",
+    "screenshots": []
+  }
+}

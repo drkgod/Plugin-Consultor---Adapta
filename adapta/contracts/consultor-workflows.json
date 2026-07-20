@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "adapta-consultor-workflows/v1",
+  "persona": "personas/consultor-adapta.md",
+  "jobs": {
+    "idear-direcoes": {
+      "skill": "skills/idear-direcoes/SKILL.md",
+      "stages": ["grounding", "decomposicao em eixos", "geracao divergente", "critica e rejeicao", "ranking e verificacao da base"],
+      "inputs": ["04_plano/proposta/proposta.md", "01_contexto/", "03_discovery/", "precedentes quando disponiveis", "check-input aprovado"],
+      "outputs": ["04_plano/proposta/direcoes.md"],
+      "gates": ["check-input aprovado", "cada direcao sobrevivente tem evidencia, hipotese, custo e risco"],
+      "externalActions": []
+    },
+    "definir-requisitos": {
+      "skill": "skills/definir-requisitos/SKILL.md",
+      "stages": ["classificacao de complexidade", "separacao de fatos e inferencias", "definicao de comportamento e limites", "analise de fluxo e pontos cegos", "sintese de requisitos"],
+      "inputs": ["04_plano/proposta/proposta.md", "04_plano/proposta/direcoes.md quando existir", "01_contexto/", "03_discovery/", "check-input aprovado"],
+      "outputs": ["04_plano/proposta/requisitos.md"],
+      "gates": ["ator, resultado, limites, sucesso, premissas e decisoes pendentes estao explicitos"],
+      "externalActions": []
+    },
+    "revisar-proposta": {
+      "skill": "skills/revisar-proposta/SKILL.md",
+      "stages": ["montagem do pacote de contexto", "painel critico dinamico", "deduplicacao", "separacao de falhas, decisoes e alternativas", "registro da revisao"],
+      "inputs": ["04_plano/proposta/proposta.md", "direcoes.md e requisitos.md quando aplicaveis", "01_contexto/", "03_discovery/", "check-input aprovado"],
+      "outputs": ["04_plano/proposta/revisao-da-proposta.md"],
+      "gates": ["nucleo do painel concluido ou cobertura parcial registrada", "achados citam evidencia e cenario de falha"],
+      "externalActions": []
+    },
+    "analise-critica": {
+      "skill": "skills/analise-critica/SKILL.md",
+      "stages": ["classificar rota leve, padrao ou profunda", "orquestrar skills especializadas necessarias", "conselho-de-decisao condicional", "sintese", "template humano"],
+      "inputs": ["04_plano/proposta/proposta.md", "direcoes.md quando aplicavel", "requisitos.md quando aplicavel", "revisao-da-proposta.md", "01_contexto/", "03_discovery/"],
+      "outputs": ["04_plano/proposta/analise-critica.md", "04_plano/proposta/analise-do-consultor.md"],
+      "gates": ["check-input aprovado", "rota executada registrada", "analise humana permanece pendente"],
+      "externalActions": []
+    },
+    "escopo-final": {
+      "skill": "skills/escopo-final/SKILL.md",
+      "stages": ["consolidacao das fontes", "composicao de exatamente cinco fases", "ce-doc-review adaptado", "correcoes seguras", "rastreabilidade final"],
+      "inputs": ["proposta.md", "analise-critica.md", "analise-do-consultor.md preenchida"],
+      "outputs": ["04_plano/PRD.md", "04_plano/escopo.md", "04_plano/fases/fase-1..5.md", "04_plano/matriz-de-rastreabilidade.md"],
+      "gates": ["decisoes humanas respondidas", "check-escopo permanece pendente"],
+      "externalActions": []
+    },
+    "gerar-specs": {
+      "skill": "skills/gerar-specs/SKILL.md",
+      "stages": ["ler escopo e rastreabilidade", "compor SPECs da fase em foco em modo onda", "acoplar TDD executavel a cada SPEC", "garantir entrega palpavel na fase 1", "revisar contrato, checklist, aceite e TDD", "atualizar matriz ate a camada SPEC"],
+      "inputs": ["PRD", "escopo", "fase em foco", "evolucoes aceitas e ledger de dividas quando houver", "check-escopo aprovado", "check-cliente aprovado"],
+      "outputs": ["05_execucao/specs/fase-N/spec-*.md", "05_execucao/matriz-specs-fases.md ate a camada SPEC"],
+      "gates": ["Consultor e CSM/cliente aprovaram o escopo", "fase 1 tem entrega palpavel", "a fase em foco possui checklist, criterios de aceite e TDD por SPEC"],
+      "externalActions": []
+    },
+    "gerar-tasks": {
+      "skill": "skills/gerar-tasks/SKILL.md",
+      "stages": ["ler SPECs revisadas", "decompor por papel, sessao e recorte de prova", "validar independencia", "sincronizar tres projecoes", "revisar rastreabilidade"],
+      "inputs": ["SPECs revisadas da fase em foco", "04_plano/fases/fase-N.md", "05_execucao/matriz-specs-fases.md", "check-escopo aprovado", "check-cliente aprovado"],
+      "outputs": ["tabela Tasks atualizada em 04_plano/fases/fase-N.md", "secoes Tasks vinculadas atualizadas nas SPECs", "05_execucao/matriz-specs-fases.md completa ate task e prova"],
+      "gates": ["toda task aponta para SPEC", "tasks da mesma leva sao independentes", "criterio binario e recorte da prova estao explicitos"],
+      "externalActions": []
+    },
+    "gerar-pasta-cliente": {
+      "skill": "skills/gerar-pasta-cliente/SKILL.md",
+      "inputs": ["template cliente", "fase atual", "specs validas com TDD", "tasks revisadas", "ajustes da reuniao incorporados"],
+      "outputs": ["pasta cliente", "handoff-manifest.json"],
+      "gates": ["check-escopo e check-cliente aprovados", "recibo-handoff-cliente vincula reuniao de corte aos hashes atuais de PRD, escopo, fase e SPECs", "dry-run aprovado", "confirmacao antes de criar repo ou publicar"],
+      "externalActions": ["criar repo", "push"]
+    },
+    "liberar-fase": {
+      "skill": "skills/liberar-fase/SKILL.md",
+      "inputs": ["fase atual fechada", "evidencias", "evolucoes decididas"],
+      "outputs": ["05_execucao/checks/check-fase-N.md", "delta-fase-N+1.md", "phase-closure-manifest.json", "SPECs e tasks da proxima fase", "handoff da proxima fase"],
+      "gates": ["todas as tasks concluidas", "criterios demonstrados", "check humano vinculado ao active-sha256 atual", "consultor aprova delta"],
+      "externalActions": ["push no repo do cliente"]
+    },
+    "concluir-task": {
+      "skill": "skills/concluir-task/SKILL.md",
+      "inputs": ["task", "spec", "artefato", "evidencias"],
+      "outputs": ["recibo de verificacao", "STATUS.md", "changelog.md"],
+      "gates": ["todos os criterios e provas passam"],
+      "externalActions": []
+    },
+    "mapear-evolucoes": {
+      "skill": "skills/mapear-evolucoes/SKILL.md",
+      "inputs": ["reunioes", "tasks", "debugs", "decisoes", "resultado da fase"],
+      "outputs": ["05_execucao/evolucoes/evolucoes-fase-N.md"],
+      "gates": ["humano classifica aceitar, rejeitar ou adiar"],
+      "externalActions": []
+    },
+    "aprendizado-continuo": {
+      "skill": "skills/aprendizado-continuo/SKILL.md",
+      "stages": ["consultar precedentes", "capturar candidato atomico", "reforcar ou contradizer", "grounding e privacidade", "promover com gate", "evoluir clusters para o metodo"],
+      "inputs": ["sinal estruturado", "evidencia", "causa raiz"],
+      "outputs": ["candidato local atomico", "aprendizado anonimizado quando aprovado", "proposta de evolucao do metodo quando houver cluster"],
+      "gates": ["privacidade validada", "aprovacao antes de promover"],
+      "externalActions": ["escrever ou publicar no acervo compartilhado"]
+    },
+    "tldv": {
+      "skill": "skills/tldv/SKILL.md",
+      "inputs": ["link oficial ou email com intervalo", "TLDV_API_KEY no ambiente ou export local"],
+      "outputs": ["02_reunioes/NN...", "_tldv_manifest.json", "00_INDICE_REUNIOES.md"],
+      "gates": ["selecao humana das reunioes", "transcript valido"],
+      "externalActions": ["leitura da API tl;dv"]
+    },
+    "debugar": {
+      "skill": "skills/debugar/SKILL.md",
+      "stages": ["reproducao", "cadeia causal", "hipoteses e predicoes", "gate de causa raiz", "correcao autorizada contra a SPEC e seu TDD", "verificacao"],
+      "inputs": ["sintoma reproduzivel", "artefato ou workflow afetado"],
+      "outputs": ["05_execucao/debug/debug-*.md", "candidato de aprendizado quando reutilizavel"],
+      "gates": ["decisao humana para mudanca de escopo, fonte ou metodo"],
+      "externalActions": []
+    }
+  }
+}

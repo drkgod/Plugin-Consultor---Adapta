@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "adapta-learning-policy/v1",
+  "originPatterns": {
+    "compoundEngineering": ["um aprendizado por run", "grounding", "busca de sobreposicao", "atualizar em vez de duplicar", "revisao de drift"],
+    "eccContinuousLearningV2": ["unidade atomica", "confianca evolutiva", "escopo de projeto por padrao", "contradicao e decaimento", "promocao entre projetos", "evolucao por clusters"]
+  },
+  "units": {
+    "signal": "evidencia estruturada local; nunca transcript ou prompt bruto",
+    "candidate": "um gatilho, uma acao e uma causa raiz",
+    "durableLearning": "candidato grounded, anonimizado e aprovado",
+    "methodEvolution": "cluster aprovado que pode virar rule, checklist, skill, subagent, teste ou playbook"
+  },
+  "capture": {
+    "oneLearningPerRun": true,
+    "singleVerifiedIncidentAllowed": true,
+    "behaviorPatternMinimumObservations": 3,
+    "overlapDimensions": ["trigger", "rootCause", "action"]
+  },
+  "confidence": {
+    "scale": [0, 100],
+    "bands": {"tentative": [0, 39], "moderate": [40, 69], "strong": [70, 89], "nearCertain": [90, 100]},
+    "increaseOn": ["independent repetition", "reproduced result", "cross-project agreement"],
+    "decreaseOn": ["human correction", "later failure", "contradicting evidence", "staleness"]
+  },
+  "promotion": {
+    "humanApprovalRequired": true,
+    "crossProjectPatternMinimumProjects": 2,
+    "crossProjectPatternMinimumAverageConfidence": 80,
+    "singleHighValueException": "allowed only with verified evidence and explicit human generalization rationale"
+  },
+  "privacy": {
+    "projectScopeDefault": true,
+    "exportSynthesizedLearningOnly": true,
+    "forbidden": ["raw prompt", "raw transcript", "tool payload", "secret", "credential", "personal data", "unnecessary proprietary code"]
+  },
+  "hooks": {
+    "rawObservationCapture": false,
+    "reason": "portability and client privacy; structured job artifacts are the observation surface",
+    "mayApproveOrPromote": false
+  }
+}

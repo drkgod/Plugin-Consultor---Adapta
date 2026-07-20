@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "adapta-context-policy/v1",
+  "maxSessionBriefChars": 8000,
+  "estimatedCharsPerToken": 4,
+  "pressure": {
+    "normalUntilPercent": 60,
+    "checkpointAtPercent": 60,
+    "compactAtPercent": 75,
+    "noNewFanoutAtPercent": 80
+  },
+  "hierarchy": {
+    "currentState": "STATUS.md",
+    "history": "changelog.md",
+    "durableDecisions": "04_plano/decisoes-do-projeto.md",
+    "reusableLearning": "05_execucao/aprendizados/",
+    "sessionCache": ".adapta/memory/latest.json",
+    "scratch": "/tmp/adapta/<job>/<run-id>/"
+  },
+  "rules": [
+    "passar caminhos e metadados antes de copiar conteudo grande",
+    "subagent grava resultado completo no scratch e retorna resumo compacto",
+    "compactar em fronteira logica, nunca no meio de decisao ou escrita atomica",
+    "nao persistir prompt, transcript bruto, segredo ou credencial na memoria de sessao",
+    "checkpoint antes de novo fanout quando a pressao atingir 60 por cento"
+  ],
+  "checkpointFields": ["phase", "gate", "pendingDecisions", "touchedArtifacts", "nextSafeAction", "timestamp"]
+}

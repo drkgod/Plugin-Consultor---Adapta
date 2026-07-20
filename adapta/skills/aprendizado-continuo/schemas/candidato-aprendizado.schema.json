@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adapta-learning-candidate/v1",
+  "type": "object",
+  "required": ["id", "trigger", "action", "rootCause", "scope", "confidence", "occurrences", "status", "overlap", "recommendation", "evidence", "privacy", "provenance"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^AP-[A-Z0-9-]+$"},
+    "trigger": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1},
+    "rootCause": {"type": "string", "minLength": 1},
+    "domain": {"type": "string"},
+    "scope": {"enum": ["projeto", "metodo-candidato"]},
+    "confidence": {"type": "integer", "minimum": 0, "maximum": 100},
+    "occurrences": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["candidato", "forte", "em-revisao", "aprovado", "obsoleto", "rejeitado"]},
+    "overlap": {"enum": ["alta", "moderada", "baixa"]},
+    "recommendation": {"enum": ["criar", "atualizar", "unir", "contradizer", "rejeitar"]},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["sourceRef", "summary", "observedAt"], "properties": {"sourceRef": {"type": "string", "minLength": 1}, "summary": {"type": "string", "minLength": 1}, "observedAt": {"type": "string", "minLength": 1}}, "additionalProperties": false}},
+    "related": {"type": "array", "items": {"type": "string"}},
+    "privacy": {"type": "object", "required": ["reviewed", "containsClientIdentity", "containsSensitiveData"], "properties": {"reviewed": {"type": "boolean"}, "containsClientIdentity": {"type": "boolean"}, "containsSensitiveData": {"type": "boolean"}}, "additionalProperties": false},
+    "provenance": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "supersededBy": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Achados da Revisao da Proposta Adapta",
+  "type": "object",
+  "required": ["run_id", "revisor", "status", "achados", "decisoes_humanas", "verificado_solido", "riscos_residuais"],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revisor": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completo", "parcial", "falhou"]
+    },
+    "achados": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["titulo", "gravidade", "tipo", "confianca", "evidencia", "cenario_de_falha", "recomendacao"],
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "gravidade": {
+            "type": "string",
+            "enum": ["grave", "moderado"]
+          },
+          "tipo": {
+            "type": "string",
+            "enum": ["grounding", "premissa", "viabilidade", "escopo", "asa", "dependencia", "coerencia", "alternativa"]
+          },
+          "confianca": {
+            "type": "integer",
+            "enum": [0, 25, 50, 75, 100]
+          },
+          "evidencia": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "cenario_de_falha": {
+            "type": "string"
+          },
+          "recomendacao": {
+            "type": "string"
+          },
+          "decisao_necessaria": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+    "decisoes_humanas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decisao", "opcoes", "criterio_de_escolha"],
+        "properties": {
+          "decisao": { "type": "string" },
+          "opcoes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 2
+          },
+          "criterio_de_escolha": { "type": "string" }
+        }
+      }
+    },
+    "verificado_solido": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "riscos_residuais": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "failure_reason": {
+      "type": ["string", "null"]
+    }
+  }
+}

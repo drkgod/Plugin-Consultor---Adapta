@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "adapta-subagents/v2",
+  "writer": "agente-principal",
+  "scratch": "/tmp/adapta/<job>/<run-id>/",
+  "promptTemplate": "references/subagent-template.md",
+  "fallback": "Executar as mesmas personas em serie, no agente principal, preservando o schema.",
+  "orchestration": {
+    "queuePolicy": "bounded-capacity",
+    "synthesisOwner": "agente-principal",
+    "inputPolicy": "passar paths e metadados; conteudo volumoso permanece no workspace",
+    "artifactPolicy": "/tmp/adapta/<job>/<run-id>/<artifact>",
+    "returnPolicy": "retornar id, severidade, confianca, sourceRef e resumo; maximo 4000 caracteres",
+    "failurePolicy": "registrar falha parcial, tentar uma vez e usar fallback serial; nunca omitir na sintese"
+  },
+  "defaults": {
+    "mode": "read-only",
+    "allowChildren": false,
+    "maxRetries": 1,
+    "provenanceRequired": true,
+    "writeScope": "scratch-only",
+    "tools": ["Read", "Grep", "Glob"]
+  },
+  "panels": {
+    "idear-direcoes": {
+      "mode": "read-only",
+      "maxParallel": 3,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"minerador-de-contexto","persona":"skills/idear-direcoes/references/personas/minerador-de-contexto.md","schema":"skills/idear-direcoes/schemas/avaliacao-ideias.schema.json","required":true,"when":"sempre","artifact":"contexto-fundamentado.json","modelTier":"economico","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"mineracao inline","provenanceRequired":true},
+        {"id":"critico-de-ideias","persona":"skills/idear-direcoes/references/personas/critico-de-ideias.md","schema":"skills/idear-direcoes/schemas/avaliacao-ideias.schema.json","required":true,"when":"depois da geracao divergente e antes do ranking","artifact":"critica-das-ideias.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"critica inline","provenanceRequired":true},
+        {"id":"pesquisador-de-precedentes","persona":"skills/idear-direcoes/references/personas/pesquisador-de-precedentes.md","schema":"skills/idear-direcoes/schemas/avaliacao-ideias.schema.json","required":false,"when":"quando houver acervo ou repo acessivel, ou a direcao depender de precedente","artifact":"precedentes.json","modelTier":"economico","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"registrar precedentes nao consultados","provenanceRequired":true}
+      ]
+    },
+    "definir-requisitos": {
+      "mode": "read-only",
+      "maxParallel": 2,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"analista-de-fluxo","persona":"skills/definir-requisitos/references/personas/analista-de-fluxo.md","schema":"skills/definir-requisitos/schemas/revisao-requisitos.schema.json","required":true,"when":"sempre","artifact":"revisao-fluxo.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao de fluxo inline","provenanceRequired":true},
+        {"id":"detector-de-pontos-cegos","persona":"skills/definir-requisitos/references/personas/detector-de-pontos-cegos.md","schema":"skills/definir-requisitos/schemas/revisao-requisitos.schema.json","required":false,"when":"escopo padrao ou profundo, territorio desconhecido ou dependencia externa","artifact":"pontos-cegos.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"passagem de pontos cegos inline","provenanceRequired":true}
+      ]
+    },
+    "revisar-proposta": {
+      "mode": "read-only",
+      "maxParallel": 3,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"revisor-de-plano","persona":"skills/revisar-proposta/references/personas/revisor-de-plano.md","schema":"skills/revisar-proposta/schemas/achado-revisao-proposta.schema.json","required":true,"when":"sempre","artifact":"achados-revisor-de-plano.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"executar em serie","provenanceRequired":true},
+        {"id":"revisor-adversarial","persona":"skills/revisar-proposta/references/personas/revisor-adversarial.md","schema":"skills/revisar-proposta/schemas/achado-revisao-proposta.schema.json","required":true,"when":"sempre","artifact":"achados-revisor-adversarial.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"executar em serie","provenanceRequired":true},
+        {"id":"revisor-viabilidade","persona":"skills/revisar-proposta/references/personas/revisor-viabilidade.md","schema":"skills/revisar-proposta/schemas/achado-revisao-proposta.schema.json","required":true,"when":"sempre","artifact":"achados-revisor-viabilidade.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"executar em serie","provenanceRequired":true},
+        {"id":"guardiao-de-escopo","persona":"skills/revisar-proposta/references/personas/guardiao-de-escopo.md","schema":"skills/revisar-proposta/schemas/achado-revisao-proposta.schema.json","required":false,"when":"excesso, prioridades concorrentes, ciclo apertado ou requisito sem conexao com objetivo","artifact":"achados-guardiao-de-escopo.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"executar em serie","provenanceRequired":true},
+        {"id":"explorador-de-alternativas","persona":"skills/revisar-proposta/references/personas/explorador-de-alternativas.md","schema":"skills/revisar-proposta/schemas/achado-revisao-proposta.schema.json","required":false,"when":"alternativas ausentes ou decisao estrutural aberta","artifact":"achados-alternativas.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"executar em serie","provenanceRequired":true}
+      ]
+    },
+    "escopo-final": {
+      "mode": "read-only",
+      "maxParallel": 3,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"revisor-coerencia","persona":"skills/escopo-final/references/personas/revisor-coerencia.md","schema":"skills/escopo-final/schemas/revisao-escopo.schema.json","required":true,"when":"sempre","artifact":"revisao-coerencia.json","modelTier":"economico","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-viabilidade","persona":"skills/escopo-final/references/personas/revisor-viabilidade.md","schema":"skills/escopo-final/schemas/revisao-escopo.schema.json","required":true,"when":"sempre","artifact":"revisao-viabilidade.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"guardiao-de-escopo","persona":"skills/escopo-final/references/personas/guardiao-de-escopo.md","schema":"skills/escopo-final/schemas/revisao-escopo.schema.json","required":false,"when":"quando houver excesso, prioridades concorrentes ou requisito sem conexao com objetivo","artifact":"revisao-escopo.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-adversarial","persona":"skills/escopo-final/references/personas/revisor-adversarial.md","schema":"skills/escopo-final/schemas/revisao-escopo.schema.json","required":false,"when":"quando houver premissa desafiavel, alternativa aberta ou decisao estrutural","artifact":"revisao-adversarial.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true}
+      ]
+    },
+    "gerar-specs": {
+      "mode": "read-only",
+      "maxParallel": 3,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"analista-de-specs","persona":"skills/gerar-specs/references/personas/analista-de-specs.md","schema":"skills/gerar-specs/schemas/revisao-spec.schema.json","required":true,"when":"sempre","artifact":"revisao-fluxos.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-specs","persona":"skills/gerar-specs/references/personas/revisor-specs.md","schema":"skills/gerar-specs/schemas/revisao-spec.schema.json","required":true,"when":"sempre","artifact":"revisao-specs.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-tdd-da-spec","persona":"skills/gerar-specs/references/personas/revisor-tdd-da-spec.md","schema":"skills/gerar-specs/schemas/revisao-spec.schema.json","required":true,"when":"sempre","artifact":"revisao-tdd-da-spec.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-risco-seguranca","persona":"skills/gerar-specs/references/personas/revisor-risco-seguranca.md","schema":"skills/gerar-specs/schemas/revisao-spec.schema.json","required":false,"when":"quando houver dados sensiveis, autenticacao, integracao ou acao irreversivel","artifact":"revisao-risco.json","modelTier":"profundo","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline quando houver risco","provenanceRequired":true}
+      ]
+    },
+    "gerar-tasks": {
+      "mode": "read-only",
+      "maxParallel": 2,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"revisor-decomposicao","persona":"skills/gerar-tasks/references/personas/revisor-decomposicao.md","schema":"skills/gerar-tasks/schemas/revisao-tasks.schema.json","required":true,"when":"sempre","artifact":"revisao-decomposicao.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"revisao inline","provenanceRequired":true},
+        {"id":"revisor-rastreabilidade","persona":"skills/gerar-tasks/references/personas/revisor-rastreabilidade.md","schema":"skills/gerar-tasks/schemas/revisao-tasks.schema.json","required":true,"when":"sempre","artifact":"revisao-rastreabilidade.json","modelTier":"economico","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"conferencia inline das tres projecoes","provenanceRequired":true}
+      ]
+    },
+    "concluir-task": {
+      "mode": "read-only",
+      "maxParallel": 1,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"verificador-de-entrega","persona":"skills/concluir-task/references/personas/verificador-de-entrega.md","schema":"skills/concluir-task/schemas/verificacao-task.schema.json","required":true,"when":"sempre","artifact":"verificacao-task.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":90,"maxRetries":1,"fallback":"verificacao inline","provenanceRequired":true}
+      ]
+    },
+    "mapear-evolucoes": {
+      "mode": "read-only",
+      "maxParallel": 1,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"minerador-de-evolucoes","persona":"skills/mapear-evolucoes/references/personas/minerador-de-evolucoes.md","schema":"skills/mapear-evolucoes/schemas/evolucao.schema.json","required":true,"when":"ao fechar cada fase ou apos incidente relevante","artifact":"evolucoes.json","modelTier":"economico","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"mineracao inline","provenanceRequired":true}
+      ]
+    },
+    "aprendizado-continuo": {
+      "mode": "read-only",
+      "maxParallel": 1,
+      "scratchByRunId": true,
+      "members": [
+        {"id":"curador-de-aprendizado","persona":"skills/aprendizado-continuo/references/personas/curador-de-aprendizado.md","schema":"skills/aprendizado-continuo/schemas/candidato-aprendizado.schema.json","required":false,"when":"captura com sobreposicao ambigua, contradicao, promocao, evolucao ou risco de privacidade","artifact":"candidato-aprendizado.json","modelTier":"equilibrado","allowChildren":false,"timeoutSeconds":60,"maxRetries":1,"fallback":"curadoria inline","provenanceRequired":true}
+      ]
+    }
+  }
+}

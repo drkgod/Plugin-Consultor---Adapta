@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adapta-evolucoes/v1",
+  "type": "object",
+  "required": ["status", "evolutions"],
+  "properties": {
+    "status": {"enum": ["completo", "parcial", "falhou"]},
+    "evolutions": {"type": "array", "items": {"type": "object", "required": ["id", "rootCause", "classification", "evidence", "recommendation", "humanDecision"], "properties": {"id": {"type": "string", "pattern": "^EV-[0-9]{3}$"}, "rootCause": {"type": "string", "minLength": 1}, "classification": {"enum": ["correcao-task", "ajuste-fase-atual", "ajuste-fase-futura", "proximo-ciclo", "aprendizado-metodo"]}, "evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "recommendation": {"type": "string", "minLength": 1}, "humanDecision": {"enum": ["pendente", "aceitar", "rejeitar", "adiar"]}}}}
+  },
+  "additionalProperties": false
+}
+

@@ -1,0 +1,17 @@
+{
+  "name": "adapta-consultor",
+  "owner": {
+    "name": "Adapta Labs"
+  },
+  "metadata": {
+    "description": "Marketplace de instalação do plugin do consultor Adapta Native (adapta) para Claude Code.",
+    "version": "0.7.0"
+  },
+  "plugins": [
+    {
+      "name": "adapta",
+      "source": "./adapta",
+      "description": "Jobs do CONSULTOR Adapta Native em arquitetura CE: skills canônicas, subagents, hooks advisory, memória, compactação, roteamento por capacidade, handoff e evolução segura."
+    }
+  ]
+}

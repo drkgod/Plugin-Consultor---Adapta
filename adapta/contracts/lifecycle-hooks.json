@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "adapta-lifecycle-hooks/v1",
+  "profile": "advisory",
+  "hooks": [
+    {"event":"SessionStart","id":"consultor-context-brief","script":"scripts/context-brief.mjs","purpose":"injetar estado minimo e memoria historica limitada","blocking":false},
+    {"event":"PreCompact","id":"consultor-context-checkpoint","script":"scripts/context-checkpoint.mjs","purpose":"salvar checkpoint estruturado antes da compactacao","blocking":false},
+    {"event":"Stop","id":"consultor-session-checkpoint","script":"scripts/context-checkpoint.mjs","purpose":"persistir somente estado operacional minimo","blocking":false}
+  ],
+  "prohibitedActions": ["aprovar gate", "publicar", "push", "criar repositorio", "promover aprendizado", "reescrever escopo"]
+}
