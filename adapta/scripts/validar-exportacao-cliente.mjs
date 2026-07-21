@@ -4,6 +4,7 @@ import crypto from "node:crypto"
 import path from "node:path"
 import process from "node:process"
 import { redactSensitive } from "./redact-sensitive.mjs"
+import { tasksTableStatus } from "./tasks-section.mjs"
 
 const target = process.argv[2]
 const errors = []
@@ -272,8 +273,15 @@ if (exists(activeRoot) && fs.lstatSync(activeRoot).isDirectory()) {
 }
 
 const currentPhasePath = path.join(root, "04_fase-atual", "fase.md")
-if (exists(currentPhasePath) && !/^## Tasks\b/m.test(fs.readFileSync(currentPhasePath, "utf8"))) {
-  errors.push("04_fase-atual/fase.md precisa conter a tabela Tasks consumida pelo plugin do cliente")
+if (exists(currentPhasePath)) {
+  const status = tasksTableStatus(fs.readFileSync(currentPhasePath, "utf8"))
+  if (!status.ok) {
+    errors.push(status.reason === "missing-section"
+      ? "04_fase-atual/fase.md precisa conter a tabela Tasks consumida pelo plugin do cliente"
+      : status.reason === "thin-table"
+      ? "04_fase-atual/fase.md contem tabela Tasks sem detalhes operacionais"
+      : "04_fase-atual/fase.md contem ## Tasks sem linhas de task executaveis")
+  }
 }
 
 for (const warning of warnings) console.warn(`AVISO: ${warning}`)

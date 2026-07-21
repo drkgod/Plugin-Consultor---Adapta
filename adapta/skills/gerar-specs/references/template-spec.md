@@ -61,9 +61,9 @@ RED/GREEN/REGRESSÃO como estados de prova.
 
 ## Tasks vinculadas
 
-| ID | Task | Dono | SPEC | Checklist/aceite | Recorte da prova | Status |
-|---|---|---|---|---|---|---|
-| [N.1] | | | | | [ex.: RED 1 e 3 passam] | ☐ |
+| ID | Task | Dono | SPEC | Critério | Recorte da prova | Evidência esperada | Pré-condições | Status |
+|---|---|---|---|---|---|---|---|---|
+| [N.1] | | | | | [ex.: RED 1 e 3 passam] | | | ☐ |
 
 ## Emendas
 

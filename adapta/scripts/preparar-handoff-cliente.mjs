@@ -6,6 +6,7 @@ import process from "node:process"
 import { fileURLToPath } from "node:url"
 import { parseCheckStatus } from "./check-status.mjs"
 import { readPlanEnvelope, writePlanEnvelope } from "./plan-envelope.mjs"
+import { assertPopulatedTasksTable } from "./tasks-section.mjs"
 
 const CLIENT_TOP_LEVEL_ALLOWLIST = new Set([
   ".claude",
@@ -161,9 +162,7 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
 
   const phaseSource = path.join(roots.consultant, "04_plano", "fases", `fase-${phase}.md`)
   assertSafeRegularFile(roots.consultant, phaseSource)
-  if (!/^## Tasks\b/m.test(fs.readFileSync(phaseSource, "utf8"))) {
-    throw new Error(`Fase ${phase} nao contem a tabela Tasks consumida pelo plugin do cliente`)
-  }
+  assertPopulatedTasksTable(fs.readFileSync(phaseSource, "utf8"), `Fase ${phase}`)
   copies.push({
     source: phaseSource,
     sourceRoot: roots.consultant,

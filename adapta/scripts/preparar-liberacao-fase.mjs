@@ -6,6 +6,7 @@ import process from "node:process"
 import { fileURLToPath } from "node:url"
 import { parseCheckStatus } from "./check-status.mjs"
 import { readPlanEnvelope, writePlanEnvelope } from "./plan-envelope.mjs"
+import { assertPopulatedTasksTable } from "./tasks-section.mjs"
 
 function inside(root, candidate) {
   const relative = path.relative(path.resolve(root), path.resolve(candidate))
@@ -128,7 +129,7 @@ export function buildPhaseReleasePlan({ consultantRoot, clientRoot, fromPhase, t
   const delta = regularFile(consultant, path.join(consultant, "05_execucao", "evolucoes", `delta-fase-${to}.md`))
 
   const phase = regularFile(consultant, path.join(consultant, "04_plano", "fases", `fase-${to}.md`))
-  if (!/^## Tasks\b/m.test(fs.readFileSync(phase, "utf8"))) throw new Error(`Fase ${to} nao contem a tabela Tasks`)
+  assertPopulatedTasksTable(fs.readFileSync(phase, "utf8"), `Fase ${to}`)
   const nestedSpecs = path.join(consultant, "05_execucao", "specs", `fase-${to}`)
   const flatSpecs = path.join(consultant, "05_execucao", "specs")
   const specs = fs.existsSync(nestedSpecs)

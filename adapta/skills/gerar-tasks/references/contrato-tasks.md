@@ -25,8 +25,13 @@ O conjunto de tasks aparece em:
 - `## Tasks vinculadas` da SPEC: visão do contrato;
 - matriz `matriz-specs-fases.md`: visão de rastreabilidade.
 
-As três projeções devem conter os mesmos IDs, SPEC, dono, critério, recorte de prova e status.
-Não existe `tasks.md` paralelo.
+A tabela da fase é a **tabela operacional completa** que será copiada para o cliente. Ela precisa
+ter, no mínimo: `ID`, `Task`, `Dono`, `SPEC`, `Critério`, `Recorte da prova`,
+`Evidência esperada`, `Pré-condições` e `Status`.
+
+As três projeções devem conter os mesmos IDs, SPEC, dono, critério, recorte de prova, evidência,
+pré-condições e status. Não existe `tasks.md` paralelo. O handoff do cliente duplica a fase e as
+SPECs sem reescrever as tasks.
 
 ## Sinais de corte ruim
 

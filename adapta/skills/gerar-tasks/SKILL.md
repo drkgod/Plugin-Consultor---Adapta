@@ -1,6 +1,6 @@
 ---
 name: gerar-tasks
-description: Decompoe SPECs revisadas em tasks independentes, binarias e executaveis por um papel em uma sessao; sincroniza a tabela Tasks da fase, as Tasks vinculadas de cada SPEC e a matriz de rastreabilidade. Use depois de gerar-specs ou ao criar uma emenda aprovada. Nao cria nem reescreve o contrato da SPEC.
+description: Decompoe SPECs revisadas em tasks independentes, binarias e executaveis por um papel em uma sessao; sincroniza a tabela operacional completa de Tasks da fase, as Tasks vinculadas de cada SPEC e a matriz de rastreabilidade. Use depois de gerar-specs ou ao criar uma emenda aprovada. Nao cria nem reescreve o contrato da SPEC.
 ---
 
 # Gerar tasks a partir das SPECs
@@ -35,9 +35,13 @@ Carregue `../../personas/consultor-adapta.md`, `../../contracts/subagents.json`,
    sequência for inevitável, organize levas separadas ou recomponha o corte.
    **Uma task por SPEC é corte degenerado**, salvo micro-spec que explicitamente cabe em uma task.
 5. Escreva o mesmo conjunto canônico em três projeções, sem criar lista paralela:
-   - `## Tasks` de `04_plano/fases/fase-N.md`;
+   - `## Tasks` de `04_plano/fases/fase-N.md` como **tabela operacional completa**, com as
+     colunas `ID`, `Task`, `Dono`, `SPEC`, `Critério`, `Recorte da prova`,
+     `Evidência esperada`, `Pré-condições` e `Status`;
    - `## Tasks vinculadas` de cada SPEC;
    - `05_execucao/matriz-specs-fases.md`.
+   `/adapta:gerar-pasta-cliente` copia essa fase pronta para o repo do cliente sem reescrever,
+   resumir ou recriar as tasks; portanto a task precisa nascer completa aqui.
 6. Rode o painel `gerar-tasks`:
    - `revisor-decomposicao` verifica tamanho, independência, dono e recorte da prova;
    - `revisor-rastreabilidade` verifica consistência das três projeções e ausência de task órfã.
