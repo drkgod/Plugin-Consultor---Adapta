@@ -1,0 +1,12 @@
+{
+  "name": "adapta-consultor-marketplace",
+  "version": "0.8.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node --test tests/contracts.test.mjs tests/skill-mind.test.mjs",
+    "build:memory": "node adapta/scripts/build-ethos-memory.mjs --write",
+    "check:memory": "node adapta/scripts/build-ethos-memory.mjs --check"
+  }
+}

@@ -17,7 +17,7 @@ um gate reservado a Consultor, CSM ou cliente.
 6. **SPEC + TDD:** resultado, limites, dependências, checklist, aceite e TDD acoplado vêm antes
    da execução. O agente do cliente deve conseguir ler a SPEC e encontrar ali a prova que precisa
    rodar ou demonstrar.
-7. **Privacidade por construção:** proposta, crítica, baseline, bloqueadores, metodologia e fases
+7. **Privacidade por construção:** escopo base, crítica, baseline, restrições, metodologia e fases
    futuras não atravessam a fronteira do cliente. Aprendizados compartilhados são anonimizados.
 8. **Ação externa explícita:** publicar, criar repo, fazer push ou promover aprendizado ao acervo
    exige confirmação humana imediatamente antes da ação.

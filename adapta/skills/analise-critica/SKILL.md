@@ -1,70 +1,61 @@
 ---
 name: analise-critica
-description: Orquestra, com cerimonia proporcional, ideacao fundamentada, definicao de requisitos e revisao multipersona; sintetiza o resultado e cria o espaco de autoria humana antes do escopo final. Use como entrada guiada do fluxo ou depois das skills especializadas.
+description: Orquestra, com cerimônia proporcional, ideação fundamentada, definição de requisitos e revisão multipersona do escopo base; sintetiza o resultado e cria o espaço de autoria humana antes do escopo definitivo.
 ---
 
 # Análise crítica e autoria do consultor
 
-<!-- Orquestra capacidades reempacotadas de ce-ideate, ce-brainstorm e revisão crítica (D6/D23). -->
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `analise-critica`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+a etapa autorizada e preserve o run até os finalizadores.
 
 Carregue `../../personas/consultor-adapta.md`, `../../contracts/consultor-workflows.json`,
-`../../contracts/model-routing.json`, `../../contracts/context-policy.json`,
-`references/synthesis.md` e `references/template-analise-do-consultor.md`.
+`../../contracts/workspace-layout.json`, `../../contracts/model-routing.json`,
+`../../contracts/context-policy.json`, `references/synthesis.md` e
+`references/template-analise-do-consultor.md`.
 
-## Bloqueio de entrada
+## Entradas
 
-- Existe `04_plano/proposta/proposta.md`? Se não, rode `/adapta:gerar-proposta`.
-- Exija `05_execucao/checks/check-input.md` aprovado.
-- Artefato especializado existente só pode ser reutilizado se for posterior aos inputs que o
-  alimentam. Se estiver obsoleto, regenere pela skill proprietária e registre o motivo.
+- Exija `03-Projeto/01-Escopo.md`. Se não existir, devolva a etapa como pendente ao SkillMind; ele
+  deve executar `gerar-escopo` antes de autorizar novamente esta síntese.
+- Não procure nem crie `check-input.md` ou folha de rosto. Confirme a suficiência das fontes por
+  rastreabilidade no próprio escopo, nas reuniões e no mapeamento de processos.
+- Artefato especializado só pode ser reutilizado se for posterior aos inputs que o alimentam. Se
+  estiver obsoleto, regenere pela skill proprietária e registre o motivo.
 
 ## Roteamento proporcional
 
-Classifique o caso antes de abrir painéis:
+O SkillMind classifica e executa a rota. Nesta etapa, valide os recibos/artefatos da variante no
+envelope; não substitua a cadeia por uma leitura superficial nem reinvoque dependências já feitas.
 
-- **Leve:** proposta clara, um caminho dominante, requisitos observáveis e baixo risco. Rode
-  `/adapta:revisar-proposta` diretamente.
+- **Leve:** escopo base claro, um caminho dominante, requisitos observáveis e baixo risco. Exige
+  `revisar-escopo` concluído.
 - **Padrão:** espaço de solução delimitado, mas comportamento, limites ou sucesso ainda precisam
-  ser fechados. Rode `/adapta:definir-requisitos` e depois `/adapta:revisar-proposta`.
+  ser fechados. Exige `definir-requisitos` e depois `revisar-escopo` concluídos.
 - **Profundo:** existem caminhos materialmente diferentes, alto custo de reversão, território
-  pouco conhecido ou decisão que muda promessa/recorte. Rode `/adapta:idear-direcoes`,
-  `/adapta:definir-requisitos` e `/adapta:revisar-proposta`.
-
-O consultor pode chamar qualquer skill especializada isoladamente. `analise-critica` não duplica
-seus contratos: ela decide quais são necessárias, confere os handoffs e sintetiza.
+  pouco conhecido ou decisão que muda promessa/recorte. Exige `idear-direcoes`,
+  `definir-requisitos` e `revisar-escopo` concluídos.
 
 ## Síntese
 
-1. Leia proposta, `direcoes.md`, `requisitos.md` e `revisao-da-proposta.md` quando aplicáveis,
-   além da folha de rosto, bloqueadores e fontes citadas.
-2. Confirme a cadeia:
-   `fonte → direção → requisito → achado/decisão`. Item sem ligação explícita fica como risco
-   residual, não como fato consolidado.
-3. Consulte `aprendizado-continuo` quando houver sinal relevante. Traga somente precedentes com
-   proveniência; não promova aprendizado nesta skill.
-4. Convoque `conselho-de-decisao` somente quando restarem dois ou mais caminhos defensáveis e a
-   escolha mudar promessa, recorte, ordem ou valor de uma fase. Passe pergunta, restrições e
-   evidências compactas; não passe a posição preferida como fato. Pergunta factual, correção óbvia
-   ou simples achado crítico não aciona conselho.
-5. Consolide em `04_plano/proposta/analise-critica.md`, seguindo `references/synthesis.md`:
-   - rota executada e por que foi leve, padrão ou profunda;
-   - achados graves e moderados, com evidência e cenário de falha;
-   - decisões humanas e alternativas defensáveis;
-   - conselho, quando acionado;
-   - aprendizados aplicáveis e riscos residuais;
-   - o que foi verificado e está sólido.
-6. Crie `04_plano/proposta/analise-do-consultor.md` a partir de
-   `references/template-analise-do-consultor.md`, sem responder pelo humano:
-   - um bloco para cada ID de achado ou decisão;
-   - novas ideias e riscos percebidos pelo consultor;
-   - mudanças que ele quer levar ao escopo final;
-   - checklist de decisões obrigatórias pendentes.
-7. Atualize `changelog.md` e informe o checkpoint: o consultor preenche sua análise; só então
-   roda `/adapta:escopo-final`.
+1. Leia `01-Escopo.md`, `direcoes.md`, `requisitos.md` e `revisao-do-escopo.md` quando aplicáveis,
+   além de `00-DMO.md`, reuniões, documentos e mapeamentos citados.
+2. Confirme a cadeia `fonte → direção → requisito → achado/decisão`. Item sem ligação explícita
+   fica como risco residual, não como fato consolidado.
+3. Use o resultado de `aprendizado-continuo consultar` quando o SkillMind tiver executado essa
+   etapa condicional. Traga somente precedentes com proveniência; não promova aprendizado aqui.
+4. Use o parecer de `conselho-de-decisao` quando a condição da rota tiver disparado. Se o parecer
+   necessário estiver ausente, devolva a pendência ao SkillMind em vez de simular o conselho.
+5. Consolide em `03-Projeto/analise-critica.md`, seguindo `references/synthesis.md`, com rota,
+   achados, decisões, alternativas, riscos residuais e pontos sólidos.
+6. Crie `03-Projeto/analise-do-consultor.md` a partir do template, sem responder pelo humano.
+7. Atualize `STATUS.md` e `changelog.md`. O consultor preenche sua análise e então roda
+   `skill-mind job=escopo-definitivo`.
 
-## O que esta skill não faz
+## Limites
 
-- Não preenche `analise-do-consultor.md` nem corrige a proposta em nome do humano.
-- Não aprova nada; análise crítica não é gate.
-- Não transforma as quatro capacidades em cerimônia obrigatória: a rota é proporcional.
-- Não escreve `fase-N.md`. `escopo-final` recompõe exatamente cinco fases; nunca nasce uma fase 6.
+- Não preenche `analise-do-consultor.md` nem corrige intenção em nome do humano.
+- Não aprova gate e não escreve fase ou task.
+- O escopo definitivo recompõe exatamente cinco fases; nunca nasce uma fase 6.

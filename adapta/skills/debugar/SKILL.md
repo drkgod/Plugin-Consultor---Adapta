@@ -1,9 +1,15 @@
 ---
 name: debugar
-description: Diagnostica causa raiz de falhas técnicas, TDD de SPEC, artefatos e agentes pelo ciclo ce-debug adaptado: reproduzir, traçar cadeia causal, testar hipóteses, corrigir contra a SPEC quando autorizado, verificar e relatar.
+description: "Diagnostica causa raiz de falhas técnicas, TDD de SPEC, artefatos e agentes pelo ciclo ce-debug adaptado: reproduzir, traçar cadeia causal, testar hipóteses, corrigir contra a SPEC quando autorizado, verificar e relatar."
 ---
 
 # Debugar entrega ou agente
+
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `debugar`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, investigue a
+etapa autorizada e preserve o run até os finalizadores.
 
 <!-- Reempacota ce-debug e o workflow local de introspecção de agentes; não depende do plugin externo em runtime. -->
 
@@ -31,9 +37,10 @@ falha de subagent.
    de adaptar o código para caber numa prova ruim. Mudança de escopo, método, credencial ou ação
    remota continua exigindo decisão humana.
 7. **Verificar:** reexecute a reprodução, os testes relacionados, regressão e leia o diff final.
-8. **Relatar:** grave `05_execucao/debug/debug-<data>-<slug>.md` com cadeia causal, evidência,
+8. **Relatar:** grave `.adapta/debug/debug-<data>-<slug>.md` com cadeia causal, evidência,
    correção, verificação, risco residual e rollback; atualize changelog/STATUS.
-9. Se a causa for reutilizável, chame `aprendizado-continuo capturar`. Para falha de agente,
+9. Se a causa for reutilizável, devolva o sinal ao finalizador do SkillMind para uma etapa
+   autorizada de `aprendizado-continuo capturar`. Para falha de agente,
    acrescente captura de prompt/contexto, classificação da falha e recuperação contida sem gravar
    transcript ou segredo na memória.
 

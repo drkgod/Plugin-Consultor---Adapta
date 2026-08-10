@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adapta-escopo-definitivo-review/v1",
+  "type": "object",
+  "required": ["reviewer", "status", "findings", "evidence"],
+  "properties": {
+    "reviewer": {"type": "string", "minLength": 1},
+    "status": {"enum": ["completo", "parcial", "falhou"]},
+    "findings": {"type": "array", "items": {"type": "object", "required": ["severity", "description", "sourceRef", "handling", "decisionOwner"], "properties": {"severity": {"enum": ["grave", "moderado", "baixo"]}, "description": {"type": "string", "minLength": 1}, "sourceRef": {"type": "string", "minLength": 1}, "handling": {"enum": ["safe_auto", "gated_auto", "manual"]}, "decisionOwner": {"enum": ["agente-principal", "consultor", "CSM", "cliente"]}}, "additionalProperties": false}},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "failureReason": {"type": "string"}
+  },
+  "additionalProperties": false
+}

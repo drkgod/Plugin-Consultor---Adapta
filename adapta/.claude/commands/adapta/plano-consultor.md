@@ -6,7 +6,7 @@ disable-model-invocation: true
 ---
 
 NOTE: Rode a análise crítica e PARE para o consultor preencher `analise-do-consultor.md`.
-Depois da autoria humana, o consultor chama `/adapta:escopo-final` separadamente. Se não houver
-proposta, a própria skill informa o pré-requisito sem atravessar o gate.
+Depois da autoria humana, o consultor chama `/adapta:escopo-definitivo` separadamente. Se não
+houver `03-Projeto/01-Escopo.md`, a própria skill informa o pré-requisito.
 
-/adapta:analise-critica $ARGUMENTS
+/adapta:skill-mind job=analise-critica $ARGUMENTS

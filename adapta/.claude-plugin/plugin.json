@@ -1,7 +1,7 @@
 {
   "name": "adapta",
-  "description": "Capacidades portáteis do consultor Adapta Native: ideação, requisitos, revisão, crítica, escopo em cinco fases, SPECs, tasks, handoff, execução, evolução, aprendizado, TLDV e debug.",
-  "version": "0.7.0",
+  "description": "SkillMind e capacidades portáteis do consultor Adapta Native para o layout Plano — <id>, com orquestração explícita e fallback para runtimes sem hooks.",
+  "version": "0.8.0",
   "author": {
     "name": "Adapta Labs"
   }

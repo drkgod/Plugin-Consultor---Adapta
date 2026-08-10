@@ -11,8 +11,10 @@
   "hierarchy": {
     "currentState": "STATUS.md",
     "history": "changelog.md",
-    "durableDecisions": "04_plano/decisoes-do-projeto.md",
-    "reusableLearning": "05_execucao/aprendizados/",
+    "durableDecisions": "03-Projeto/decisoes-do-projeto.md",
+    "reusableLearning": ".adapta/aprendizados/",
+    "runtimeBootstrap": "<plugin>/MEMORY.md",
+    "orchestrationLedger": ".adapta/orquestracao/",
     "sessionCache": ".adapta/memory/latest.json",
     "scratch": "/tmp/adapta/<job>/<run-id>/"
   },
@@ -20,7 +22,8 @@
     "passar caminhos e metadados antes de copiar conteudo grande",
     "subagent grava resultado completo no scratch e retorna resumo compacto",
     "compactar em fronteira logica, nunca no meio de decisao ou escrita atomica",
-    "nao persistir prompt, transcript bruto, segredo ou credencial na memoria de sessao",
+    "nao confundir MEMORY.md de bootstrap com .adapta/memory/latest.json de checkpoint historico",
+    "nao persistir prompt, transcript bruto, segredo ou credencial na memoria de sessao ou no ledger",
     "checkpoint antes de novo fanout quando a pressao atingir 60 por cento"
   ],
   "checkpointFields": ["phase", "gate", "pendingDecisions", "touchedArtifacts", "nextSafeAction", "timestamp"]

@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url"
 import { parseCheckStatus } from "./check-status.mjs"
 import { readPlanEnvelope, writePlanEnvelope } from "./plan-envelope.mjs"
 import { assertPopulatedTasksTable } from "./tasks-section.mjs"
+import { phasePaths, planPath, resolvePlanRoot } from "./workspace-layout.mjs"
 
 function inside(root, candidate) {
   const relative = path.relative(path.resolve(root), path.resolve(candidate))
@@ -103,7 +104,7 @@ export function buildPhaseReleasePlan({ consultantRoot, clientRoot, fromPhase, t
   if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to > 5 || to !== from + 1) {
     throw new Error("Liberacao exige fases consecutivas entre 1 e 5")
   }
-  const consultant = path.resolve(consultantRoot)
+  const consultant = resolvePlanRoot(consultantRoot)
   const client = path.resolve(clientRoot)
   if (!fs.existsSync(consultant) || !fs.statSync(consultant).isDirectory()) throw new Error("Workspace do consultor invalido")
   if (!fs.existsSync(client) || !fs.statSync(client).isDirectory()) throw new Error("Repo do cliente invalido")
@@ -119,22 +120,21 @@ export function buildPhaseReleasePlan({ consultantRoot, clientRoot, fromPhase, t
   if (fs.existsSync(deliveries) && fs.lstatSync(deliveries).isSymbolicLink()) throw new Error("05_entregas nao pode ser link simbolico")
   if (fs.existsSync(archive)) throw new Error(`Arquivo da fase ${from} ja existe no cliente`)
 
-  const check = regularFile(consultant, path.join(consultant, "05_execucao", "checks", `check-fase-${from}.md`))
+  const check = regularFile(consultant, path.join(planPath(consultant, "checks"), `check-fase-${from}.md`))
   const checkBody = fs.readFileSync(check, "utf8")
   if (!parseCheckStatus(checkBody).canAdvance) throw new Error(`check-fase-${from}.md ainda nao foi aprovado`)
   const approvedDigest = checkBody.match(/\*\*O que foi validado:\*\*[^\n]*\bactive-sha256=([a-f0-9]{64})\b/i)?.[1]
   if (approvedDigest !== activeDigest) {
     throw new Error(`check-fase-${from}.md nao aprova o active-sha256 atual (${activeDigest})`)
   }
-  const delta = regularFile(consultant, path.join(consultant, "05_execucao", "evolucoes", `delta-fase-${to}.md`))
+  const delta = regularFile(consultant, path.join(planPath(consultant, "evolutions"), `delta-fase-${to}.md`))
 
-  const phase = regularFile(consultant, path.join(consultant, "04_plano", "fases", `fase-${to}.md`))
+  const nextPhase = phasePaths(consultant, to)
+  const phase = regularFile(consultant, nextPhase.tasks)
   assertPopulatedTasksTable(fs.readFileSync(phase, "utf8"), `Fase ${to}`)
-  const nestedSpecs = path.join(consultant, "05_execucao", "specs", `fase-${to}`)
-  const flatSpecs = path.join(consultant, "05_execucao", "specs")
-  const specs = fs.existsSync(nestedSpecs)
-    ? listFiles(nestedSpecs).filter((file) => path.extname(file).toLowerCase() === ".md")
-    : listFiles(flatSpecs).filter((file) => path.basename(file).startsWith(`fase-${to}--spec-`) && path.extname(file).toLowerCase() === ".md")
+  const specs = fs.existsSync(nextPhase.specs)
+    ? listFiles(nextPhase.specs).filter((file) => path.extname(file).toLowerCase() === ".md" && /^spec-/i.test(path.basename(file)))
+    : []
   if (specs.length === 0) throw new Error(`Nenhuma SPEC valida encontrada para a fase ${to}`)
 
   const copies = [
@@ -270,9 +270,11 @@ async function main() {
     for (const key of ["consultantRoot", "clientRoot", "fromPhase", "toPhase"]) {
       if (!args[key]) throw new Error(`Argumento obrigatorio ausente: ${key}`)
     }
-    const planFile = path.resolve(args.planFile || path.join(args.consultantRoot, "05_execucao", "checks", `release-plan-fase-${args.fromPhase}-${args.toPhase}.json`))
-    if (!inside(args.consultantRoot, planFile)) throw new Error("Plano selado precisa ficar dentro do workspace do consultor")
-    assertRealContainment(args.consultantRoot, path.dirname(planFile))
+    const consultantPlanRoot = resolvePlanRoot(args.consultantRoot)
+    const planFile = path.resolve(args.planFile || path.join(planPath(consultantPlanRoot, "handoff"), `release-plan-fase-${args.fromPhase}-${args.toPhase}.json`))
+    if (!inside(consultantPlanRoot, planFile)) throw new Error("Plano selado precisa ficar dentro do plano do consultor")
+    fs.mkdirSync(path.dirname(planFile), { recursive: true })
+    assertRealContainment(consultantPlanRoot, path.dirname(planFile))
     if (args.dryRun) {
       const plan = buildPhaseReleasePlan(args)
       const sealed = writePlanEnvelope(plan, planFile)
@@ -280,7 +282,7 @@ async function main() {
       return
     }
     const sealed = readPlanEnvelope(planFile, "adapta-phase-release/v1")
-    if (path.resolve(args.consultantRoot) !== sealed.plan.consultantRoot || path.resolve(args.clientRoot) !== sealed.plan.clientRoot || Number(args.fromPhase) !== sealed.plan.from || Number(args.toPhase) !== sealed.plan.to) {
+    if (consultantPlanRoot !== sealed.plan.consultantRoot || path.resolve(args.clientRoot) !== sealed.plan.clientRoot || Number(args.fromPhase) !== sealed.plan.from || Number(args.toPhase) !== sealed.plan.to) {
       throw new Error("Argumentos nao correspondem ao plano de liberacao aprovado")
     }
     console.log(JSON.stringify(executePhaseRelease(sealed.plan), null, 2))

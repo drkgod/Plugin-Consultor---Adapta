@@ -8,4 +8,4 @@ disable-model-invocation: true
 NOTE: A skill canônica sincroniza, verifica, fecha, mapeia evoluções e só então prepara a próxima
 fase. Ela não publica sem confirmação.
 
-/adapta:liberar-fase $ARGUMENTS
+/adapta:skill-mind job=liberar-fase $ARGUMENTS

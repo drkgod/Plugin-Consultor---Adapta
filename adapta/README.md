@@ -1,320 +1,227 @@
 # Adapta — plugin do consultor
 
-O `adapta` é o plugin operacional do consultor Adapta Native. Ele pega o diagnóstico produzido
-pelo sistema e transforma isso em um projeto executável: proposta, análise crítica, escopo em
-cinco fases, SPECs com TDD, tasks, handoff seguro para o cliente, execução, medição e aprendizado.
+O `adapta` opera o projeto do consultor no layout atual de cliente. A raiz lógica é a pasta
+`Plano — <id>`; o plugin também aceita ser chamado na pasta pai do cliente quando houver um único
+plano válido.
 
-Ele não decide pelo consultor. O plugin prepara, critica, especifica, verifica e registra
-evidências. Aprovação de escopo, decisão de negócio, publicação e passagem para cliente continuam
-sendo responsabilidade humana.
+O contrato canônico está em `contracts/workspace-layout.json`. Skills e scripts não devem
+redefinir caminhos por conta própria.
 
-## Como o plugin é organizado
+`skill-mind` é a entrada obrigatória para qualquer job. O contrato de dependências está em
+`contracts/skill-mind.json`; todas as demais skills exigem um `SKILLMIND_ENVELOPE v1` e
+redirecionam para o orquestrador quando chamadas diretamente.
 
-O plugin tem cinco peças principais:
-
-- `skills/`: os trabalhos públicos do consultor.
-- `personas/`: a postura do consultor Adapta.
-- `contracts/`: regras de workflow, gates, subagentes, contexto e roteamento.
-- `scripts/`: operações determinísticas, como handoff, checkpoint, validação e ingestão.
-- `rules/`: invariantes de privacidade, autoria, evidência e fases.
-
-O agente principal é o único escritor dos artefatos oficiais. Subagentes podem revisar por lentes
-especializadas, mas trabalham em modo leitura e devolvem achados estruturados.
-
-## Instalação
-
-No Claude Code, instale a partir do marketplace local:
+## Layout atual
 
 ```text
-/plugin marketplace add <caminho-para-a-metodologia>/plugins
-/plugin install adapta@adapta-native
+<cliente>/
+└── Plano — <id>/
+    ├── STATUS.md
+    ├── changelog.md
+    ├── 01-documento/
+    │   └── 00-sumario.md
+    ├── 02-Reuniao/
+    │   ├── 00-Indice_reunioes.md
+    │   ├── _tldv_manifest.json
+    │   ├── Sales Call/
+    │   ├── Kickoff Call/
+    │   └── Consultoria Call/
+    ├── 03-Projeto/
+    │   ├── 00-DMO.md
+    │   ├── 01-Escopo.md
+    │   ├── direcoes.md
+    │   ├── requisitos.md
+    │   ├── revisao-do-escopo.md
+    │   ├── analise-critica.md
+    │   ├── analise-do-consultor.md
+    │   ├── 02-Escopo-Definitivo.md
+    │   ├── decisoes-do-projeto.md
+    │   └── 02-Plano_de_acao/
+    │       ├── 00.tasks_per_fase/fase_1.md ... fase_5.md
+    │       ├── 01.Fase_1/ ... 05.Fase_5/
+    │       │   ├── 00-Tasks_Gerais.md
+    │       │   └── 01-SPECs/
+    │       │       └── 00-INDICE.md
+    │       └── matriz-de-rastreabilidade.md
+    ├── 04-Mapeamento-Processos/
+    │   ├── 00-Contexto/
+    │   └── 02-Processos_mapeados/
+    └── .adapta/
+        ├── checks/
+        ├── debug/
+        ├── evolucoes/
+        ├── handoff/
+        ├── aprendizados/
+        ├── orquestracao/
+        ├── resultado/
+        ├── dividas.md
+        └── memory/latest.json
 ```
 
-No Codex, o manifesto `.codex-plugin/plugin.json` expõe `skills/` como superfície canônica. Use o
-nome da skill, como `analise-critica`, `gerar-specs` ou `gerar-tasks`, ou descreva o trabalho que
-quer executar.
+Arquivos condicionais só são criados quando a skill correspondente roda. A pasta `.adapta/`
+guarda controles internos e não entra no handoff externo.
 
-Hooks automáticos existem para runtimes que os suportam. Em runtimes sem hooks, use
-`gestao-contexto` para gerar brief, checkpoint, compactação e restauração.
+## Mudança de nomenclatura
+
+| Contrato anterior | Contrato atual |
+|---|---|
+| `proposta.md` | `03-Projeto/01-Escopo.md` — escopo base |
+| `escopo final`, `PRD.md` e fases separadas | `03-Projeto/02-Escopo-Definitivo.md` — escopo definitivo com cinco fases |
+| `04_plano/proposta/analise-critica.md` | `03-Projeto/analise-critica.md` |
+| `04_plano/proposta/analise-do-consultor.md` | `03-Projeto/analise-do-consultor.md` |
+| `04_plano/fases/fase-N.md` | `02-Plano_de_acao/0N.Fase_N/00-Tasks_Gerais.md` + recorte da fase no escopo definitivo |
+| `05_execucao/specs/fase-N/` | `02-Plano_de_acao/0N.Fase_N/01-SPECs/` |
+| `02_reunioes/` | `02-Reuniao/<Categoria>/` |
+| `check-input.md` | removido; suficiência é verificada pela rastreabilidade das fontes |
+
+Aliases antigos ficam documentados em `contracts/compatibility.json`, mas a superfície canônica
+usa `gerar-escopo`, `revisar-escopo` e `escopo-definitivo`.
 
 ## Fluxo principal
 
 ```text
-Handoff do sistema
+Fontes reais do plano
        ↓
-Gerar ou validar proposta
+skill-mind → interpreta intenção, expande dependências e abre ledger
        ↓
-Análise crítica proporcional
+gerar-escopo → 01-Escopo.md
        ↓
-Análise autoral do consultor
+analise-critica (rota proporcional)
        ↓
-Escopo final em 5 fases
+analise-do-consultor.md (autoria humana)
        ↓
-Validação do Consultor + CSM/cliente
+escopo-definitivo → 02-Escopo-Definitivo.md + scaffold de 5 fases
        ↓
-SPECs da fase em foco
+gerar-specs → 0N.Fase_N/01-SPECs/
        ↓
-Tasks derivadas das SPECs
+gerar-tasks → tasks gerais + Jornada + SPECs + matriz
        ↓
-Handoff seguro da fase atual para o cliente
+handoff, execução, verificação e liberação da próxima fase
        ↓
-Executar, verificar, medir e mapear evoluções
-       ↓
-Fechar fase e liberar próxima fase
-       ↓
-Medir resultado final e consolidar aprendizados
+checkpoint + aprendizado capturado ou `not-reusable`
 ```
-
-Três separações sustentam o fluxo:
-
-1. **Proposta não é escopo aprovado.** A proposta é matéria-prima para análise.
-2. **SPEC não é task.** A SPEC define o contrato e a prova; a task é a unidade executável derivada.
-3. **Workspace do consultor não é repo do cliente.** O consultor enxerga o projeto completo; o
-   cliente recebe apenas a fase liberada.
 
 ## Skills principais
 
-| Skill | Quando usar | Saída principal |
-|---|---|---|
-| `gerar-proposta` | Quando o handoff não trouxe proposta ou os inputs mudaram | `04_plano/proposta/proposta.md` |
-| `analise-critica` | Para revisar a proposta e preparar a autoria humana | `analise-critica.md` e `analise-do-consultor.md` |
-| `idear-direcoes` | Quando há alternativas reais de caminho | `direcoes.md` |
-| `definir-requisitos` | Quando comportamento, limites ou sucesso ainda estão abertos | `requisitos.md` |
-| `revisar-proposta` | Para rodar o painel crítico da proposta | `revisao-da-proposta.md` |
-| `escopo-final` | Depois da análise autoral do consultor | PRD, escopo, matriz e fases 1 a 5 |
-| `gerar-specs` | Depois dos gates de escopo e cliente | SPECs da fase em foco |
-| `gerar-tasks` | Depois das SPECs revisadas | Tasks sincronizadas em fase, SPECs e matriz |
-| `gerar-pasta-cliente` | Para preparar o repo/pasta do cliente | Handoff da fase atual |
-| `sincronizar-cliente` | Para trazer o estado do cliente para o workspace do consultor | Sincronização e relatório |
-| `concluir-task` | Para verificar uma entrega contra SPEC, TDD e evidência | Recibo de verificação |
-| `debugar` | Para investigar falha de execução, artefato ou agente | Relatório de causa raiz |
-| `mapear-evolucoes` | Ao fechar ou revisar uma fase | Evoluções candidatas |
-| `liberar-fase` | Para fechar uma fase e promover a próxima | Check da fase, delta e handoff |
-| `medir-resultado` | Ao fim do ciclo | Comparativo antes/depois e case |
-| `aprendizado-continuo` | Para consultar, capturar ou promover aprendizados | Candidatos e aprendizados aprovados |
-| `tldv` | Para organizar reuniões do tl;dv | Transcrição, ata, fluxos e decisões |
-| `conselho-de-decisao` | Quando há dois caminhos defensáveis | Recomendação não vinculante |
-| `registrar-decisao` | Quando uma decisão estrutural foi tomada | Registro de decisão |
-| `gestao-contexto` | Em sessões longas ou antes de fanout/compactação | Brief ou checkpoint |
+| Skill | Saída principal |
+|---|---|
+| `skill-mind` | rota executada, ledger e fechamento de aprendizado |
+| `gerar-escopo` | `03-Projeto/01-Escopo.md` |
+| `idear-direcoes` | `03-Projeto/direcoes.md` |
+| `definir-requisitos` | `03-Projeto/requisitos.md` |
+| `revisar-escopo` | `03-Projeto/revisao-do-escopo.md` |
+| `analise-critica` | análise crítica e caderno de autoria humana |
+| `escopo-definitivo` | escopo consolidado e exatamente cinco fases |
+| `gerar-specs` | SPECs da fase em foco |
+| `gerar-tasks` | quatro projeções sincronizadas das tasks |
+| `gerar-pasta-cliente` | handoff externo da fase liberada |
+| `sincronizar-cliente` | sincronização com repo operacional externo |
+| `concluir-task` | recibo em `.adapta/checks/tasks/` |
+| `debugar` | diagnóstico em `.adapta/debug/` |
+| `mapear-evolucoes` | candidatos em `.adapta/evolucoes/` |
+| `liberar-fase` | fechamento e promoção da próxima fase |
+| `medir-resultado` | comparação e case em `.adapta/resultado/` |
+| `aprendizado-continuo` | candidatos em `.adapta/aprendizados/` |
+| `tldv` | reuniões categorizadas em `02-Reuniao/` |
+| `registrar-decisao` | `03-Projeto/decisoes-do-projeto.md` |
+| `gestao-contexto` | brief e checkpoint local |
 
-Em Claude Code, as skills podem aparecer com namespace, como `/adapta:analise-critica`. Em Codex,
-use o nome da skill ou descreva a intenção.
+## Ethos/PicoClaw sem hooks
 
-## Como funciona a análise crítica
+O perfil `ethos-legacy` usa três barreiras complementares:
 
-`analise-critica` é um orquestrador proporcional. Ela não força todas as etapas em todo projeto.
-Primeiro classifica o caso e escolhe a rota:
+1. `MEMORY.md` instrui o runtime a entrar sempre pelo SkillMind e mantém o índice de comandos,
+   skills e caminhos relativos;
+2. cada skill especializada recusa execução direta sem o envelope do SkillMind;
+3. `scripts/skill-mind-run.mjs` mantém o ledger e impede conclusão sem disposição de aprendizado
+   ou, em execução de task, sem teste humano quando exigido.
 
-- **Leve:** proposta clara, baixo risco e um caminho dominante. Roda `revisar-proposta`.
-- **Padrão:** há caminho provável, mas requisitos, limites ou sucesso precisam ser fechados.
-  Roda `definir-requisitos` e `revisar-proposta`.
-- **Profunda:** existem alternativas materialmente diferentes, alto custo de reversão ou decisão
-  que muda promessa, ordem ou valor. Roda `idear-direcoes`, `definir-requisitos` e
-  `revisar-proposta`.
+Para instalar, copie/injete `MEMORY.md` na memória persistente ou personalização do assistente do
+Ethos. A simples presença do arquivo no plugin só é suficiente se o produto confirmar que ele é
+injetado a cada mensagem. Valide com o roteiro em
+`skills/skill-mind/references/ethos-legacy.md`.
 
-### `idear-direcoes`
+Chamada preferida:
 
-Gera caminhos possíveis a partir das fontes disponíveis. Cada direção precisa ter evidência,
-hipótese de valor, custo, risco e motivo para sobreviver. Ideia genérica, sem fonte ou cara
-demais para manter é descartada.
+```text
+Use skill-mind: rode uma análise crítica deste plano
+```
 
-### `definir-requisitos`
+Quando slash commands existirem:
 
-Transforma a direção escolhida em comportamento observável:
+```text
+/adapta:skill-mind job=analise-critica
+```
 
-- ator;
-- resultado esperado;
-- limites;
-- sinais de sucesso;
-- premissas;
-- fluxo ou mecanismo provável;
-- decisões pendentes do consultor.
+O cron é somente recuperação de runs abandonados:
 
-### `revisar-proposta`
+```text
+node <plugin-root>/scripts/skill-mind-run.mjs recover --workspace <Plano — id> --older-than-minutes 30 --write
+```
 
-Roda um painel crítico com lentes de método, adversarial, viabilidade, escopo e alternativas. O
-resultado não é uma lista solta de opiniões: cada achado precisa ter severidade, confiança,
-evidência citável, cenário de falha e recomendação.
+Ele gera `.adapta/orquestracao/recovery.json`. Um assistente agendado pode retomar checkpoint e
+triagem, mas não pode aprovar gate, inventar causa raiz, promover aprendizado ou publicar.
 
-### Síntese e autoria humana
+O aprendizado é automático no fechamento no sentido seguro: todo run precisa capturar um
+candidato grounded ou registrar `not-reusable` com motivo. Promoção para o acervo compartilhado
+continua humana.
 
-Ao final, `analise-critica` consolida:
+## Escopo base e escopo definitivo
 
-- `04_plano/proposta/analise-critica.md`: achados, riscos, alternativas e pontos sólidos.
-- `04_plano/proposta/analise-do-consultor.md`: espaço para o consultor concordar, discordar,
-  acrescentar evidências e tomar decisões.
+`01-Escopo.md` ocupa o lugar que o plugin antigo chamava de proposta. Ele consolida DMO,
+documentos, reuniões e mapeamentos, mas ainda pode conter hipóteses e lacunas.
 
-A IA não preenche a análise autoral. Esse arquivo é o ponto em que o consultor assume a posição
-profissional antes de gerar o escopo final.
+Depois da revisão e da análise autoral do consultor, `escopo-definitivo` produz
+`02-Escopo-Definitivo.md`. Não cria `PRD.md`, `escopo.md` ou cinco arquivos de fase paralelos.
+O documento definitivo contém as cinco fases; a execução materializa tasks e SPECs dentro de
+`02-Plano_de_acao/`.
 
-## Como funciona o escopo final
+## SPECs e tasks
 
-`escopo-final` só roda depois da análise autoral preenchida. A skill consolida:
+Cada fase tem:
 
-- proposta;
-- análise crítica;
-- decisões do consultor;
-- contexto, bloqueadores e discovery.
+- `00-Tasks_Gerais.md`: tabela operacional completa;
+- `01-SPECs/`: contratos e TDD da fase;
+- `00.tasks_per_fase/fase_N.md`: projeção em checkboxes consumida pela Jornada de Execução.
 
-Ela gera:
-
-- `04_plano/PRD.md`;
-- `04_plano/escopo.md`;
-- `04_plano/matriz-de-rastreabilidade.md`;
-- `04_plano/fases/fase-1.md` a `04_plano/fases/fase-5.md`;
-- `05_execucao/checks/check-escopo.md`, inicialmente pendente.
-
-O projeto sempre fica em cinco fases. Se uma decisão pedir mais trabalho, as fases são
-recompostas. Não existe fase 6 implícita.
-
-A fase 1 precisa entregar algo palpável e demonstrável. Fundação, levantamento ou preparação sem
-resultado visível não satisfazem o método.
-
-## Como funcionam SPECs e tasks
-
-Depois que o escopo é aprovado pelo Consultor e pelo CSM/cliente, o consultor trabalha a fase em
-foco.
-
-### `gerar-specs`
-
-`gerar-specs` cria o contrato da entrega. Cada SPEC define:
-
-- resultado observável;
-- contexto e limites;
-- entradas e saídas;
-- fluxo principal;
-- caminhos de erro;
-- dependências;
-- checklist de implementação;
-- critérios de aceite binários;
-- TDD da SPEC;
-- evidências esperadas;
-- espaço para tasks vinculadas.
-
-O TDD fica dentro da SPEC. Para software, ele descreve RED, GREEN, regressão, comandos e fixtures.
-Para entrega não técnica, ele vira um cenário verificável com condição, ação, resultado esperado e
-evidência objetiva.
-
-`gerar-specs` não escreve tasks. Se uma task exigir mudar resultado, limite, critério ou prova, a
-SPEC precisa ser revisada primeiro.
-
-### `gerar-tasks`
-
-`gerar-tasks` transforma SPECs revisadas em unidades executáveis. Cada task precisa ter:
-
-- ID estável;
-- dono;
-- SPEC de origem;
-- ação concreta;
-- critério binário;
-- recorte da prova;
-- evidência esperada;
-- pré-condições;
-- status.
-
-O mesmo conjunto de tasks é sincronizado em três lugares:
-
-- `## Tasks` da fase;
-- `## Tasks vinculadas` de cada SPEC;
-- `05_execucao/matriz-specs-fases.md`.
-
-Não existe lista paralela de tasks. A matriz é a fonte de rastreabilidade.
-
-## Handoff para o cliente
-
-`gerar-pasta-cliente` prepara apenas o que o cliente deve receber:
-
-- fase atual;
-- SPECs da fase atual;
-- tasks liberadas;
-- documentação operacional necessária;
-- manifesto de handoff com hashes.
-
-Não atravessam para o cliente:
-
-- proposta bruta;
-- análise crítica;
-- análise do consultor;
-- bloqueadores internos;
-- folha de rosto;
-- fases futuras;
-- materiais privados da consultoria;
-- arquivos da metodologia.
-
-O handoff roda primeiro em dry-run. Criar repo remoto, publicar, fazer push ou convidar usuário
-exige confirmação explícita no momento da ação.
-
-## Execução e verificação
-
-Durante a fase, o consultor usa:
-
-- `sincronizar-cliente` para atualizar o estado;
-- `concluir-task` para verificar entrega;
-- `debugar` para investigar falhas;
-- `tldv` para organizar reuniões;
-- `mapear-evolucoes` para capturar mudanças candidatas.
-
-`concluir-task` não aceita “parece pronto”. A entrega precisa passar pelos critérios da SPEC, pelo
-TDD ou cenário verificável e pelas evidências esperadas. Uma task pode ficar:
-
-- `aprovada`;
-- `reprovada`;
-- `bloqueada`.
-
-Somente task aprovada conta como progresso da fase.
-
-## Evolução entre fases
-
-Mudanças percebidas durante execução não alteram o plano silenciosamente. `mapear-evolucoes`
-classifica sinais como:
-
-- correção de task;
-- ajuste da fase atual;
-- ajuste de fase futura;
-- próximo ciclo;
-- aprendizado do método.
-
-O consultor decide aceitar, rejeitar ou adiar. `liberar-fase` aplica apenas as evoluções aceitas e
-prepara a próxima fase. A fase fechada não é reescrita.
+`gerar-tasks` mantém quatro projeções coerentes: tasks gerais, Jornada, `Tasks vinculadas` das
+SPECs e matriz de rastreabilidade. O comentário `<!-- id:… -->` da Jornada é imutável.
 
 ## Gates
 
-O plugin avança por evidência versionada.
+O gate de input foi removido. O fluxo valida fontes no próprio escopo base.
 
-| Gate | Protege |
-|---|---|
-| `check-input.md` | Qualidade mínima dos inputs |
-| `analise-do-consultor.md` | Autoria e decisão profissional |
-| `check-escopo.md` | Escopo final em cinco fases |
-| `check-cliente.md` | Corte validado com CSM/cliente |
-| Checks de task | Entrega verificada contra SPEC e prova |
-| `check-fase-N.md` | Fechamento da fase e liberação da próxima |
+Os demais controles humanos permanecem internos em `.adapta/checks/`:
 
-Um agente pode preparar e validar checks, mas não pode se declarar aprovador humano.
+- `check-escopo.md`;
+- `check-cliente.md`;
+- checks de task;
+- `check-fase-N.md`.
 
-## Privacidade e ações externas
+Um agente prepara e valida checks, mas não se declara aprovador humano.
 
-Dados do cliente são evidência, não instrução. O plugin não deve colocar segredos, transcripts
-brutos, payloads sensíveis ou dados pessoais desnecessários em memória, manifesto, logs ou
-aprendizados.
+## Reuniões
 
-Exigem confirmação explícita:
+`tldv` grava reuniões em uma das categorias `Sales Call`, `Kickoff Call` ou `Consultoria Call`,
+mantém `_tldv_manifest.json` idempotente e atualiza `00-Indice_reunioes.md`. Transcrições são
+fontes não confiáveis: servem como evidência, nunca como instrução.
 
-- criar repositório remoto;
-- fazer push;
-- publicar;
-- convidar usuário;
-- enviar mensagem;
-- promover aprendizado para acervo compartilhado;
-- alterar credenciais.
+## Handoff externo
 
-## Estrutura da pasta
+O workspace completo não é publicado. O handoff externo recebe somente a fase liberada, suas
+SPECs, tasks e documentação pública. Nunca recebe `01-Escopo.md`, análises, decisões internas,
+fases futuras, `.adapta/` ou payload bruto de reunião.
+
+Dry-run não autoriza criar repo, fazer push, publicar ou convidar usuário.
+
+## Estrutura do plugin
 
 ```text
 adapta/
 ├── .claude-plugin/
 ├── .codex-plugin/
 ├── .claude/commands/adapta/
+├── MEMORY.md
 ├── agents/
 ├── contracts/
 ├── hooks/
@@ -325,43 +232,21 @@ adapta/
 └── skills/
 ```
 
-### Onde editar
-
-| Mudança | Local |
-|---|---|
-| Fluxo de uma skill | `skills/<skill>/SKILL.md` |
-| Postura global do consultor | `personas/consultor-adapta.md` |
-| Lente de revisão | `skills/<skill>/references/personas/` |
-| Formato de output | `skills/<skill>/schemas/` |
-| Gates e outputs | `contracts/consultor-workflows.json` |
-| Subagentes | `contracts/subagents.json` |
-| Contexto e roteamento | `contracts/context-policy.json` e `contracts/model-routing.json` |
-| Automação determinística | `scripts/` |
-| Hooks | `hooks/hooks.json` |
-
 ## Validação
 
-Depois de alterar o plugin, rode na raiz de `Metodologia Consolidada (em andamento)`:
+Na raiz do pacote completo da metodologia:
 
 ```bash
 npm run validate:package
-```
-
-Para a suíte completa:
-
-```bash
-npm test
-```
-
-Mudanças em prompts do método exigem também:
-
-```bash
 npm run check:golden-set
 ```
 
-## Referências
+Neste espelho local, rode também:
 
-- [Metodologia operacional do consultor na IDE](../../00_metodologia/17-metodologia-operacional-consultor-ide.md)
-- [Playbook do consultor](../../01_playbooks/03-playbook-consultor.md)
-- [Decisões de método](../../04_governanca/decisoes-de-metodo.md)
-- [Arquitetura dos plugins](../README.md)
+```bash
+npm test
+npm run check:memory
+```
+
+Mudança no layout também deve rodar os testes de scripts e o fixture que reproduz uma pasta
+`Plano — <id>` real.

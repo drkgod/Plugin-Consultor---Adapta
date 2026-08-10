@@ -1,4 +1,4 @@
-# Contrato de requisitos da proposta
+# Contrato de requisitos do escopo base
 
 Um requisito descreve intenção verificável de produto ou processo. Ele define comportamento,
 limite e sucesso sem antecipar a implementação.

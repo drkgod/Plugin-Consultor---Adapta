@@ -5,6 +5,12 @@ description: Gera brief, checkpoint, recomendação de compactação e restaura�
 
 # Gestão de contexto
 
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `gestao-contexto`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+o modo autorizado e preserve o run até os finalizadores.
+
 Carregue `../../contracts/context-policy.json` e `../../contracts/model-routing.json`.
 
 ## Modos

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "adapta-skill-mind/v1",
+  "canonicalEntry": {
+    "skill": "skill-mind",
+    "path": "skills/skill-mind/SKILL.md",
+    "memoryBootstrap": "MEMORY.md",
+    "directInvocationRule": "Toda skill especializada exige SKILLMIND_ENVELOPE v1; sem envelope, redireciona ao SkillMind."
+  },
+  "runtimeProfiles": {
+    "agentic": {
+      "hooks": "advisory",
+      "nestedSkills": true,
+      "subagents": true,
+      "fallback": "usar contratos locais quando uma capacidade falhar"
+    },
+    "ethos-legacy": {
+      "hooks": false,
+      "nestedSkills": "nao presumir",
+      "subagents": "nao presumir",
+      "persistentMemoryRequired": true,
+      "fallback": "ler skills e personas inline, executar paineis em serie e usar ledger explicito"
+    }
+  },
+  "invariants": [
+    "interpretar o objetivo antes de escolher a skill",
+    "executar dependencias e condicionais; nao apenas a skill citada pelo usuario",
+    "uma task de implementacao por vez",
+    "nao avancar task sem teste humano explicito quando aplicavel",
+    "agente principal e o unico escritor",
+    "gate humano nao pode ser inferido",
+    "acao externa exige confirmacao imediatamente anterior",
+    "todo run concluido fecha checkpoint e disposicao de aprendizado"
+  ],
+  "envelope": {
+    "marker": "SKILLMIND_ENVELOPE v1",
+    "required": ["run_id", "requested_job", "authorized_skill", "stage_index", "runtime_profile"]
+  },
+  "executionDiscipline": {
+    "appliesWhen": "o pedido implementa codigo, muda comportamento executavel ou pede uma ou mais tasks da fase",
+    "maxActiveTasks": 1,
+    "automatedProofBeforeHumanTest": true,
+    "advanceRequiresExplicitHumanTest": true,
+    "failureRoute": "debugar"
+  },
+  "finalizers": [
+    {"id": "state", "action": "atualizar estado versionado e criar checkpoint"},
+    {"id": "learning", "action": "capturar um candidato reutilizavel ou registrar not-reusable com motivo"},
+    {"id": "ledger", "action": "fechar o run somente depois dos gates aplicaveis"}
+  ],
+  "routes": {
+    "gerar-escopo": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-escopo", "mode": "execute", "when": "sempre"}]}
+    },
+    "idear-direcoes": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "idear-direcoes", "mode": "execute", "when": "sempre"}]}
+    },
+    "definir-requisitos": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "idear-direcoes", "mode": "execute", "when": "ha caminhos materialmente diferentes ainda nao analisados"}, {"job": "definir-requisitos", "mode": "execute", "when": "sempre"}]}
+    },
+    "revisar-escopo": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "definir-requisitos", "mode": "execute", "when": "comportamento, limites ou sucesso ainda nao estao observaveis"}, {"job": "revisar-escopo", "mode": "execute", "when": "sempre"}]}
+    },
+    "analise-critica": {
+      "defaultVariant": "padrao",
+      "variants": {
+        "leve": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "aprendizado-continuo", "mode": "consultar", "when": "ha acervo local ou compartilhado configurado"}, {"job": "revisar-escopo", "mode": "execute", "when": "sempre"}, {"job": "analise-critica", "mode": "synthesize", "when": "sempre"}],
+        "padrao": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "aprendizado-continuo", "mode": "consultar", "when": "ha acervo local ou compartilhado configurado"}, {"job": "definir-requisitos", "mode": "execute", "when": "sempre"}, {"job": "revisar-escopo", "mode": "execute", "when": "sempre"}, {"job": "conselho-de-decisao", "mode": "execute", "when": "restam dois caminhos defensaveis que mudam promessa, recorte, ordem ou valor"}, {"job": "analise-critica", "mode": "synthesize", "when": "sempre"}],
+        "profunda": [{"job": "gerar-escopo", "mode": "execute", "when": "escopo base ausente ou obsoleto"}, {"job": "aprendizado-continuo", "mode": "consultar", "when": "ha acervo local ou compartilhado configurado"}, {"job": "idear-direcoes", "mode": "execute", "when": "sempre"}, {"job": "definir-requisitos", "mode": "execute", "when": "sempre"}, {"job": "revisar-escopo", "mode": "execute", "when": "sempre"}, {"job": "conselho-de-decisao", "mode": "execute", "when": "restam dois caminhos defensaveis que mudam promessa, recorte, ordem ou valor"}, {"job": "analise-critica", "mode": "synthesize", "when": "sempre"}]
+      }
+    },
+    "conselho-de-decisao": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "conselho-de-decisao", "mode": "execute", "when": "ha decisao ambigua com caminhos defensaveis concorrentes"}]}
+    },
+    "escopo-definitivo": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "analise-critica", "mode": "execute", "when": "analise critica ausente ou obsoleta"}, {"job": "escopo-definitivo", "mode": "execute", "when": "analise-do-consultor preenchida e decisoes humanas respondidas"}]}
+    },
+    "gerar-specs": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-specs", "mode": "execute", "when": "check-escopo e check-cliente aprovados"}]}
+    },
+    "gerar-tasks": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-specs", "mode": "execute", "when": "SPECs da fase ausentes ou obsoletas"}, {"job": "gerar-tasks", "mode": "execute", "when": "SPECs revisadas"}]}
+    },
+    "gerar-pasta-cliente": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "gerar-tasks", "mode": "execute", "when": "tasks ou rastreabilidade ausentes ou obsoletas"}, {"job": "gerar-pasta-cliente", "mode": "dry-run", "when": "gates e recibo validos"}]}
+    },
+    "sincronizar-cliente": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "sincronizar-cliente", "mode": "execute", "when": "sempre; publicacao permanece condicionada a confirmacao"}]}
+    },
+    "concluir-task": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "concluir-task", "mode": "execute", "when": "uma unica task, sua SPEC e evidencias estao identificadas"}]}
+    },
+    "debugar": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "debugar", "mode": "execute", "when": "ha sintoma reproduzivel ou falha de gate"}, {"job": "concluir-task", "mode": "execute", "when": "a correcao pertence a uma task e precisa ser revalidada"}]}
+    },
+    "mapear-evolucoes": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "mapear-evolucoes", "mode": "execute", "when": "sempre"}]}
+    },
+    "liberar-fase": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "sincronizar-cliente", "mode": "read-only", "when": "sempre"}, {"job": "concluir-task", "mode": "for-each-open-task", "when": "cada task da fase"}, {"job": "mapear-evolucoes", "mode": "execute", "when": "todas as tasks foram aprovadas"}, {"job": "liberar-fase", "mode": "preparar-transicao", "when": "decisoes humanas das evolucoes registradas"}, {"job": "gerar-specs", "mode": "execute", "when": "fase atual menor que 5"}, {"job": "gerar-tasks", "mode": "execute", "when": "fase atual menor que 5 e SPECs revisadas"}, {"job": "liberar-fase", "mode": "selar-liberacao", "when": "fase atual menor que 5 e proxima fase validada"}, {"job": "medir-resultado", "mode": "execute", "when": "fase atual igual a 5"}, {"job": "liberar-fase", "mode": "encerrar-projeto", "when": "fase atual igual a 5 e medicao concluida"}]}
+    },
+    "medir-resultado": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "medir-resultado", "mode": "execute", "when": "fase 5 encerrada e fontes de antes/depois disponiveis"}]}
+    },
+    "registrar-decisao": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "registrar-decisao", "mode": "execute", "when": "ha decisao estrutural explicita do projeto"}]}
+    },
+    "aprendizado-continuo": {
+      "defaultVariant": "capturar",
+      "variants": {
+        "consultar": [{"job": "aprendizado-continuo", "mode": "consultar", "when": "sempre"}],
+        "capturar": [{"job": "aprendizado-continuo", "mode": "capturar", "when": "ha sinal, evidencia e causa raiz verificavel"}],
+        "revisar": [{"job": "aprendizado-continuo", "mode": "revisar", "when": "sempre"}],
+        "promover": [{"job": "aprendizado-continuo", "mode": "promover", "when": "ha aprovacao humana explicita"}],
+        "evoluir": [{"job": "aprendizado-continuo", "mode": "evoluir", "when": "ha cluster de candidatos fortes"}]
+      }
+    },
+    "tldv": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "tldv", "mode": "execute", "when": "selecao humana e fonte valida"}]}
+    },
+    "gestao-contexto": {
+      "defaultVariant": "checkpoint",
+      "variants": {
+        "brief": [{"job": "gestao-contexto", "mode": "brief", "when": "sempre"}],
+        "checkpoint": [{"job": "gestao-contexto", "mode": "checkpoint", "when": "sempre"}],
+        "restore": [{"job": "gestao-contexto", "mode": "restore", "when": "ha memoria historica"}]
+      }
+    }
+  }
+}

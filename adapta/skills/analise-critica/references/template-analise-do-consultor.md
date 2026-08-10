@@ -33,5 +33,5 @@ _Repita um bloco para cada achado e decisão humana da análise crítica._
 - [ ] Respondi todos os IDs obrigatórios.
 - [ ] Registrei discordâncias e novas evidências.
 - [ ] Diferenciei mudança do ciclo atual de ideia para o próximo ciclo.
-- [ ] Autorizo usar estes apontamentos como input de `/adapta:escopo-final`.
+- [ ] Autorizo usar estes apontamentos como input de `/adapta:escopo-definitivo`.
 

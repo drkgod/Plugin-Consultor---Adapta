@@ -1,59 +1,51 @@
 ---
 name: gerar-tasks
-description: Decompoe SPECs revisadas em tasks independentes, binarias e executaveis por um papel em uma sessao; sincroniza a tabela operacional completa de Tasks da fase, as Tasks vinculadas de cada SPEC e a matriz de rastreabilidade. Use depois de gerar-specs ou ao criar uma emenda aprovada. Nao cria nem reescreve o contrato da SPEC.
+description: Decompõe SPECs revisadas em tasks independentes, binárias e executáveis; sincroniza 00-Tasks_Gerais.md, a Jornada em 00.tasks_per_fase/fase_N.md, as Tasks vinculadas das SPECs e a matriz de rastreabilidade.
 ---
 
 # Gerar tasks a partir das SPECs
 
-Carregue `../../personas/consultor-adapta.md`, `../../contracts/subagents.json`,
-`references/contrato-tasks.md`, as SPECs da fase em foco e
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `gerar-tasks`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+a decomposição autorizada e preserve o run até os finalizadores.
+
+Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout.json`,
+`../../contracts/subagents.json`, `references/contrato-tasks.md`, as SPECs da fase em foco e
 `schemas/revisao-tasks.schema.json`.
 
 ## Gates
 
-- Exija `check-escopo.md` e `check-cliente.md` aprovados.
-- Exija SPECs da fase em foco revisadas por `gerar-specs`, com critérios de aceite e TDD
-  executável.
-- Se uma task exigir mudar resultado, limite, critério ou prova da SPEC, pare e devolva para
-  `/adapta:gerar-specs`. Task não corrige contrato por baixo.
+- Exija `.adapta/checks/check-escopo.md` e `.adapta/checks/check-cliente.md` aprovados.
+- Exija SPECs revisadas, com critérios de aceite e TDD executável.
+- Se uma task exigir mudar resultado, limite, critério ou prova, devolva ao SkillMind a etapa
+  `gerar-specs`.
 
 ## Processo
 
-1. Leia a fase em foco, todas as suas SPECs e `05_execucao/matriz-specs-fases.md`.
-2. Para cada SPEC, derive tasks pela progressão de evidência: preparação/fixture, caminho
-   principal, bordas/erros, integração/handoff e prova final, somente quando cada recorte deixar
-   um estado válido e demonstrável.
-3. Cada task deve ter:
-   - ID estável, ação concreta e um dono;
-   - uma SPEC de origem;
-   - critério binário;
-   - recorte nomeado da prova da SPEC;
-   - evidência esperada;
-   - pré-condições já satisfeitas no momento da liberação;
-   - status.
-4. **Independência:** nenhuma task liberada na mesma leva depende de outra task aberta. Quando a
-   sequência for inevitável, organize levas separadas ou recomponha o corte.
-   **Uma task por SPEC é corte degenerado**, salvo micro-spec que explicitamente cabe em uma task.
-5. Escreva o mesmo conjunto canônico em três projeções, sem criar lista paralela:
-   - `## Tasks` de `04_plano/fases/fase-N.md` como **tabela operacional completa**, com as
-     colunas `ID`, `Task`, `Dono`, `SPEC`, `Critério`, `Recorte da prova`,
-     `Evidência esperada`, `Pré-condições` e `Status`;
+1. Leia `0N.Fase_N/00-Tasks_Gerais.md`, todas as SPECs em `0N.Fase_N/01-SPECs/`, a lista
+   `00.tasks_per_fase/fase_N.md` e `matriz-de-rastreabilidade.md`.
+2. Para cada SPEC, derive tasks pela progressão de evidência: preparação, caminho principal,
+   bordas/erros, integração/handoff e prova final, somente quando cada recorte deixar estado
+   válido e demonstrável.
+3. Cada task possui ID estável, ação, dono, SPEC, critério binário, recorte da prova, evidência
+   esperada, pré-condições e status.
+4. Tasks liberadas na mesma leva não dependem de outra task aberta. Uma task por SPEC é corte
+   degenerado, salvo micro-SPEC proporcional.
+5. Sincronize quatro projeções do mesmo conjunto:
+   - tabela operacional completa em `0N.Fase_N/00-Tasks_Gerais.md`;
+   - checklist da Jornada em `00.tasks_per_fase/fase_N.md`, preservando cada marcador
+     `<!-- id:… -->`; task nova recebe um UUID uma única vez;
    - `## Tasks vinculadas` de cada SPEC;
-   - `05_execucao/matriz-specs-fases.md`.
-   `/adapta:gerar-pasta-cliente` copia essa fase pronta para o repo do cliente sem reescrever,
-   resumir ou recriar as tasks; portanto a task precisa nascer completa aqui.
-6. Rode o painel `gerar-tasks`:
-   - `revisor-decomposicao` verifica tamanho, independência, dono e recorte da prova;
-   - `revisor-rastreabilidade` verifica consistência das três projeções e ausência de task órfã.
-7. Corrija inconsistências seguras. Mudança de intenção ou de contrato volta ao consultor e à
-   SPEC proprietária.
-8. Atualize STATUS, índice e changelog. Informe que a fase está pronta para
-   `/adapta:gerar-pasta-cliente` ou para o dry-run de `liberar-fase`.
+   - `03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md`.
+   A projeção da Jornada contém título e `[ ]`/`[x]`; os detalhes permanecem no arquivo de tasks
+   gerais e nas SPECs.
+6. Rode `revisor-decomposicao` e `revisor-rastreabilidade`; corrija inconsistências seguras.
+7. Atualize `STATUS.md` e `changelog.md`. Informe que a fase está pronta para handoff ou para o
+   dry-run de `liberar-fase`.
 
 ## Emendas
 
-Micro-spec aprovada por D19 pode gerar uma única task. Registre a task na fase, na seção
-`## Emendas` e em `## Tasks vinculadas` da SPEC mãe, preservando o histórico append-only.
-
-Subagents são read-only e retornam `schemas/revisao-tasks.schema.json`; o agente principal é o
-único escritor.
+Micro-SPEC aprovada pode gerar uma task. Registre-a nas quatro projeções, preservando histórico.
+Revisores são read-only; o agente principal é o único escritor.

@@ -21,17 +21,18 @@ capaz de produzir evidência própria.
 
 O conjunto de tasks aparece em:
 
-- tabela `## Tasks` da fase: visão operacional;
+- `0N.Fase_N/00-Tasks_Gerais.md`: tabela operacional completa;
+- `00.tasks_per_fase/fase_N.md`: checklist da Jornada com IDs imutáveis;
 - `## Tasks vinculadas` da SPEC: visão do contrato;
-- matriz `matriz-specs-fases.md`: visão de rastreabilidade.
+- `02-Plano_de_acao/matriz-de-rastreabilidade.md`: visão de rastreabilidade.
 
-A tabela da fase é a **tabela operacional completa** que será copiada para o cliente. Ela precisa
+`00-Tasks_Gerais.md` é a **tabela operacional completa** que será copiada para o cliente. Ela precisa
 ter, no mínimo: `ID`, `Task`, `Dono`, `SPEC`, `Critério`, `Recorte da prova`,
 `Evidência esperada`, `Pré-condições` e `Status`.
 
-As três projeções devem conter os mesmos IDs, SPEC, dono, critério, recorte de prova, evidência,
-pré-condições e status. Não existe `tasks.md` paralelo. O handoff do cliente duplica a fase e as
-SPECs sem reescrever as tasks.
+As quatro projeções devem conter os mesmos IDs e status; os detalhes completos de SPEC, dono,
+critério, recorte de prova, evidência e pré-condições ficam em `00-Tasks_Gerais.md`, nas SPECs e
+na matriz. Não existe `tasks.md` paralelo. O handoff duplica tasks gerais e SPECs sem reescrever.
 
 ## Sinais de corte ruim
 

@@ -4,11 +4,13 @@ import crypto from "node:crypto"
 import path from "node:path"
 import process from "node:process"
 import { fileURLToPath } from "node:url"
+import { PLAN_PATHS, resolvePlanRoot } from "./workspace-layout.mjs"
 
 const BASE_URL = "https://pasta.tldv.io"
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,200}$/
 const ISO_TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/
 const BUNDLE_KEYS = ["meeting", "transcript", "highlights", "notes"]
+const MEETING_CATEGORIES = new Set(["Sales Call", "Kickoff Call", "Consultoria Call"])
 
 function inside(root, candidate) {
   const relative = path.relative(path.resolve(root), path.resolve(candidate))
@@ -206,6 +208,23 @@ function safeName(value) {
   return value.normalize("NFKD").replace(/[^A-Za-z0-9 _.-]/g, "").replace(/\s+/g, " ").trim().slice(0, 80) || "Reuniao"
 }
 
+function meetingCategory(value) {
+  const category = value || "Consultoria Call"
+  if (!MEETING_CATEGORIES.has(category)) {
+    throw new Error(`Categoria de reuniao invalida: ${category}`)
+  }
+  return category
+}
+
+function officialMeetingUrl(value, meetingId) {
+  if (typeof value !== "string" || !value.startsWith("https://")) return null
+  try {
+    return parseMeetingId(value) === meetingId ? value : null
+  } catch {
+    return null
+  }
+}
+
 function readManifest(root) {
   const file = path.join(root, "_tldv_manifest.json")
   if (!fs.existsSync(file)) return { schemaVersion: "adapta-tldv-manifest/v1", meetings: [] }
@@ -224,29 +243,45 @@ function writeAtomic(file, body) {
 }
 
 function renderIndex(meetings) {
-  const lines = ["# Índice de reuniões", "", "| Nº | Data | Reunião | Pasta |", "|---:|---|---|---|"]
+  const lines = ["# Índice de reuniões", "", "Reuniões registradas do cliente (tl;dv).", "", "| Reunião | Data | Tipo | tl;dv |", "|---|---|---|---|"]
   for (const meeting of meetings) {
-    lines.push(`| ${String(meeting.numero).padStart(2, "0")} | ${meeting.happenedAt.slice(0, 10)} | ${meeting.name} | [abrir](${meeting.folder}/02_ata.md) |`)
+    const link = meeting.url ? `[abrir](${meeting.url})` : "—"
+    lines.push(`| ${meeting.name} | ${meeting.happenedAt.slice(0, 10)} | ${meeting.categoria || "Consultoria Call"} | ${link} |`)
   }
   return `${lines.join("\n")}\n`
 }
 
-export function writeMeetingBundle({ bundle, outputRoot, dryRun = false }) {
+export function writeMeetingBundle({ bundle, outputRoot, category, dryRun = false }) {
   const root = path.resolve(outputRoot)
+  const categoria = meetingCategory(category)
+  const categoryRoot = path.join(root, categoria)
   validateBundle(bundle)
+  if (fs.existsSync(categoryRoot) && fs.lstatSync(categoryRoot).isSymbolicLink()) {
+    throw new Error("Categoria de reunioes nao pode ser link simbolico")
+  }
   if (bundle.transcript.data.length === 0) throw new Error("Transcript TLDV vazio")
   const previewManifest = readManifest(root)
   if (previewManifest.meetings.some((meeting) => meeting.id_tldv === bundle.meeting.id || meeting.id === bundle.meeting.id)) {
     throw new Error(`Reuniao TLDV ja consta no manifest: ${bundle.meeting.id}`)
   }
   const previewNumber = previewManifest.meetings.reduce((max, meeting) => Math.max(max, Number(meeting.numero) || 0), 0) + 1
+  const previewCategoryNumber = previewManifest.meetings
+    .filter((meeting) => meeting.categoria === categoria || String(meeting.folder || "").startsWith(`${categoria}/`))
+    .reduce((max, meeting) => {
+      const relative = String(meeting.folder || "").replaceAll("\\", "/").replace(`${categoria}/`, "")
+      return Math.max(max, Number(relative.match(/^(\d+)\./)?.[1]) || 0)
+    }, 0) + 1
   const date = new Date(bundle.meeting.happenedAt).toISOString().slice(0, 10).split("-").reverse().join(".")
-  const previewFolder = `${String(previewNumber).padStart(2, "0")}. ${date} - ${safeName(bundle.meeting.name)}`
-  const previewTarget = path.join(root, previewFolder)
+  const previewFolder = `${String(previewCategoryNumber).padStart(2, "0")}. ${date} - ${safeName(bundle.meeting.name)}`
+  const previewTarget = path.join(root, categoria, previewFolder)
   if (!inside(root, previewTarget)) throw new Error("Destino TLDV escapou da pasta de reunioes")
-  if (dryRun) return { schemaVersion: "adapta-reuniao/v1", meetingId: bundle.meeting.id, numero: previewNumber, target: previewTarget }
+  if (dryRun) return { schemaVersion: "adapta-reuniao/v2", meetingId: bundle.meeting.id, numero: previewNumber, categoria, target: previewTarget }
   fs.mkdirSync(root, { recursive: true })
   if (fs.lstatSync(root).isSymbolicLink()) throw new Error("Pasta de reunioes nao pode ser link simbolico")
+  fs.mkdirSync(categoryRoot, { recursive: true })
+  if (fs.lstatSync(categoryRoot).isSymbolicLink() || !inside(fs.realpathSync(root), fs.realpathSync(categoryRoot))) {
+    throw new Error("Categoria de reunioes resolve para fora da pasta de reunioes")
+  }
   const lockPath = path.join(root, ".tldv-sync.lock")
   let lock
   let staging
@@ -261,11 +296,19 @@ export function writeMeetingBundle({ bundle, outputRoot, dryRun = false }) {
       throw new Error(`Reuniao TLDV ja consta no manifest: ${bundle.meeting.id}`)
     }
     const numero = currentManifest.meetings.reduce((max, meeting) => Math.max(max, Number(meeting.numero) || 0), 0) + 1
-    const folder = `${String(numero).padStart(2, "0")}. ${date} - ${safeName(bundle.meeting.name)}`
-    target = path.join(root, folder)
+    const categoryNumber = currentManifest.meetings
+      .filter((meeting) => meeting.categoria === categoria || String(meeting.folder || "").startsWith(`${categoria}/`))
+      .reduce((max, meeting) => {
+        const relative = String(meeting.folder || "").replaceAll("\\", "/").replace(`${categoria}/`, "")
+        return Math.max(max, Number(relative.match(/^(\d+)\./)?.[1]) || 0)
+      }, 0) + 1
+    const folderName = `${String(categoryNumber).padStart(2, "0")}. ${date} - ${safeName(bundle.meeting.name)}`
+    const folder = `${categoria}/${folderName}`
+    target = path.join(root, categoria, folderName)
     if (!inside(root, target)) throw new Error("Destino TLDV escapou da pasta de reunioes")
     if (fs.existsSync(target)) throw new Error(`Reuniao ja materializada: ${target}`)
-    plan = { schemaVersion: "adapta-reuniao/v1", meetingId: bundle.meeting.id, numero, target }
+    plan = { schemaVersion: "adapta-reuniao/v2", meetingId: bundle.meeting.id, numero, categoria, target }
+    fs.mkdirSync(path.dirname(target), { recursive: true })
     staging = fs.mkdtempSync(path.join(root, ".tldv-staging-"))
     fs.mkdirSync(path.join(staging, "99_tldv_api"), { recursive: true })
     for (const [name, payload] of Object.entries(bundle)) {
@@ -276,16 +319,18 @@ export function writeMeetingBundle({ bundle, outputRoot, dryRun = false }) {
     promoted = true
     const entry = {
       numero,
+      categoria,
       id_tldv: bundle.meeting.id,
       name: safeName(bundle.meeting.name),
       happenedAt: bundle.meeting.happenedAt,
-      folder
+      folder,
+      ...(officialMeetingUrl(bundle.meeting.url, bundle.meeting.id) ? { url: bundle.meeting.url } : {})
     }
     const nextManifest = { ...currentManifest, meetings: [...currentManifest.meetings, entry] }
     writeAtomic(path.join(root, "_tldv_manifest.json"), `${JSON.stringify(nextManifest, null, 2)}\n`)
     manifestCommitted = true
     try {
-      writeAtomic(path.join(root, "00_INDICE_REUNIOES.md"), renderIndex(nextManifest.meetings))
+      writeAtomic(path.join(root, "00-Indice_reunioes.md"), renderIndex(nextManifest.meetings))
     } catch (error) {
       return { ...plan, warnings: [`Manifest salvo; indice precisa ser regenerado: ${error.message}`] }
     }
@@ -320,6 +365,8 @@ function parseArgs(argv) {
     else if (value === "--to") args.to = argv[++index]
     else if (value === "--input") args.input = argv[++index]
     else if (value === "--output") args.outputRoot = argv[++index]
+    else if (value === "--workspace") args.workspace = argv[++index]
+    else if (value === "--category") args.category = argv[++index]
     else if (value === "--dry-run") args.dryRun = true
     else throw new Error(`Argumento desconhecido: ${value}`)
   }
@@ -340,14 +387,15 @@ async function main() {
       return
     }
     if (args.input) {
-      if (!args.outputRoot) throw new Error("Use --input <bundle.json> --output <02_reunioes> [--dry-run]")
+      args.outputRoot ||= path.join(resolvePlanRoot(args.workspace || process.cwd()), PLAN_PATHS.meetings)
       const bundle = loadLocalBundle(args.input)
-      console.log(JSON.stringify(writeMeetingBundle({ bundle, outputRoot: args.outputRoot, dryRun: args.dryRun }), null, 2))
+      console.log(JSON.stringify(writeMeetingBundle({ bundle, outputRoot: args.outputRoot, category: args.category, dryRun: args.dryRun }), null, 2))
       return
     }
-    if (!args.meetingId || !args.outputRoot) throw new Error("Use --email <email> --from <data> --to <data> ou --meeting <id|link> --output <02_reunioes> [--dry-run]")
+    if (!args.meetingId) throw new Error("Use --email <email> --from <data> --to <data> ou --meeting <id|link> [--workspace <cliente|plano>] [--category <tipo>] [--dry-run]")
+    args.outputRoot ||= path.join(resolvePlanRoot(args.workspace || process.cwd()), PLAN_PATHS.meetings)
     const bundle = await fetchMeetingBundle({ meetingId: args.meetingId, apiKey: process.env.TLDV_API_KEY })
-    console.log(JSON.stringify(writeMeetingBundle({ bundle, outputRoot: args.outputRoot, dryRun: args.dryRun }), null, 2))
+    console.log(JSON.stringify(writeMeetingBundle({ bundle, outputRoot: args.outputRoot, category: args.category, dryRun: args.dryRun }), null, 2))
   } catch (error) {
     console.error(`Falha na ingestao tl;dv: ${error.message}`)
     process.exitCode = 1

@@ -5,6 +5,12 @@ description: Consulta, captura, reforça, contradiz, promove e evolui aprendizad
 
 # Aprendizado contínuo composto
 
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `aprendizado-continuo`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+o modo autorizado e preserve o run até os finalizadores.
+
 <!-- Reempacota ce-compound (Compound Engineering) e continuous-learning-v2 (ECC). É autossuficiente: os plugins externos não são dependências de runtime. -->
 
 Carregue `../../personas/consultor-adapta.md`, `../../contracts/learning-policy.json`, o painel
@@ -49,7 +55,7 @@ observação crua nunca entram no acervo.
 4. Em captura simples e inequívoca use modo leve no agente principal. Em sobreposição ambígua,
    promoção, contradição ou risco de privacidade, despache o `curador-de-aprendizado` read-only;
    somente o agente principal escreve.
-5. Grave **um** JSON em `05_execucao/aprendizados/candidatos/<id>.json`, válido no schema, com
+5. Grave **um** JSON em `.adapta/aprendizados/candidatos/<id>.json`, válido no schema, com
    escopo `projeto`, confiança, ocorrências, evidências e proveniência. Nunca inclua nome de
    cliente, segredo, dado pessoal, transcript ou código proprietário desnecessário.
 

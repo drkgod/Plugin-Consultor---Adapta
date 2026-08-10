@@ -7,6 +7,12 @@ description: Lente interna da análise crítica para decisões ambíguas com cam
 
 # Conselho de Decisão (4 vozes para decisão ambígua)
 
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `conselho-de-decisao`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute a lente
+autorizada e preserve o run até os finalizadores.
+
 Para quando **existem dois ou mais caminhos defensáveis** e o risco real é ancoragem: a
 conversa já pende para um lado e ninguém construiu o desacordo. O valor do conselho não é
 unanimidade — é tornar a divergência legível **antes** de decidir.
@@ -15,10 +21,10 @@ unanimidade — é tornar a divergência legível **antes** de decidir.
 
 | Em vez do conselho | Use |
 |---|---|
-| Revisar a proposta de plano | `/adapta:analise-critica` (ela convoca o conselho se necessário) |
+| Revisar o escopo base | `skill-mind job=analise-critica` (ele convoca o conselho se necessário) |
 | Verificar se uma entrega está pronta | `verificador-de-entrega` (plugin do cliente) |
-| Especificar a fase | `/adapta:gerar-specs` |
-| Decompor SPECs em tasks | `/adapta:gerar-tasks` |
+| Especificar a fase | `skill-mind job=gerar-specs` |
+| Decompor SPECs em tasks | `skill-mind job=gerar-tasks` |
 | Pergunta factual ou execução óbvia | responda/execute direto |
 
 ## As 4 vozes
@@ -34,7 +40,7 @@ unanimidade — é tornar a divergência legível **antes** de decidir.
 
 1. **Extraia a pergunta real** em uma frase: o que estamos decidindo, quais restrições valem,
    o que conta como sucesso. Pergunta vaga → uma pergunta de esclarecimento antes de convocar.
-2. **Reúna só o contexto necessário** (trechos da proposta, bloqueadores, STATUS — compacto).
+2. **Reúna só o contexto necessário** (trechos do escopo, restrições, STATUS — compacto).
 3. **Escreva a posição do Arquiteto primeiro** — sua posição, as 3 razões mais fortes, o
    principal risco do caminho preferido. Antes de ler as outras vozes, para a síntese não virar
    eco.
@@ -82,6 +88,6 @@ unanimidade — é tornar a divergência legível **antes** de decidir.
 
 ## Persistência
 
-Decisão que muda algo real no projeto → registre com `/adapta:registrar-decisao`.
+Decisão que muda algo real no projeto → devolva ao SkillMind o job `registrar-decisao`.
 Decisão que muda **o método** (não só este projeto) → leve para quem mantém o pacote
 (`04_governanca/decisoes-de-metodo.md`). Decisão que não muda nada → não persista.

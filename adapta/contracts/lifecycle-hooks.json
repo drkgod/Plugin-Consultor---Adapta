@@ -1,10 +1,15 @@
 {
   "schemaVersion": "adapta-lifecycle-hooks/v1",
   "profile": "advisory",
+  "runtimeGuarantee": "O fluxo correto nao depende de hooks; SkillMind e o ledger executam os mesmos limites explicitamente.",
   "hooks": [
     {"event":"SessionStart","id":"consultor-context-brief","script":"scripts/context-brief.mjs","purpose":"injetar estado minimo e memoria historica limitada","blocking":false},
     {"event":"PreCompact","id":"consultor-context-checkpoint","script":"scripts/context-checkpoint.mjs","purpose":"salvar checkpoint estruturado antes da compactacao","blocking":false},
     {"event":"Stop","id":"consultor-session-checkpoint","script":"scripts/context-checkpoint.mjs","purpose":"persistir somente estado operacional minimo","blocking":false}
   ],
+  "fallbacks": {
+    "ethos-legacy": "injetar MEMORY.md, iniciar e fechar runs pelo SkillMind e recuperar pendencias por cron",
+    "sem-subagents": "executar as mesmas personas em serie e preservar os schemas"
+  },
   "prohibitedActions": ["aprovar gate", "publicar", "push", "criar repositorio", "promover aprendizado", "reescrever escopo"]
 }

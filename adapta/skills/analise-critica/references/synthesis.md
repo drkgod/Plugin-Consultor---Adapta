@@ -6,8 +6,8 @@ A sintese consome os artefatos produzidos pela rota escolhida:
 
 - `direcoes.md`, quando `idear-direcoes` foi executada;
 - `requisitos.md`, quando `definir-requisitos` foi executada;
-- `revisao-da-proposta.md`, produzida por `revisar-proposta` a partir dos achados no schema
-  `achado-revisao-proposta.schema.json`.
+- `revisao-do-escopo.md`, produzida por `revisar-escopo` a partir dos achados no schema
+  `achado-revisao-escopo.schema.json`.
 
 A sintese deve juntar esses resultados em um documento humano, sem despejar JSON bruto nem
 reexecutar o trabalho das skills especializadas.
@@ -16,7 +16,7 @@ reexecutar o trabalho das skills especializadas.
 
 1. **Deduplicar por falha, nao por frase.** Se dois revisores apontam a mesma consequencia, vira um
    achado com varios revisores de origem.
-2. **Grave exige cenario concreto.** Achado grave precisa dizer como a proposta falha no mundo real
+2. **Grave exige cenario concreto.** Achado grave precisa dizer como o escopo falha no mundo real
    e qual evidência sustenta isso.
 3. **Decisao humana nao e erro.** Quando existem dois caminhos validos, escreva como decisao do
    consultor: opcoes, trade-off e recomendacao se houver.
@@ -28,15 +28,15 @@ reexecutar o trabalho das skills especializadas.
 ## Template do documento final
 
 ```markdown
-# Analise Critica da Proposta
+# Analise Critica do Escopo
 
 **Data:** AAAA-MM-DD
-**Proposta analisada:** `04_plano/proposta/proposta.md`
+**Escopo analisado:** `03-Projeto/01-Escopo.md`
 **Revisores:** revisor-de-plano, revisor-adversarial, revisor-viabilidade, guardiao-de-escopo, explorador-de-alternativas
 
 ## Veredito curto
 
-[2-4 linhas: proposta utilizavel / precisa de corte / precisa regenerar / falta input]
+[2-4 linhas: escopo utilizavel / precisa de corte / precisa regenerar / falta fonte]
 
 ## Achados graves
 
@@ -67,6 +67,6 @@ devem ser usados em `analise-do-consultor.md` e na matriz de rastreabilidade.]
 
 ## Proximo passo
 
-O consultor lê proposta + análise crítica, preenche `analise-do-consultor.md` e roda
-`/adapta:escopo-final`.
+O consultor lê escopo base + análise crítica, preenche `analise-do-consultor.md` e roda
+`/adapta:escopo-definitivo`.
 ```

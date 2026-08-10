@@ -37,5 +37,13 @@
     "rawObservationCapture": false,
     "reason": "portability and client privacy; structured job artifacts are the observation surface",
     "mayApproveOrPromote": false
+  },
+  "automaticClosure": {
+    "owner": "skill-mind",
+    "everyCompletedRunRequiresDisposition": true,
+    "allowedDispositions": ["captured", "not-reusable"],
+    "recoveryLedger": ".adapta/orquestracao/",
+    "cronMay": ["detectar run interrompido", "solicitar retomada da triagem", "atualizar relatorio de recuperacao"],
+    "cronMayNot": ["inventar causa raiz", "promover aprendizado", "aprovar gate", "publicar"]
   }
 }

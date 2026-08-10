@@ -3,16 +3,13 @@ import fs from "node:fs"
 import path from "node:path"
 import process from "node:process"
 import { fileURLToPath } from "node:url"
+import { PLAN_PATHS, planPath, resolvePlanRoot } from "./workspace-layout.mjs"
 
 const STATUSES = ["aprovada", "reprovada", "bloqueada"]
 const RECEIPT_TITLE = "adapta-task-result/v1"
 
 function resolveWorkspace(workspace) {
-  const root = path.resolve(workspace)
-  if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
-    throw new Error(`Workspace invalido: ${root}`)
-  }
-  return root
+  return resolvePlanRoot(workspace)
 }
 
 function assertString(value, label, file) {
@@ -59,7 +56,7 @@ function validateReceipt(receipt, file) {
 }
 
 function readReceipts(workspace) {
-  const directory = path.join(workspace, "05_execucao", "checks", "tasks")
+  const directory = planPath(workspace, "taskReceipts")
   if (!fs.existsSync(directory)) return []
   if (!fs.statSync(directory).isDirectory()) throw new Error(`Pasta de recibos invalida: ${directory}`)
   return fs.readdirSync(directory)
@@ -84,7 +81,7 @@ function extractPhase(name, taskId) {
 }
 
 function readDebtLedger(workspace) {
-  const file = path.join(workspace, "05_execucao", "dividas.md")
+  const file = planPath(workspace, "debtLedger")
   if (!fs.existsSync(file)) return { exists: false, total: 0, entries: [], file }
   const entries = fs.readFileSync(file, "utf8")
     .split(/\r?\n/)
@@ -138,8 +135,8 @@ export function buildMethodReport({ workspace }) {
       reason: `os recibos ${RECEIPT_TITLE} nao possuem timestamp; nenhuma janela foi estimada`
     },
     sources: {
-      receipts: "05_execucao/checks/tasks/*.json",
-      debts: debts.exists ? "05_execucao/dividas.md" : "05_execucao/dividas.md (ausente)"
+      receipts: `${PLAN_PATHS.taskReceipts.replaceAll(path.sep, "/")}/*.json`,
+      debts: debts.exists ? PLAN_PATHS.debtLedger.replaceAll(path.sep, "/") : `${PLAN_PATHS.debtLedger.replaceAll(path.sep, "/")} (ausente)`
     }
   }
 }

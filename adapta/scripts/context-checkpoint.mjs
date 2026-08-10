@@ -6,6 +6,7 @@ import process from "node:process"
 import { fileURLToPath } from "node:url"
 import { parseCheckStatus } from "./check-status.mjs"
 import { redactDeep, redactSensitive } from "./redact-sensitive.mjs"
+import { PLAN_PATHS, planPath, resolvePlanRoot, toPlanRelative } from "./workspace-layout.mjs"
 
 function safeText(value, maxChars) {
   return redactSensitive(value).slice(0, maxChars)
@@ -18,7 +19,7 @@ function read(file, maxChars, tail = false) {
 }
 
 function checks(root) {
-  const directory = path.join(root, "05_execucao", "checks")
+  const directory = planPath(root, "checks")
   if (!fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) return []
   return fs.readdirSync(directory)
     .filter((name) => /^check-[a-z0-9-]+\.md$/i.test(name))
@@ -27,29 +28,27 @@ function checks(root) {
       const body = read(path.join(directory, name), 1200)
       let parsed = { status: "PENDENTE", canAdvance: false }
       try { parsed = parseCheckStatus(body) } catch { /* check incompleto permanece pendente */ }
-      return { path: `05_execucao/checks/${name}`, ...parsed }
+      return { path: toPlanRelative(root, path.join(directory, name)), ...parsed }
     })
 }
 
 export function buildCheckpoint({ workspace, reason = "manual" }) {
-  const root = path.resolve(workspace)
-  if (!fs.existsSync(root) || !fs.statSync(root).isDirectory() || fs.lstatSync(root).isSymbolicLink()) {
-    throw new Error("Workspace invalido para checkpoint")
-  }
-  const status = read(path.join(root, "STATUS.md"), 4000)
-  const changelogTail = read(path.join(root, "changelog.md"), 1600, true)
+  const root = resolvePlanRoot(workspace)
+  const status = read(planPath(root, "status"), 4000)
+  const changelogTail = read(planPath(root, "changelog"), 1600, true)
   const gateStates = checks(root)
   const currentGate = [...gateStates].reverse().find((gate) => !gate.canAdvance) || gateStates.at(-1) || null
   const phase = status.match(/(?:fase atual|fase)\s*[:#-]?\s*(\d)/i)?.[1] || null
   const pendingDecisions = status.split("\n").filter((line) => /pend[eê]ncia|decis[aã]o pendente/i.test(line)).slice(0, 20)
   const touchedArtifacts = [...changelogTail.matchAll(/`([^`]+\.[A-Za-z0-9]+)`/g)].map((match) => match[1]).slice(-20)
-  const nextSafeAction = status.match(/pr[oó]xima (?:a[cç][aã]o|task)\s*:\s*(.+)/i)?.[1]?.trim() || "Revalidar este checkpoint contra STATUS.md e checks antes de agir."
+  const nextSafeAction = status.match(/pr[oó]xima (?:a[cç][aã]o|task)\s*:\s*(.+)/i)?.[1]?.trim() || "Revalidar este checkpoint contra STATUS.md e controles antes de agir."
   return {
     schemaVersion: "adapta-context-checkpoint/v1",
     workspace: root,
     reason,
     timestamp: new Date().toISOString(),
-    sourceOfTruth: ["STATUS.md", "changelog.md", "05_execucao/checks/"],
+    sourceOfTruth: [PLAN_PATHS.status, PLAN_PATHS.changelog, PLAN_PATHS.checks]
+      .map((entry) => entry.replaceAll(path.sep, "/")),
     statusSnapshot: status,
     changelogTail,
     gateStates,

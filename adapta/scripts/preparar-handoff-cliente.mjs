@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url"
 import { parseCheckStatus } from "./check-status.mjs"
 import { readPlanEnvelope, writePlanEnvelope } from "./plan-envelope.mjs"
 import { assertPopulatedTasksTable } from "./tasks-section.mjs"
+import { phasePaths, planPath, resolvePlanRoot } from "./workspace-layout.mjs"
 
 const CLIENT_TOP_LEVEL_ALLOWLIST = new Set([
   ".claude",
@@ -106,7 +107,7 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
   }
 
   const roots = {
-    consultant: path.resolve(consultantRoot),
+    consultant: resolvePlanRoot(consultantRoot),
     client: path.resolve(clientRoot),
     template: path.resolve(templateRoot)
   }
@@ -121,7 +122,7 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
     throw new Error("Gerar pasta cliente exige destino novo ou vazio; fases seguintes usam sincronizar-cliente")
   }
 
-  const checksRoot = path.join(roots.consultant, "05_execucao", "checks")
+  const checksRoot = planPath(roots.consultant, "checks")
   const prerequisites = []
   for (const name of ["check-escopo.md", "check-cliente.md"]) {
     const source = path.join(checksRoot, name)
@@ -138,7 +139,7 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
     throw new Error("Recibo de handoff nao comprova reuniao, ajustes e revalidacao")
   }
   const meeting = path.resolve(roots.consultant, meetingRelative)
-  assertSafeRegularFile(path.join(roots.consultant, "02_reunioes"), meeting)
+  assertSafeRegularFile(planPath(roots.consultant, "meetings"), meeting)
   prerequisites.push(
     { source: receipt, sha256: sha256(receipt), classification: "recibo-handoff" },
     { source: meeting, sha256: sha256(meeting), classification: "reuniao-de-corte" }
@@ -160,7 +161,8 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
       }
     })
 
-  const phaseSource = path.join(roots.consultant, "04_plano", "fases", `fase-${phase}.md`)
+  const currentPhase = phasePaths(roots.consultant, phase)
+  const phaseSource = currentPhase.tasks
   assertSafeRegularFile(roots.consultant, phaseSource)
   assertPopulatedTasksTable(fs.readFileSync(phaseSource, "utf8"), `Fase ${phase}`)
   copies.push({
@@ -170,20 +172,17 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
     classification: "fase-atual"
   })
 
-  const nestedSpecs = path.join(roots.consultant, "05_execucao", "specs", `fase-${phase}`)
-  const flatSpecs = path.join(roots.consultant, "05_execucao", "specs")
-  const specFiles = fs.existsSync(nestedSpecs)
-    ? listRegularFiles(nestedSpecs).filter((file) => path.extname(file).toLowerCase() === ".md")
-    : listRegularFiles(flatSpecs).filter((file) => path.basename(file).startsWith(`fase-${phase}--spec-`) && path.extname(file).toLowerCase() === ".md")
+  const specFiles = listRegularFiles(currentPhase.specs)
+    .filter((file) => path.extname(file).toLowerCase() === ".md" && /^spec-/i.test(path.basename(file)))
   if (specFiles.length === 0) throw new Error(`Nenhuma SPEC valida encontrada para a fase ${phase}`)
-  const prd = path.join(roots.consultant, "04_plano", "PRD.md")
-  const scope = path.join(roots.consultant, "04_plano", "escopo.md")
-  assertSafeRegularFile(roots.consultant, prd)
-  assertSafeRegularFile(roots.consultant, scope)
+  const baseScope = planPath(roots.consultant, "baseScope")
+  const definitiveScope = planPath(roots.consultant, "definitiveScope")
+  assertSafeRegularFile(roots.consultant, baseScope)
+  assertSafeRegularFile(roots.consultant, definitiveScope)
   const receiptHashes = {
-    PRD: sha256(prd),
-    Escopo: sha256(scope),
-    Fase: sha256(phaseSource),
+    "Escopo base": sha256(baseScope),
+    "Escopo definitivo": sha256(definitiveScope),
+    [`Tasks fase ${phase}`]: sha256(phaseSource),
     [`SPECs fase ${phase}`]: digestFiles(roots.consultant, specFiles)
   }
   for (const [label, expected] of Object.entries(receiptHashes)) {
@@ -192,8 +191,8 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
     if (recorded !== expected) throw new Error(`Recibo de handoff nao corresponde ao hash atual de ${label}`)
   }
   prerequisites.push(
-    { source: prd, sha256: receiptHashes.PRD, classification: "artefato-revalidado" },
-    { source: scope, sha256: receiptHashes.Escopo, classification: "artefato-revalidado" }
+    { source: baseScope, sha256: receiptHashes["Escopo base"], classification: "artefato-revalidado" },
+    { source: definitiveScope, sha256: receiptHashes["Escopo definitivo"], classification: "artefato-revalidado" }
   )
 
   for (const source of specFiles) {
@@ -308,9 +307,11 @@ async function main() {
     const args = parseArgs(process.argv.slice(2))
     const required = ["consultantRoot", "clientRoot", "templateRoot", "phaseNumber"]
     for (const key of required) if (!args[key]) throw new Error(`Argumento obrigatorio ausente: ${key}`)
-    const planFile = path.resolve(args.planFile || path.join(args.consultantRoot, "05_execucao", "checks", `handoff-plan-fase-${args.phaseNumber}.json`))
-    if (!inside(args.consultantRoot, planFile)) throw new Error("Plano selado precisa ficar dentro do workspace do consultor")
-    assertRealContainment(args.consultantRoot, path.dirname(planFile))
+    const consultantPlanRoot = resolvePlanRoot(args.consultantRoot)
+    const planFile = path.resolve(args.planFile || path.join(planPath(consultantPlanRoot, "handoff"), `handoff-plan-fase-${args.phaseNumber}.json`))
+    if (!inside(consultantPlanRoot, planFile)) throw new Error("Plano selado precisa ficar dentro do plano do consultor")
+    fs.mkdirSync(path.dirname(planFile), { recursive: true })
+    assertRealContainment(consultantPlanRoot, path.dirname(planFile))
     if (args.dryRun) {
       const plan = buildHandoffPlan(args)
       const sealed = writePlanEnvelope(plan, planFile)
@@ -318,7 +319,7 @@ async function main() {
       return
     }
     const sealed = readPlanEnvelope(planFile, "adapta-cliente-handoff/v1")
-    if (path.resolve(args.consultantRoot) !== sealed.plan.consultantRoot || path.resolve(args.templateRoot) !== sealed.plan.templateRoot || path.resolve(args.clientRoot) !== sealed.plan.clientRoot || Number(args.phaseNumber) !== sealed.plan.phase) {
+    if (consultantPlanRoot !== sealed.plan.consultantRoot || path.resolve(args.templateRoot) !== sealed.plan.templateRoot || path.resolve(args.clientRoot) !== sealed.plan.clientRoot || Number(args.phaseNumber) !== sealed.plan.phase) {
       throw new Error("Argumentos nao correspondem ao plano de handoff aprovado")
     }
     console.log(JSON.stringify(executeHandoff(sealed.plan), null, 2))

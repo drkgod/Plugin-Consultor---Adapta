@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "adapta-workspace-layout/v2",
+  "planRoot": {
+    "canonicalName": "Plano — <id>",
+    "resolution": [
+      "usar o diretório informado quando ele contiver 03-Projeto/",
+      "senão, usar o único filho direto Plano — <id> que contiver 03-Projeto/",
+      "falhar quando nenhum ou mais de um plano forem encontrados"
+    ]
+  },
+  "artifacts": {
+    "status": "STATUS.md",
+    "changelog": "changelog.md",
+    "documentIndex": "01-documento/00-sumario.md",
+    "meetings": "02-Reuniao/",
+    "meetingIndex": "02-Reuniao/00-Indice_reunioes.md",
+    "tldvManifest": "02-Reuniao/_tldv_manifest.json",
+    "dmo": "03-Projeto/00-DMO.md",
+    "baseScope": "03-Projeto/01-Escopo.md",
+    "directions": "03-Projeto/direcoes.md",
+    "requirements": "03-Projeto/requisitos.md",
+    "scopeReview": "03-Projeto/revisao-do-escopo.md",
+    "criticalAnalysis": "03-Projeto/analise-critica.md",
+    "consultantAnalysis": "03-Projeto/analise-do-consultor.md",
+    "definitiveScope": "03-Projeto/02-Escopo-Definitivo.md",
+    "decisions": "03-Projeto/decisoes-do-projeto.md",
+    "actionPlan": "03-Projeto/02-Plano_de_acao/",
+    "phaseTaskList": "03-Projeto/02-Plano_de_acao/00.tasks_per_fase/fase_N.md",
+    "phaseDirectory": "03-Projeto/02-Plano_de_acao/0N.Fase_N/",
+    "phaseTasks": "03-Projeto/02-Plano_de_acao/0N.Fase_N/00-Tasks_Gerais.md",
+    "phaseSpecs": "03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/",
+    "phaseSpecIndex": "03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/00-INDICE.md",
+    "traceability": "03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md",
+    "processMapping": "04-Mapeamento-Processos/",
+    "processContext": "04-Mapeamento-Processos/00-Contexto/",
+    "mappedProcesses": "04-Mapeamento-Processos/02-Processos_mapeados/"
+  },
+  "internal": {
+    "root": ".adapta/",
+    "checks": ".adapta/checks/",
+    "taskReceipts": ".adapta/checks/tasks/",
+    "handoff": ".adapta/handoff/",
+    "evolutions": ".adapta/evolucoes/",
+    "learnings": ".adapta/aprendizados/",
+    "debug": ".adapta/debug/",
+    "result": ".adapta/resultado/",
+    "orchestration": ".adapta/orquestracao/",
+    "debtLedger": ".adapta/dividas.md",
+    "memory": ".adapta/memory/latest.json"
+  },
+  "removed": [
+    "check-input.md",
+    "01_contexto/",
+    "02_reunioes/",
+    "03_discovery/",
+    "04_plano/",
+    "05_execucao/",
+    "07_resultado/"
+  ]
+}

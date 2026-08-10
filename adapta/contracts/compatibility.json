@@ -1,6 +1,9 @@
 {
   "schemaVersion": "adapta-compatibility/v2",
   "aliases": {
+    "gerar-proposta": {"target": "gerar-escopo", "surface": "skill", "status": "deprecated"},
+    "revisar-proposta": {"target": "revisar-escopo", "surface": "skill", "status": "deprecated"},
+    "escopo-final": {"target": "escopo-definitivo", "surface": "skill", "status": "deprecated"},
     "plano-consultor": {"target": "analise-critica", "surface": "command", "status": "deprecated"},
     "abrir-cliente": {"target": "gerar-pasta-cliente", "surface": "command", "status": "deprecated"},
     "destravar-task": {"target": "debugar", "surface": "command", "status": "deprecated"},
@@ -12,8 +15,8 @@
       "brainstorm-escopo": "absorvido por analise-critica",
       "debug-task": "substituido por debugar no consultor; permanece apenas no plugin do cliente",
       "detalhar-fase": "substituido por gerar-specs",
-      "plano-final": "absorvido por escopo-final",
-      "revisar-plano": "ce-doc-review absorvido por escopo-final",
+      "plano-final": "absorvido por escopo-definitivo",
+      "revisar-plano": "ce-doc-review absorvido por escopo-definitivo",
       "fechar-fase": "substituido por liberar-fase"
     },
     "0.6.0": {
@@ -27,8 +30,15 @@
     "0.7.0": {
       "idear-direcoes": "restaura a profundidade de ideacao como skill especializada, sem reintroduzir o alias antigo",
       "definir-requisitos": "restaura o contrato de brainstorm de requisitos como skill especializada",
-      "revisar-proposta": "move o painel critico para uma skill com artefato e fronteira proprios",
+      "revisar-proposta": "moveu o painel critico para uma skill com artefato e fronteira proprios; renomeada em 0.8.0",
       "gerar-tasks": "separa decomposicao e rastreabilidade de tasks da composicao das SPECs"
+    }
+  },
+  "renamedIn": {
+    "0.8.0": {
+      "gerar-proposta": "gerar-escopo",
+      "revisar-proposta": "revisar-escopo",
+      "escopo-final": "escopo-definitivo"
     }
   }
 }

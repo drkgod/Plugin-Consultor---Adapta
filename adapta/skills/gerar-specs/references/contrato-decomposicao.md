@@ -12,7 +12,7 @@ fixam invariantes. O corte SPEC → tasks pertence a
 
 - Cada fase fecha um incremento **observável do processo crítico** — fatia vertical, nunca
   camada técnica ("fase de banco" é anti-padrão; fase só de fundação é proibida, D15).
-- Todo `fase-N.md` tem a seção **"Fora desta fase"**: o que não construir agora, com motivo
+- Toda fase em `02-Escopo-Definitivo.md` tem a seção **"Fora desta fase"**: o que não construir agora, com motivo
   curto ("fase futura" / "fora do programa"). Declarar o out-of-scope protege o champion de
   improvisar.
 

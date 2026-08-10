@@ -21,7 +21,8 @@ O TDD é obrigatório dentro da SPEC quando a entrega envolver software, automa�
 dados, planilha automatizada, script ou qualquer comportamento executável pelo agente do cliente.
 Para entregas não técnicas, o bloco TDD vira um roteiro de verificação: cenário, dado/condição,
 resultado esperado, evidência objetiva e regressão manual. Não mantenha matriz ou arquivo TDD
-paralelo; a rastreabilidade vive no próprio arquivo da SPEC e na matriz `matriz-specs-fases.md`.
+paralelo; a rastreabilidade vive no próprio arquivo da SPEC e em
+`02-Plano_de_acao/matriz-de-rastreabilidade.md`.
 
 Para a fase 1, o resultado palpável é obrigatório: uma tela, fluxo, automação, artefato ou decisão
 operacional que o cliente consiga demonstrar e usar no primeiro ciclo. Fundação sem demonstração

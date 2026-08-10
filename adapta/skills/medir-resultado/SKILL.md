@@ -1,39 +1,37 @@
 ---
 name: medir-resultado
-description: Fecha o projeto medindo o antes/depois - analisa os vídeos regravados (05a-2), compara com o baseline (prompt 05b), gera comparacao.md com as 3 camadas de resultado e prepara a entrevista de case. Use ao fim da fase 5, quando chegarem os vídeos "depois", ou quando o usuário pedir "medir o resultado" / "comparar antes e depois" / "fechar o projeto".
+description: Fecha o projeto medindo o antes/depois com evidências comparáveis, gera a comparação e prepara a entrevista de case. Use ao fim da fase 5 ou quando o usuário pedir para medir o resultado ou fechar o projeto.
 ---
 
-# Medir Resultado (antes/depois + case)
+# Medir resultado
 
-## Bloqueio de entrada
+## Porta de entrada SkillMind
 
-- `check-fase-5.md` existe? Se não → o projeto não terminou; feche a fase 5 primeiro.
-- Existem vídeos em `07_resultado/videos_depois/`? Se não → peça ao CS para solicitar a
-  regravação com o **mesmo roteiro** (`04`) e os **mesmos processos** do discovery. Sem
-  regravação não há medição — **não estime resultado sem evidência**.
+Sem `SKILLMIND_ENVELOPE v1` autorizando `medir-resultado`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+a etapa autorizada e preserve o run até os finalizadores.
+
+## Entradas
+
+- `.adapta/checks/check-fase-5.md` precisa estar aprovado.
+- Evidência “depois” fica em `.adapta/resultado/videos_depois/` e deve repetir processo, roteiro
+  ou métrica do baseline. Sem comparação válida, não estime resultado.
 
 ## Passos
 
-1. **Receba do sistema a análise dos vídeos "depois"** em `07_resultado/analises/`, com métricas
-   no mesmo formato do baseline. Se o artefato não veio, não estime: solicite novo processamento.
-2. **Monte os inputs** do prompt `02_prompts/05b-prompt-comparacao.md` (metodologia):
-   `<baseline>` ← `03_discovery/baseline.md` (congelado) · `<raio_x_depois>` ← passo 1 ·
-   `<plano>` ← `04_plano/PRD.md` + `escopo.md` · `<contexto_financeiro>` ← seção do baseline.
-3. **Execute e salve** em `07_resultado/comparacao.md`. Honestidade em dobro: números
-   conservadores, contas explícitas, métrica que piorou reportada.
-4. **Prepare o case:** `07_resultado/case.md` a partir do template `14`, preenchendo o que vem
-   da comparação e marcando o roteiro de perguntas da camada 3 (percepção). A entrevista
-   acontece **depois** da comparação.
-5. **Atualize** `STATUS.md` e `changelog.md`. O resumo executivo do `comparacao.md` é o
-   material da reunião de entrega.
-6. **Meça o custo do método:** rode
-   `node <metodologia>/plugins/adapta/scripts/relatorio-metodo.mjs --workspace <workspace-consultor> --out <workspace-consultor>/07_resultado/custo-do-metodo.md`.
-   O script lê os recibos `05_execucao/checks/tasks/*.json` e `05_execucao/dividas.md`, sem
-   estimar horas ou tokens. Preencha manualmente as lacunas e compare qualquer ganho contra um
-   baseline explícito.
-7. **Feche o ciclo de conhecimento:**
-   - `/adapta:aprendizado-continuo capturar`: aprendizados do projeto, anonimizados;
-   - caso bem-sucedido → candidato ao golden set (`02_prompts/golden-set/`) e à biblioteca
-     de cases;
-   - via `/adapta:sincronizar-cliente`, publique no repo do cliente a versão dele do resultado
-     (comparação em linguagem de cliente + case) — é o material da renovação.
+1. Receba a análise “depois” em `.adapta/resultado/analises/`, no mesmo formato do baseline.
+2. Monte os inputs do prompt de comparação configurado na metodologia:
+   - `<baseline>`: evidência congelada citada por `03-Projeto/01-Escopo.md` ou por
+     `04-Mapeamento-Processos/00-Contexto/`;
+   - `<raio_x_depois>`: análise do passo 1;
+   - `<plano>`: `03-Projeto/02-Escopo-Definitivo.md`;
+   - `<contexto_financeiro>`: somente números com fonte explícita.
+3. Salve `.adapta/resultado/comparacao.md`, com contas explícitas e também métricas que pioraram.
+4. Prepare `.adapta/resultado/case.md`; a entrevista de percepção ocorre depois da comparação.
+5. Atualize `STATUS.md` e `changelog.md`.
+6. Rode `relatorio-metodo.mjs --workspace <pasta-do-cliente-ou-plano> --out
+   <plano>/.adapta/resultado/custo-do-metodo.md`. O script lê recibos em
+   `.adapta/checks/tasks/*.json` e `.adapta/dividas.md`.
+7. Devolva sinais anonimizados ao finalizador de aprendizado do SkillMind. Publicação de
+   comparação ou case no repo do cliente exige
+   `sincronizar-cliente` e confirmação explícita.

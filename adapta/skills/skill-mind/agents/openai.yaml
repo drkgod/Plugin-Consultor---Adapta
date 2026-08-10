@@ -1,0 +1,4 @@
+interface:
+  display_name: "SkillMind"
+  short_description: "Orquestra todos os jobs do consultor"
+  default_prompt: "Use $skill-mind para interpretar este pedido e executar a cadeia correta de skills."

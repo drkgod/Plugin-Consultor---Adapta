@@ -5,6 +5,12 @@ description: Sincroniza o workspace do consultor com o repositório do cliente, 
 
 # Sincronizar com o Repo do Cliente
 
+## Porta de entrada SkillMind
+
+Sem `SKILLMIND_ENVELOPE v1` autorizando `sincronizar-cliente`, não execute este job. Carregue
+`../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
+a etapa autorizada; publicação continua condicionada a confirmação.
+
 ## Pré-requisito
 
 - O campo "Repo do cliente" está preenchido no CLAUDE.md do workspace (colocado pelo
@@ -23,7 +29,7 @@ description: Sincroniza o workspace do consultor com o repositório do cliente, 
    - Marcas `adapta-divida:` novas no diff (simplificação deliberada com teto e gatilho — D17)
    - Mudanças órfãs: diff/commits que não se rastreiam a nenhuma task ativa da fase
 3. **Reflita no workspace:** atualize o `STATUS.md` do consultor (% da fase, travas) e o
-   `changelog.md`. Consolide as marcas `adapta-divida:` novas no ledger `05_execucao/dividas.md`
+   `changelog.md`. Consolide as marcas `adapta-divida:` novas no ledger `.adapta/dividas.md`
    (teto, gatilho, task e arquivo de origem) — o ledger é insumo de `mapear-evolucoes`,
    `liberar-fase` e de propostas de ciclos novos. Task travada > 3–5 dias → sinalize para o CS
    acionar o champion.
@@ -38,7 +44,7 @@ description: Sincroniza o workspace do consultor com o repositório do cliente, 
 
 6. Copie para o repo do cliente **apenas** o que foi liberado:
    - Specs/tasks novas ou corrigidas da **fase atual**
-   - Na virada de fase (após `/adapta:liberar-fase`): mover a unidade fechada para
+   - Na virada de fase (após `skill-mind job=liberar-fase`): mover a unidade fechada para
      `05_entregas/fase-N/` e colocar a nova em `04_fase-atual/` — o cliente continua vendo
      **uma unidade por vez** (decisão D3)
    - Extras de celebração desbloqueados (decisão D2)

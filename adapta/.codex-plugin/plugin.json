@@ -1,7 +1,7 @@
 {
   "name": "adapta",
-  "version": "0.7.0",
-  "description": "Jobs do consultor Adapta Native em arquitetura CE: skills canônicas, subagents contratados, hooks advisory, memória, roteamento por capacidade e handoff seguro.",
+  "version": "0.8.0",
+  "description": "SkillMind orquestra os jobs do consultor Adapta Native no layout Plano — <id>, com dependências explícitas, gates, memória e fallback para runtimes sem hooks.",
   "author": {
     "name": "Adapta Labs"
   },
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Adapta",
     "shortDescription": "Ferramentas do consultor Adapta Native.",
-    "longDescription": "Opera a camada do consultor por jobs orquestradores e capacidades especializadas: ideacao, requisitos, revisao, SPECs e tasks possuem contratos proprios, com personas locais, subagents, contexto compacto, memoria e handoff seguro.",
+    "longDescription": "Opera a camada do consultor por uma entrada única, o SkillMind, que interpreta a intenção, expande dependências e executa capacidades especializadas. Inclui fallback serial para runtimes sem hooks ou subagentes, ledger de execução, checkpoint, triagem obrigatória de aprendizado e handoff seguro.",
     "developerName": "Adapta Labs",
     "category": "Productivity",
     "capabilities": [
@@ -26,18 +26,11 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Use idear-direcoes quando houver alternativas reais; use definir-requisitos para fechar comportamento e limites; use revisar-proposta para o painel multipersona.",
-      "Rode analise-critica como orquestrador proporcional e gere o template da analise do consultor.",
-      "Consolide escopo-final em cinco fases com revisao documental multipersona.",
-      "Use gerar-specs para detalhar a fase em foco em modo onda, com SPECs, TDD acoplado, checklist e critérios de aceite; exija valor palpável na fase 1.",
-      "Depois use gerar-tasks para decompor as SPECs em unidades independentes e sincronizar fase, SPECs e matriz.",
-      "Use gerar-pasta-cliente com dry-run.",
-      "Use concluir-task para verificar uma entrega.",
-      "Use mapear-evolucoes e depois liberar-fase.",
-      "Use aprendizado-continuo para consultar, capturar, revisar, promover ou evoluir precedentes com grounding e privacidade.",
-      "Use tldv para organizar uma reuniao.",
-      "Use debugar para investigar uma falha.",
-      "Use gestao-contexto antes de fanout ou compactacao."
+      "Para todo pedido do consultor, comece por skill-mind; ele interpreta a intenção, resolve aliases e executa a cadeia de contracts/skill-mind.json.",
+      "Nunca execute uma skill especializada sem SKILLMIND_ENVELOPE v1, mesmo quando o usuário citar ou invocar diretamente aquela skill.",
+      "Em Ethos ou runtime sem hooks, chamadas aninhadas ou subagentes, leia skills e personas inline, execute revisores em série e use o ledger explícito.",
+      "Em implementação, execute uma task por vez e não avance sem teste humano explícito.",
+      "Antes de concluir qualquer run, atualize o estado, faça checkpoint e capture aprendizado reutilizável ou registre not-reusable com motivo; nunca promova ou publique sem confirmação."
     ],
     "brandColor": "#0F766E",
     "screenshots": []

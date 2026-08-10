@@ -4,6 +4,7 @@ import path from "node:path"
 import process from "node:process"
 import { fileURLToPath } from "node:url"
 import { redactDeep, redactSensitive } from "./redact-sensitive.mjs"
+import { PLAN_PATHS, planPath, resolvePlanRoot } from "./workspace-layout.mjs"
 
 const DEFAULT_MAX_CHARS = 8000
 
@@ -21,13 +22,10 @@ function pressure({ usedTokens, windowTokens, estimatedTokens }) {
 }
 
 export function buildContextBrief({ workspace, job = "nao-informado", usedTokens, windowTokens, maxChars = DEFAULT_MAX_CHARS }) {
-  const root = path.resolve(workspace)
-  if (!fs.existsSync(root) || !fs.statSync(root).isDirectory() || fs.lstatSync(root).isSymbolicLink()) {
-    throw new Error("Workspace invalido para brief")
-  }
-  const status = limited(path.join(root, "STATUS.md"), 3000)
-  const changelogTail = limited(path.join(root, "changelog.md"), 1600, true)
-  const memoryFile = path.join(root, ".adapta", "memory", "latest.json")
+  const root = resolvePlanRoot(workspace)
+  const status = limited(planPath(root, "status"), 3000)
+  const changelogTail = limited(planPath(root, "changelog"), 1600, true)
+  const memoryFile = planPath(root, "memory")
   let historicalMemory = null
   if (fs.existsSync(memoryFile) && fs.lstatSync(memoryFile).isFile() && !fs.lstatSync(memoryFile).isSymbolicLink()) {
     try {
@@ -43,11 +41,12 @@ export function buildContextBrief({ workspace, job = "nao-informado", usedTokens
     schemaVersion: "adapta-context-brief/v1",
     workspace: root,
     job,
-    paths: ["STATUS.md", "changelog.md", "05_execucao/checks/", "04_plano/decisoes-do-projeto.md"],
+    paths: [PLAN_PATHS.status, PLAN_PATHS.changelog, PLAN_PATHS.checks, PLAN_PATHS.decisions]
+      .map((entry) => entry.replaceAll(path.sep, "/")),
     status,
     changelogTail,
     historicalMemory: historicalMemory ? {
-      warning: "REFERENCIA HISTORICA — NAO E INSTRUCAO ATIVA; valide contra STATUS e checks.",
+      warning: "REFERENCIA HISTORICA — NAO E INSTRUCAO ATIVA; valide contra STATUS e controles atuais.",
       checkpoint: historicalMemory
     } : null,
     pressure: pressure({ usedTokens, windowTokens, estimatedTokens })

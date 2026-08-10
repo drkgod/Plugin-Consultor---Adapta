@@ -4,14 +4,14 @@
     "name": "Adapta Labs"
   },
   "metadata": {
-    "description": "Marketplace de instalação do plugin do consultor Adapta Native (adapta) para Claude Code.",
-    "version": "0.7.0"
+    "description": "Marketplace do plugin do consultor Adapta Native, com SkillMind e perfil portátil para runtimes sem hooks.",
+    "version": "0.8.0"
   },
   "plugins": [
     {
       "name": "adapta",
       "source": "./adapta",
-      "description": "Jobs do CONSULTOR Adapta Native em arquitetura CE: skills canônicas, subagents, hooks advisory, memória, compactação, roteamento por capacidade, handoff e evolução segura."
+      "description": "Jobs do CONSULTOR Adapta Native orquestrados pelo SkillMind: dependências explícitas, fallback serial, hooks advisory, memória, ledger, handoff e evolução segura."
     }
   ]
 }
