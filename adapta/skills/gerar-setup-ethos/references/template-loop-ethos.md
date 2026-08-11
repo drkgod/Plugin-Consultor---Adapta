@@ -1,8 +1,8 @@
 # LOOP-NN — [nome curto]
 
-**Status:** RASCUNHO — validar na call de setup  
-**Fase de origem:** Fase 4  
-**Sistemas usados:** [entregas das fases 1–3]  
+**Status:** RASCUNHO — validar na call de setup
+**Fase de origem:** Fase 4
+**Sistemas usados:** [entregas das fases 1–3]
 **Agente responsável:** [assistente principal ou agente especializado]
 
 ## 1. Meta
