@@ -36,13 +36,20 @@ redirecionam para o orquestrador quando chamadas diretamente.
     │   ├── analise-do-consultor.md
     │   ├── 02-Escopo-Definitivo.md
     │   ├── decisoes-do-projeto.md
-    │   └── 02-Plano_de_acao/
-    │       ├── 00.tasks_per_fase/fase_1.md ... fase_5.md
-    │       ├── 01.Fase_1/ ... 05.Fase_5/
-    │       │   ├── 00-Tasks_Gerais.md
-    │       │   └── 01-SPECs/
-    │       │       └── 00-INDICE.md
-    │       └── matriz-de-rastreabilidade.md
+    │   ├── 02-Plano_de_acao/
+    │   │   ├── 00.tasks_per_fase/fase_1.md ... fase_5.md
+    │   │   ├── 01.Fase_1/ ... 05.Fase_5/
+    │   │   │   ├── 00-Tasks_Gerais.md
+    │   │   │   └── 01-SPECs/
+    │   │   │       └── 00-INDICE.md
+    │   │   └── matriz-de-rastreabilidade.md
+    │   └── 03-Setup-Ethos/
+    │       ├── SOUL.md
+    │       ├── IDENTITY.md
+    │       ├── USER.md
+    │       ├── sugestoes-conectores-automacoes.md
+    │       ├── mapa-de-agentes-e-loops.md
+    │       └── loops/
     ├── 04-Mapeamento-Processos/
     │   ├── 00-Contexto/
     │   └── 02-Processos_mapeados/
@@ -92,6 +99,8 @@ analise-do-consultor.md (autoria humana)
        ↓
 escopo-definitivo → 02-Escopo-Definitivo.md + scaffold de 5 fases
        ↓
+gerar-setup-ethos → persona + conectores + agentes + loops candidatos
+       ↓
 gerar-specs → 0N.Fase_N/01-SPECs/
        ↓
 gerar-tasks → tasks gerais + Jornada + SPECs + matriz
@@ -112,6 +121,7 @@ checkpoint + aprendizado capturado ou `not-reusable`
 | `revisar-escopo` | `03-Projeto/revisao-do-escopo.md` |
 | `analise-critica` | análise crítica e caderno de autoria humana |
 | `escopo-definitivo` | escopo consolidado e exatamente cinco fases |
+| `gerar-setup-ethos` | `03-Projeto/03-Setup-Ethos/` |
 | `gerar-specs` | SPECs da fase em foco |
 | `gerar-tasks` | quatro projeções sincronizadas das tasks |
 | `gerar-pasta-cliente` | handoff externo da fase liberada |
@@ -176,6 +186,14 @@ Depois da revisão e da análise autoral do consultor, `escopo-definitivo` produ
 O documento definitivo contém as cinco fases; a execução materializa tasks e SPECs dentro de
 `02-Plano_de_acao/`.
 
+As fases 1–3 continuam construindo os sistemas. A fase 4 acrescenta loops, agentes, skills e
+conectores que operam ou integram essas entregas. A fase 5 valida ponta a ponta tudo que foi feito
+nas fases 1–4; não é uma fase de expansão de escopo.
+
+`gerar-setup-ethos` cria arquivos separados `SOUL.md`, `IDENTITY.md` e `USER.md`, além das sugestões
+de conectores/automações e fichas de loops. O `MEMORY.md` distribuído com o plugin continua sendo o
+bootstrap operacional e não é duplicado dentro do plano do cliente.
+
 ## SPECs e tasks
 
 Cada fase tem:
@@ -183,6 +201,10 @@ Cada fase tem:
 - `00-Tasks_Gerais.md`: tabela operacional completa;
 - `01-SPECs/`: contratos e TDD da fase;
 - `00.tasks_per_fase/fase_N.md`: projeção em checkboxes consumida pela Jornada de Execução.
+
+Nas fases 1–3, cada SPEC explicita estado atual e desejado, atores, permissões, dados, integrações,
+regras, sequência, exceções, rollback, critérios, provas e pontos de parada. Lacuna material volta
+ao consultor; o Ethos não deve completá-la por suposição.
 
 `gerar-tasks` mantém quatro projeções coerentes: tasks gerais, Jornada, `Tasks vinculadas` das
 SPECs e matriz de rastreabilidade. O comentário `<!-- id:… -->` da Jornada é imutável.

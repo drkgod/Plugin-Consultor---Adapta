@@ -1,7 +1,7 @@
 {
   "name": "adapta",
-  "version": "0.8.0",
-  "description": "SkillMind orquestra os jobs do consultor Adapta Native no layout Plano — <id>, com dependências explícitas, gates, memória e fallback para runtimes sem hooks.",
+  "version": "0.9.0",
+  "description": "SkillMind orquestra os jobs do consultor Adapta Native no layout Plano — <id>, incluindo setup do Ethos, SPECs profundas, loops e validação integral, com fallback sem hooks.",
   "author": {
     "name": "Adapta Labs"
   },
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Adapta",
     "shortDescription": "Ferramentas do consultor Adapta Native.",
-    "longDescription": "Opera a camada do consultor por uma entrada única, o SkillMind, que interpreta a intenção, expande dependências e executa capacidades especializadas. Inclui fallback serial para runtimes sem hooks ou subagentes, ledger de execução, checkpoint, triagem obrigatória de aprendizado e handoff seguro.",
+    "longDescription": "Opera a camada do consultor por uma entrada única, o SkillMind, que interpreta a intenção, expande dependências e executa capacidades especializadas. Acrescenta o pacote de setup do Ethos, sistemas com SPECs profundas nas fases 1–3, loops/agentes na fase 4 e validação integral na fase 5, preservando fallback serial, ledger, aprendizado e handoff seguro.",
     "developerName": "Adapta Labs",
     "category": "Productivity",
     "capabilities": [
@@ -29,6 +29,7 @@
       "Para todo pedido do consultor, comece por skill-mind; ele interpreta a intenção, resolve aliases e executa a cadeia de contracts/skill-mind.json.",
       "Nunca execute uma skill especializada sem SKILLMIND_ENVELOPE v1, mesmo quando o usuário citar ou invocar diretamente aquela skill.",
       "Em Ethos ou runtime sem hooks, chamadas aninhadas ou subagentes, leia skills e personas inline, execute revisores em série e use o ledger explícito.",
+      "Preserve as cinco fases: 1–3 constroem sistemas com SPECs profundas, 4 configura loops/agentes e 5 valida tudo que foi entregue nas fases 1–4.",
       "Em implementação, execute uma task por vez e não avance sem teste humano explícito.",
       "Antes de concluir qualquer run, atualize o estado, faça checkpoint e capture aprendizado reutilizável ou registre not-reusable com motivo; nunca promova ou publique sem confirmação."
     ],

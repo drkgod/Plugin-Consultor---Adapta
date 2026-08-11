@@ -6,8 +6,8 @@ pedido, expande as dependências e executa o fluxo completo mesmo quando o runti
 hooks, chamadas aninhadas ou subagentes.
 
 O plugin transforma as fontes reais de `Plano — <id>` em um projeto executável: escopo base,
-análise crítica, escopo definitivo em cinco fases, SPECs com TDD, tasks, handoff seguro, execução,
-medição e aprendizado.
+análise crítica, escopo definitivo em cinco fases, pacote de setup do Ethos, SPECs profundas com
+TDD, loops/agentes, tasks, handoff seguro, execução, validação, medição e aprendizado.
 
 O conteúdo aqui é um espelho de publicação do plugin mantido em
 `Metodologia Consolidada (em andamento)/plugins/adapta` no pacote da metodologia Adapta Native.
@@ -50,16 +50,20 @@ presuma que o Ethos descobre esse arquivo apenas por ele existir no repositório
 - `MEMORY.md`: bootstrap portátil para a memória persistente do Ethos.
 
 Veja o guia completo em [`adapta/README.md`](adapta/README.md).
-O mapa de quebra de compatibilidade desta versão está em
-[`MIGRATION-0.8.0.md`](MIGRATION-0.8.0.md).
+Esta versão é aditiva; veja [`MIGRATION-0.9.0.md`](MIGRATION-0.9.0.md). O histórico de mudança de
+nomenclatura permanece em [`MIGRATION-0.8.0.md`](MIGRATION-0.8.0.md).
 
 ## Regras centrais
 
 - Toda solicitação entra por `skill-mind`; skill especializada sem envelope redireciona para ele.
 - `03-Projeto/01-Escopo.md` é o escopo base; não é o escopo aprovado.
 - A análise autoral do consultor não é preenchida pela IA.
-- `03-Projeto/02-Escopo-Definitivo.md` tem exatamente cinco fases.
+- `03-Projeto/02-Escopo-Definitivo.md` tem exatamente cinco fases: sistemas nas fases 1–3,
+  loops/agentes na fase 4 e validação das fases 1–4 na fase 5.
+- O pacote `03-Projeto/03-Setup-Ethos/` prepara SOUL, IDENTITY, USER, conectores e loops sem criar
+  outra memória nem ativar acessos por inferência.
 - SPEC define contrato e prova; task executa um recorte desse contrato.
+- SPEC das fases 1–3 precisa ser profunda o bastante para o Ethos não inventar decisões.
 - O cliente recebe apenas a fase atual.
 - Execução de código trata uma task por vez e só avança após teste humano explícito.
 - Todo run concluído registra um candidato de aprendizado ou o motivo de não haver aprendizado

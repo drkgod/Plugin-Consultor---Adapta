@@ -16,6 +16,10 @@ capaz de produzir evidência própria.
 6. Uma task por SPEC é degenerado, exceto micro-spec que, por definição, cabe em uma task.
 7. TDD permanece na SPEC. A task não cria RED/GREEN paralelo.
 8. Dono, evidência e status são obrigatórios.
+9. A task aponta para a subseção exata da SPEC e declara o ponto de parada. Instrução vaga não
+   autoriza o executor a completar regra, arquitetura, campo, permissão ou aceite ausente.
+10. Task da fase 4 trata uma meta/loop por vez. Task da fase 5 registra a validação e a evidência;
+    correção descoberta retorna à SPEC de origem ou a uma emenda aprovada.
 
 ## Projeções canônicas
 

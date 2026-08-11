@@ -14,6 +14,8 @@ a etapa autorizada e preserve o run até os finalizadores.
 ## Entradas
 
 - `.adapta/checks/check-fase-5.md` precisa estar aprovado.
+- As SPECs da fase 5 precisam conter e concluir a matriz de validação das fases 1–4. Item sem
+  evidência mantém o fechamento bloqueado, mesmo quando nenhum erro foi relatado.
 - Evidência “depois” fica em `.adapta/resultado/videos_depois/` e deve repetir processo, roteiro
   ou métrica do baseline. Sem comparação válida, não estime resultado.
 
@@ -27,6 +29,7 @@ a etapa autorizada e preserve o run até os finalizadores.
    - `<plano>`: `03-Projeto/02-Escopo-Definitivo.md`;
    - `<contexto_financeiro>`: somente números com fonte explícita.
 3. Salve `.adapta/resultado/comparacao.md`, com contas explícitas e também métricas que pioraram.
+   Diferencie prova de funcionamento (fase 5) de resultado de negócio (comparação antes/depois).
 4. Prepare `.adapta/resultado/case.md`; a entrevista de percepção ocorre depois da comparação.
 5. Atualize `STATUS.md` e `changelog.md`.
 6. Rode `relatorio-metodo.mjs --workspace <pasta-do-cliente-ou-plano> --out

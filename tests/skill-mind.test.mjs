@@ -56,6 +56,21 @@ test("rota profunda de analise critica expande dependencias antes da sintese", (
   assert.equal(plan.stages.at(-1).mode, "synthesize")
 })
 
+test("escopo definitivo acrescenta o setup Ethos e specs o recuperam quando ausente", () => {
+  const scope = buildRunPlan({ job: "escopo-definitivo" })
+  assert.deepEqual(scope.stages.map((stage) => stage.job), [
+    "analise-critica",
+    "escopo-definitivo",
+    "gerar-setup-ethos"
+  ])
+  const specs = buildRunPlan({ job: "gerar-specs" })
+  assert.deepEqual(specs.stages.map((stage) => stage.job), [
+    "escopo-definitivo",
+    "gerar-setup-ethos",
+    "gerar-specs"
+  ])
+})
+
 test("aliases antigos sao normalizados pelo orquestrador", () => {
   const plan = buildRunPlan({ job: "gerar-proposta" })
   assert.equal(plan.normalizedJob, "gerar-escopo")

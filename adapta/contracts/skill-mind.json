@@ -25,6 +25,7 @@
     "interpretar o objetivo antes de escolher a skill",
     "executar dependencias e condicionais; nao apenas a skill citada pelo usuario",
     "uma task de implementacao por vez",
+    "fases 1 a 3 usam SPECs profundas; fase 4 operacionaliza loops e agentes; fase 5 valida as fases 1 a 4",
     "nao avancar task sem teste humano explicito quando aplicavel",
     "agente principal e o unico escritor",
     "gate humano nao pode ser inferido",
@@ -78,11 +79,15 @@
     },
     "escopo-definitivo": {
       "defaultVariant": "padrao",
-      "variants": {"padrao": [{"job": "analise-critica", "mode": "execute", "when": "analise critica ausente ou obsoleta"}, {"job": "escopo-definitivo", "mode": "execute", "when": "analise-do-consultor preenchida e decisoes humanas respondidas"}]}
+      "variants": {"padrao": [{"job": "analise-critica", "mode": "execute", "when": "analise critica ausente ou obsoleta"}, {"job": "escopo-definitivo", "mode": "execute", "when": "analise-do-consultor preenchida e decisoes humanas respondidas"}, {"job": "gerar-setup-ethos", "mode": "execute", "when": "escopo definitivo gerado ou alterado"}]}
+    },
+    "gerar-setup-ethos": {
+      "defaultVariant": "padrao",
+      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-setup-ethos", "mode": "execute", "when": "sempre"}]}
     },
     "gerar-specs": {
       "defaultVariant": "padrao",
-      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-specs", "mode": "execute", "when": "check-escopo e check-cliente aprovados"}]}
+      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-setup-ethos", "mode": "execute", "when": "pacote de setup Ethos ausente ou obsoleto"}, {"job": "gerar-specs", "mode": "execute", "when": "check-escopo e check-cliente aprovados"}]}
     },
     "gerar-tasks": {
       "defaultVariant": "padrao",

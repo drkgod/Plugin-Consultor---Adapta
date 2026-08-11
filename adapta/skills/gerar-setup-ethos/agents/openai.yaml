@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar setup ETHOS"
+  short_description: "Prepara o assistente, loops e integrações do cliente."
+  default_prompt: "Use gerar-setup-ethos para criar o pacote de configuração do assistente e dos loops do cliente a partir do escopo definitivo."

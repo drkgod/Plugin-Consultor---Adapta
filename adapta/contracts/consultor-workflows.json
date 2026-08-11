@@ -47,18 +47,26 @@
     },
     "escopo-definitivo": {
       "skill": "skills/escopo-definitivo/SKILL.md",
-      "stages": ["consolidacao das fontes", "composicao de exatamente cinco fases", "ce-doc-review adaptado", "correcoes seguras", "rastreabilidade final"],
+      "stages": ["consolidacao das fontes", "composicao das fases 1-3 de sistemas, fase 4 de loops/agentes e fase 5 de validacao", "ce-doc-review adaptado", "correcoes seguras", "rastreabilidade final"],
       "inputs": ["03-Projeto/01-Escopo.md", "03-Projeto/analise-critica.md", "03-Projeto/analise-do-consultor.md preenchida"],
       "outputs": ["03-Projeto/02-Escopo-Definitivo.md", "03-Projeto/02-Plano_de_acao/", "03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md"],
-      "gates": ["decisoes humanas respondidas", ".adapta/checks/check-escopo.md permanece pendente"],
+      "gates": ["decisoes humanas respondidas", "fases 1-3 constroem sistemas, fase 4 opera loops/agentes e fase 5 valida as fases 1-4", ".adapta/checks/check-escopo.md permanece pendente"],
+      "externalActions": []
+    },
+    "gerar-setup-ethos": {
+      "skill": "skills/gerar-setup-ethos/SKILL.md",
+      "stages": ["extrair contexto aprovado", "gerar SOUL IDENTITY e USER", "sugerir conectores e automacoes", "mapear agentes e loops", "registrar pendencias da call de setup"],
+      "inputs": ["03-Projeto/02-Escopo-Definitivo.md", "03-Projeto/analise-critica.md", "03-Projeto/analise-do-consultor.md preenchida", "02-Reuniao/", "04-Mapeamento-Processos/"],
+      "outputs": ["03-Projeto/03-Setup-Ethos/00-INDICE.md", "03-Projeto/03-Setup-Ethos/SOUL.md", "03-Projeto/03-Setup-Ethos/IDENTITY.md", "03-Projeto/03-Setup-Ethos/USER.md", "03-Projeto/03-Setup-Ethos/sugestoes-conectores-automacoes.md", "03-Projeto/03-Setup-Ethos/mapa-de-agentes-e-loops.md", "03-Projeto/03-Setup-Ethos/loops/LOOP-NN-<slug>.md"],
+      "gates": ["conteudo rastreado a fontes", "lacunas marcadas para a call", "nenhum conector loop ou autonomia e ativado por inferencia"],
       "externalActions": []
     },
     "gerar-specs": {
       "skill": "skills/gerar-specs/SKILL.md",
-      "stages": ["ler escopo definitivo e rastreabilidade", "compor SPECs da fase em foco em modo onda", "acoplar TDD executavel", "revisar contrato, aceite e TDD", "atualizar indice e matriz"],
+      "stages": ["ler escopo definitivo e rastreabilidade", "selecionar contrato da fase", "compor SPECs profundas da fase em foco em modo onda", "acoplar TDD executavel", "revisar contrato, aceite e TDD", "atualizar indice e matriz"],
       "inputs": ["03-Projeto/02-Escopo-Definitivo.md", "fase em foco", "evolucoes aceitas e ledger de dividas quando houver", "check-escopo aprovado", "check-cliente aprovado"],
       "outputs": ["03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/spec-*.md", "03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/00-INDICE.md", "03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md ate a camada SPEC"],
-      "gates": ["Consultor e CSM/cliente aprovaram o escopo", "fase 1 tem entrega palpavel", "cada SPEC possui checklist, aceite e TDD"],
+      "gates": ["Consultor e CSM/cliente aprovaram o escopo", "fases 1-3 nao deixam decisao estrutural para o Ethos", "fase 4 preenche Meta Validacao Conectores Skills e Arranque", "fase 5 cobre todas as entregas das fases 1-4", "cada SPEC possui checklist, aceite e TDD"],
       "externalActions": []
     },
     "gerar-tasks": {
@@ -66,7 +74,7 @@
       "stages": ["ler SPECs revisadas", "decompor por papel, sessao e recorte de prova", "validar independencia", "sincronizar projecoes", "revisar rastreabilidade"],
       "inputs": ["SPECs revisadas da fase em foco", "03-Projeto/02-Plano_de_acao/0N.Fase_N/", "03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md", "gates aprovados"],
       "outputs": ["00.tasks_per_fase/fase_N.md atualizado", "0N.Fase_N/00-Tasks_Gerais.md atualizado", "Tasks vinculadas nas SPECs", "matriz-de-rastreabilidade.md completa ate task e prova"],
-      "gates": ["toda task aponta para SPEC", "tasks da mesma leva sao independentes", "criterio binario e recorte da prova estao explicitos"],
+      "gates": ["toda task aponta para SPEC e subsecao exata", "tasks da mesma leva sao independentes", "criterio binario recorte da prova e ponto de parada estao explicitos"],
       "externalActions": []
     },
     "gerar-pasta-cliente": {
@@ -80,7 +88,7 @@
       "skill": "skills/liberar-fase/SKILL.md",
       "inputs": ["fase atual fechada", "evidencias", "evolucoes decididas"],
       "outputs": [".adapta/checks/check-fase-N.md", ".adapta/evolucoes/delta-fase-N+1.md", "phase-closure-manifest.json", "SPECs e tasks da proxima fase", "handoff da proxima fase"],
-      "gates": ["todas as tasks concluidas", "criterios demonstrados", "check humano vinculado ao active-sha256 atual", "consultor aprova delta"],
+      "gates": ["todas as tasks concluidas", "criterios demonstrados", "fase 5 valida todas as entregas das fases 1-4", "check humano vinculado ao active-sha256 atual", "consultor aprova delta"],
       "externalActions": ["push no repo do cliente"]
     },
     "concluir-task": {

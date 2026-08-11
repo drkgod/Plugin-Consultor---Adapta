@@ -74,6 +74,13 @@ test("resolve a raiz quando o cwd e o plano ou a pasta do cliente", () => {
   assert.equal(resolvePlanRoot(data.client), data.plan)
 })
 
+test("layout expoe o pacote de setup Ethos sem mudar os caminhos existentes", () => {
+  const data = fixture()
+  assert.equal(PLAN_PATHS.ethosSetup, path.join("03-Projeto", "03-Setup-Ethos"))
+  assert.equal(PLAN_PATHS.ethosSoul, path.join("03-Projeto", "03-Setup-Ethos", "SOUL.md"))
+  assert.equal(phasePaths(data.plan, 1).tasks, data.phase.tasks)
+})
+
 test("falha com dois planos para nao escolher cliente errado", () => {
   const data = fixture()
   write(path.join(data.client, "Plano — outro", "03-Projeto", "01-Escopo.md"), "# Outro\n")

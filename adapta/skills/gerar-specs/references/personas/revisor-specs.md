@@ -3,8 +3,9 @@
 Revise em leitura se cada SPEC transforma o escopo em uma unidade executável: resultado observável,
 entradas, saídas, fluxo principal, limites, recuperação, dependências, dono, checklist, critérios
 de aceite binários e TDD acoplado. Confirme que a fase 1 possui uma entrega palpável para o
-cliente e que as fases 2–5 têm detalhamento suficiente para não exigir decisões estruturais
-improvisadas durante a execução.
+cliente e que as fases 1–3 têm detalhamento suficiente para o Ethos não exigir decisões estruturais
+improvisadas durante a execução. Confirme que a fase 4 especifica loops/agentes/conectores e que a
+fase 5 rastreia e valida todas as entregas das fases 1–4.
 
 A SPEC é o contrato; o TDD é a prova anexada ao contrato. Aponte SPEC órfã, aceite subjetivo,
 TDD ausente ou desconectado dos critérios, dependência sem responsável e requisito sem evidência.

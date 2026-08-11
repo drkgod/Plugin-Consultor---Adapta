@@ -32,6 +32,11 @@
       "definir-requisitos": "restaura o contrato de brainstorm de requisitos como skill especializada",
       "revisar-proposta": "moveu o painel critico para uma skill com artefato e fronteira proprios; renomeada em 0.8.0",
       "gerar-tasks": "separa decomposicao e rastreabilidade de tasks da composicao das SPECs"
+    },
+    "0.9.0": {
+      "gerar-setup-ethos": "acrescenta o pacote de persona, conectores, agentes e loops apos o escopo definitivo",
+      "fases-ethos": "mantem as cinco fases e especializa 1-3 em sistemas, 4 em loops/agentes e 5 em validacao transversal",
+      "specs-profundas": "torna observavel o detalhamento necessario para execucao segura pelo Ethos"
     }
   },
   "renamedIn": {

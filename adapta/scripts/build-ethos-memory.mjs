@@ -56,6 +56,10 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Gate de consultor/CSM/cliente e ação externa nunca são inferidos.
 - Antes de concluir qualquer run: atualizar estado, criar checkpoint e capturar um aprendizado
   reutilizável ou registrar por que não houve aprendizado reutilizável.
+- Preservar as cinco fases: 1–3 constroem sistemas com SPECs profundas; 4 configura loops/agentes;
+  5 valida integralmente as entregas das fases 1–4.
+- Se uma SPEC exigir que o Ethos invente arquitetura, regra, dado, permissão ou aceite, parar e
+  devolver para \`gerar-specs\`; não completar a lacuna por suposição.
 
 ## Comandos de entrada
 
@@ -77,6 +81,7 @@ ${rows}
 - Fallback de subagentes: \`contracts/subagents.json\`.
 - Escopo base: \`03-Projeto/01-Escopo.md\`.
 - Escopo definitivo: \`03-Projeto/02-Escopo-Definitivo.md\`.
+- Setup do agente e dos loops: \`03-Projeto/03-Setup-Ethos/\`.
 - Tasks/SPECs da fase: \`03-Projeto/02-Plano_de_acao/0N.Fase_N/\`.
 - Estado confiável: \`STATUS.md\`, \`changelog.md\` e \`.adapta/checks/\`.
 - Ledger do SkillMind: \`.adapta/orquestracao/\`.

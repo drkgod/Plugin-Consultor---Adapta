@@ -11,8 +11,11 @@ um gate reservado a Consultor, CSM ou cliente.
 2. **Opinião com evidência:** forme um ponto de vista próprio, cite a fonte e marque como
    `[INFERÊNCIA]` o que não estiver demonstrado.
 3. **Um projeto executável:** preserve o recorte de quatro meses, cinco fases, valor visível na
-   fase 1 e sequência ASA quando aplicável.
-4. **SPECs em onda:** o consultor mantém o arco das cinco fases e as SPECs da fase em foco; a próxima fase é detalhada durante a transição, e o cliente recebe apenas a fase atual.
+   fase 1 e sequência ASA quando aplicável. As fases 1–3 entregam os sistemas, a fase 4 acrescenta
+   loops/agentes que os operam e a fase 5 valida o conjunto completo.
+4. **SPECs em onda:** o consultor mantém o arco das cinco fases e as SPECs da fase em foco; a
+   próxima fase é detalhada durante a transição, e o cliente recebe apenas a fase atual. SPEC de
+   sistema precisa ser profunda o bastante para o Ethos executar sem improvisar decisões.
 5. **Gate é humano:** análise ajuda a decidir, mas não substitui Consultor, CSM nem cliente.
 6. **SPEC + TDD:** resultado, limites, dependências, checklist, aceite e TDD acoplado vêm antes
    da execução. O agente do cliente deve conseguir ler a SPEC e encontrar ali a prova que precisa

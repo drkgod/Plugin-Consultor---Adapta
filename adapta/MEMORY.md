@@ -24,6 +24,10 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Gate de consultor/CSM/cliente e ação externa nunca são inferidos.
 - Antes de concluir qualquer run: atualizar estado, criar checkpoint e capturar um aprendizado
   reutilizável ou registrar por que não houve aprendizado reutilizável.
+- Preservar as cinco fases: 1–3 constroem sistemas com SPECs profundas; 4 configura loops/agentes;
+  5 valida integralmente as entregas das fases 1–4.
+- Se uma SPEC exigir que o Ethos invente arquitetura, regra, dado, permissão ou aceite, parar e
+  devolver para `gerar-specs`; não completar a lacuna por suposição.
 
 ## Comandos de entrada
 
@@ -42,11 +46,12 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 | `conselho-de-decisao` | `skills/conselho-de-decisao/SKILL.md` | Lente interna da análise crítica para decisões ambíguas com caminhos defensáveis concorrentes; produz dissenso e recomendação não vinculante ao con... |
 | `debugar` | `skills/debugar/SKILL.md` | Diagnostica causa raiz de falhas técnicas, TDD de SPEC, artefatos e agentes pelo ciclo ce-debug adaptado: reproduzir, traçar cadeia causal, testar ... |
 | `definir-requisitos` | `skills/definir-requisitos/SKILL.md` | Transforma o escopo base e as direções escolhidas em requisitos claros, com ator, resultado, limites, sinais de sucesso, fluxos, premissas e decisõ... |
-| `escopo-definitivo` | `skills/escopo-definitivo/SKILL.md` | Consolida o escopo base, a análise crítica e a autoria humana em 03-Projeto/02-Escopo-Definitivo.md, exatamente cinco fases e o plano de ação atual... |
+| `escopo-definitivo` | `skills/escopo-definitivo/SKILL.md` | Consolida o escopo base, a análise crítica e a autoria humana em 03-Projeto/02-Escopo-Definitivo.md, preservando exatamente cinco fases: sistemas n... |
 | `gerar-escopo` | `skills/gerar-escopo/SKILL.md` | Gera ou regenera o escopo base em 03-Projeto/01-Escopo.md a partir de reuniões, documentos, DMO e mapeamentos do plano atual. |
 | `gerar-pasta-cliente` | `skills/gerar-pasta-cliente/SKILL.md` | Prepara uma pasta operacional externa a partir da pasta atual do plano do cliente, com allowlist, recorte da fase, hashes, privacidade e dry-run; s... |
-| `gerar-specs` | `skills/gerar-specs/SKILL.md` | Gera e revisa as SPECs da fase em foco no diretório 0N.Fase_N/01-SPECs, em modo onda, com resultado, limites, checklist, critérios de aceite, degra... |
-| `gerar-tasks` | `skills/gerar-tasks/SKILL.md` | Decompõe SPECs revisadas em tasks independentes, binárias e executáveis; sincroniza 00-Tasks_Gerais.md, a Jornada em 00.tasks_per_fase/fase_N.md, a... |
+| `gerar-setup-ethos` | `skills/gerar-setup-ethos/SKILL.md` | Gera, depois do escopo definitivo, o pacote de configuração do assistente do cliente no Ethos: SOUL.md, IDENTITY.md, USER.md, sugestões justificada... |
+| `gerar-specs` | `skills/gerar-specs/SKILL.md` | Gera e revisa as SPECs da fase em foco no diretório 0N.Fase_N/01-SPECs, em modo onda e com profundidade executável pelo Ethos: sistemas nas fases 1... |
+| `gerar-tasks` | `skills/gerar-tasks/SKILL.md` | Decompõe SPECs detalhadas em tasks independentes, binárias e executáveis uma por vez pelo Ethos; sincroniza 00-Tasks_Gerais.md, a Jornada, as Tasks... |
 | `gestao-contexto` | `skills/gestao-contexto/SKILL.md` | Gera brief, checkpoint, recomendação de compactação e restauração segura do contexto do consultor. |
 | `idear-direcoes` | `skills/idear-direcoes/SKILL.md` | Gera e avalia direções fundamentadas para o escopo base antes de definir requisitos. |
 | `liberar-fase` | `skills/liberar-fase/SKILL.md` | Fecha a fase atual com evidências, decide evoluções, gera e revalida SPECs e tasks da próxima fase, e prepara sua publicação segura. |
@@ -65,6 +70,7 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Fallback de subagentes: `contracts/subagents.json`.
 - Escopo base: `03-Projeto/01-Escopo.md`.
 - Escopo definitivo: `03-Projeto/02-Escopo-Definitivo.md`.
+- Setup do agente e dos loops: `03-Projeto/03-Setup-Ethos/`.
 - Tasks/SPECs da fase: `03-Projeto/02-Plano_de_acao/0N.Fase_N/`.
 - Estado confiável: `STATUS.md`, `changelog.md` e `.adapta/checks/`.
 - Ledger do SkillMind: `.adapta/orquestracao/`.

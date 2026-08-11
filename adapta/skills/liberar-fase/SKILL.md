@@ -29,7 +29,9 @@ no ledger e devolve pendência quando algum estiver ausente.
    `node <plugin-root>/scripts/preparar-liberacao-fase.mjs --cliente <repo-cliente> --digest-ativo`.
 5. Registre `.adapta/checks/check-fase-N.md` com aprovador humano, data e
    `active-sha256=<digest>`. Mudança posterior na fase ativa invalida a aprovação.
-6. Se N < 5, encerre este submodo e devolva ao SkillMind a próxima etapa `gerar-specs`. Se N = 5,
+6. Se N < 5, encerre este submodo e devolva ao SkillMind a próxima etapa `gerar-specs`. Na
+   transição 3→4, cobre as SPECs de loops/agentes/conectores; na transição 4→5, cobre as SPECs de
+   validação transversal das fases 1–4. Se N = 5, exija cobertura integral da matriz final e
    devolva a próxima etapa `medir-resultado`; nunca crie fase 6.
 
 ## Submodo `selar-liberacao`
@@ -37,7 +39,8 @@ no ledger e devolve pendência quando algum estiver ausente.
 Use somente quando N < 5 e os recibos de `gerar-specs` e `gerar-tasks` da fase N+1 estiverem
 concluídos.
 
-1. Revalide checklist, aceite, TDD, independência das tasks, matriz e ledger de dívidas.
+1. Revalide checklist, aceite, TDD, independência das tasks, matriz e ledger de dívidas. Para a
+   fase 5, qualquer entrega das fases 1–4 sem prova ou justificativa mantém o gate fechado.
 2. Faça o dry-run determinístico:
    `node <plugin-root>/scripts/preparar-liberacao-fase.mjs --consultor <workspace> --cliente <repo-cliente> --de <N> --para <N+1> --dry-run`.
 3. Mostre digest, hashes, arquivo da fase e delta. Pare para confirmação explícita.
@@ -50,9 +53,9 @@ concluídos.
 
 ## Submodo `encerrar-projeto`
 
-Use somente na fase 5, depois do recibo de `medir-resultado`. Registre o fechamento, resultados,
-riscos residuais e recomendação de próximo ciclo fora do escopo atual. Não invente fase 6 nem
-publique comparação/case sem confirmação.
+Use somente na fase 5, depois da validação transversal das fases 1–4 e do recibo de
+`medir-resultado`. Registre o fechamento, resultados, riscos residuais e recomendação de próximo
+ciclo fora do escopo atual. Não invente fase 6 nem publique comparação/case sem confirmação.
 
 ## Fechamento do submodo
 

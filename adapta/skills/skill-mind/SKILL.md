@@ -60,12 +60,17 @@ runtime_profile: <ethos-legacy|agentic>
 
 Quando o pedido executar tasks ou código:
 
-1. Selecione somente uma task elegível e leia sua SPEC, critérios e TDD.
+1. Selecione somente uma task elegível e leia sua SPEC, critérios e TDD. Se a SPEC exigir que o
+   Ethos invente arquitetura, regra, dado, acesso ou aceite, não execute: devolva para
+   `gerar-specs` com a lacuna concreta.
 2. Implemente apenas esse recorte; não comece a próxima task na mesma resposta.
 3. Rode as provas automatizáveis e explique ao cliente o resultado observável esperado.
 4. Peça o teste humano. Só avance depois de confirmação explícita equivalente a “testei, pode
    seguir”. Silêncio, ausência de erro relatado ou pedido em lote não aprovam o gate.
 5. Se o teste falhar, mantenha a task aberta e roteie para `debugar`; depois repita o mesmo gate.
+
+Nas fases 1–3, preserve a profundidade da SPEC; na fase 4, execute um loop/meta por vez; na fase 5,
+registre a validação das fases 1–4 e não corrija silenciosamente o que falhar.
 
 ## 5. Fechar sem perder aprendizado
 
