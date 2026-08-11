@@ -11,6 +11,9 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `sincronizar-cliente`, não execute este
 `../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
 a etapa autorizada; publicação continua condicionada a confirmação.
 
+Carregue `../../references/runtime-paths.md`. O plugin é autossuficiente; não procure nem solicite
+um pacote externo da metodologia.
+
 ## Pré-requisito
 
 - O campo "Repo do cliente" está preenchido no CLAUDE.md do workspace (colocado pelo
@@ -48,10 +51,9 @@ a etapa autorizada; publicação continua condicionada a confirmação.
      `05_entregas/fase-N/` e colocar a nova em `04_fase-atual/` — o cliente continua vendo
      **uma unidade por vez** (decisão D3)
    - Extras de celebração desbloqueados (decisão D2)
-7. Antes de commitar, rode o validador de fronteira cliente:
-   ```bash
-   node <caminho-metodologia>/plugins/adapta/scripts/validar-exportacao-cliente.mjs <clone-repo-cliente>
-   ```
+7. Antes de commitar, execute, a partir do diretório desta skill,
+   `node ../../scripts/validar-exportacao-cliente.mjs`, passando o caminho já resolvido do clone do
+   cliente como primeiro argumento.
    Se falhar, não publique; remova o vazamento ou corrija o placeholder primeiro.
 8. Atualize o `STATUS.md` do cliente (fase, %, próxima reunião), commit com mensagem clara
    (`fase 2 liberada: <objetivo em 1 frase>`) e push.

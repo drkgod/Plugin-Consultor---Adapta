@@ -8,8 +8,8 @@ description: Entrada obrigatória e orquestradora de todos os trabalhos do consu
 Carregue `../../contracts/skill-mind.json`, `../../contracts/consultor-workflows.json`,
 `../../contracts/compatibility.json`, `../../contracts/workspace-layout.json`,
 `../../contracts/subagents.json`, `../../contracts/context-policy.json` e
-`../../personas/consultor-adapta.md`. Se o runtime não tiver hooks ou subagentes, carregue também
-`references/ethos-legacy.md`.
+`../../personas/consultor-adapta.md` e `../../references/runtime-paths.md`. Se o runtime não tiver
+hooks ou subagentes, carregue também `references/ethos-legacy.md`.
 
 ## 1. Interpretar antes de executar
 
@@ -25,8 +25,9 @@ Carregue `../../contracts/skill-mind.json`, `../../contracts/consultor-workflows
 
 ## 2. Abrir o run e expandir a cadeia
 
-1. Se houver shell/Node, gere a rota com:
-   `node <plugin-root>/scripts/skill-mind-run.mjs plan --job <job> --variant <variante>`.
+1. Se houver shell/Node, execute, a partir do diretório desta skill,
+   `node ../../scripts/skill-mind-run.mjs plan --job JOB --variant VARIANTE`, substituindo `JOB` e
+   `VARIANTE` pela rota já normalizada. Não use o diretório corrente como raiz do plugin.
 2. Abra o ledger com `start`; use `--human-test-required` quando o pedido implementar uma task ou
    alterar comportamento que o cliente precisa experimentar.
 3. Emita e preserve este envelope em toda delegação:
@@ -77,14 +78,15 @@ registre a validação das fases 1–4 e não corrija silenciosamente o que falh
 Antes de declarar o run concluído:
 
 1. Confirme artefatos, evidências, gates e estágio do ledger.
-2. Rode `gestao-contexto checkpoint` ou `context-checkpoint.mjs` e atualize o estado versionado
+2. Rode `gestao-contexto checkpoint` ou `../../scripts/context-checkpoint.mjs`, resolvido pelo
+   contrato portátil, e atualize o estado versionado
    exigido pela skill executada.
 3. Faça triagem obrigatória de aprendizado usando somente artefatos estruturados do run:
    - se houver causa raiz ou orientação reutilizável verificada, execute
      `aprendizado-continuo capturar` e guarde a referência do candidato;
    - se não houver, registre `not-reusable` com motivo concreto;
    - nunca grave prompt, transcript bruto, payload de tool, segredo ou dado pessoal.
-4. Feche o ledger com `skill-mind-run.mjs finish`. O script deve recusar conclusão sem disposição
+4. Feche o ledger com `../../scripts/skill-mind-run.mjs` em modo `finish`. O script deve recusar conclusão sem disposição
    de aprendizado e, quando aplicável, sem teste humano confirmado.
 5. Promoção para acervo compartilhado, push, publicação ou criação de repo continuam exigindo
    confirmação explícita; o fechamento automático nunca concede essa autorização.

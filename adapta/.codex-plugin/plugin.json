@@ -1,6 +1,6 @@
 {
   "name": "adapta",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "SkillMind orquestra os jobs do consultor Adapta Native no layout Plano — <id>, incluindo setup do Ethos, SPECs profundas, loops e validação integral, com fallback sem hooks.",
   "author": {
     "name": "Adapta Labs"

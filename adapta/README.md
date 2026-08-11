@@ -7,6 +7,9 @@ plano válido.
 O contrato canônico está em `contracts/workspace-layout.json`. Skills e scripts não devem
 redefinir caminhos por conta própria.
 
+O contrato `references/runtime-paths.md` deriva a raiz do plugin do próprio `SKILL.md`. A
+instalação é autossuficiente: nenhum comando depende do caminho do pacote externo da metodologia.
+
 `skill-mind` é a entrada obrigatória para qualquer job. O contrato de dependências está em
 `contracts/skill-mind.json`; todas as demais skills exigem um `SKILLMIND_ENVELOPE v1` e
 redirecionam para o orquestrador quando chamadas diretamente.
@@ -163,11 +166,9 @@ Quando slash commands existirem:
 /adapta:skill-mind job=analise-critica
 ```
 
-O cron é somente recuperação de runs abandonados:
-
-```text
-node <plugin-root>/scripts/skill-mind-run.mjs recover --workspace <Plano — id> --older-than-minutes 30 --write
-```
+O cron é somente recuperação de runs abandonados. Depois de resolver a raiz por
+`references/runtime-paths.md`, execute `scripts/skill-mind-run.mjs` em modo `recover`, com a raiz
+do plano já resolvida, janela de 30 minutos e escrita do relatório.
 
 Ele gera `.adapta/orquestracao/recovery.json`. Um assistente agendado pode retomar checkpoint e
 triagem, mas não pode aprovar gate, inventar causa raiz, promover aprendizado ou publicar.

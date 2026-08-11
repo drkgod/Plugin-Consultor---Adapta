@@ -17,3 +17,9 @@ Esta versão acrescenta capacidades sem renomear skills ou caminhos existentes.
 - O fluxo de SPECs em onda, gates humanos, handoff da fase atual e aprendizado permanecem.
 - `MEMORY.md` continua sendo instalado manualmente na memória do Ethos; a skill não cria outra
   memória por cliente.
+
+## Correção 0.9.1
+
+- Remove dos comandos os placeholders antigos de raiz do plugin e do pacote da metodologia.
+- Resolve scripts a partir do `SKILL.md` carregado por `references/runtime-paths.md`.
+- O ETHOS não deve pedir ao consultor o caminho do pacote da metodologia.

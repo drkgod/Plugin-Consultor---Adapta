@@ -26,7 +26,7 @@ test("manifests usam a mesma versao e o nome da pasta", () => {
   const marketplace = JSON.parse(read(".claude-plugin/marketplace.json"))
   assert.equal(claude.name, "adapta")
   assert.equal(codex.name, "adapta")
-  assert.equal(claude.version, "0.9.0")
+  assert.equal(claude.version, "0.9.1")
   assert.equal(codex.version, claude.version)
   assert.equal(marketplace.metadata.version, claude.version)
   assert.equal(codex.skills, "./skills/")
@@ -88,6 +88,27 @@ test("contratos preservam o metodo e acrescentam a arquitetura Ethos", () => {
   assert.match(scope, /Fase 4 — operar e integrar por loops/)
   assert.match(scope, /Fase 5 — validar o conjunto completo/)
   assert.match(specs, /escolher arquitetura, inventar regra, adivinhar campo, ampliar/)
+})
+
+test("runtime resolve scripts pelo bundle sem pedir caminho da metodologia", () => {
+  const runtimePaths = read("adapta/references/runtime-paths.md")
+  assert.match(runtimePaths, /Parta do caminho real do `SKILL\.md`/)
+  assert.match(runtimePaths, /contracts\/skill-mind\.json/)
+  assert.match(runtimePaths, /scripts\/skill-mind-run\.mjs/)
+
+  const runtimeText = [
+    "adapta/MEMORY.md",
+    "adapta/README.md",
+    "adapta/skills/skill-mind/SKILL.md",
+    "adapta/skills/skill-mind/references/ethos-legacy.md",
+    "adapta/skills/liberar-fase/SKILL.md",
+    "adapta/skills/sincronizar-cliente/SKILL.md"
+  ].map(read).join("\n")
+  const oldPluginRootPlaceholder = "<" + "plugin-root>"
+  const oldMethodPathPlaceholder = "<" + "caminho-metodologia>"
+  assert.ok(!runtimeText.includes(oldPluginRootPlaceholder))
+  assert.ok(!runtimeText.includes(oldMethodPathPlaceholder))
+  assert.doesNotMatch(runtimeText, /node\s+[^\n]*plugins[\\/]adapta[\\/]scripts/i)
 })
 
 test("JSON e referencias locais do contrato sao validos", () => {

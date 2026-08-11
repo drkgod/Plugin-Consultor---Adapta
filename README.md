@@ -9,10 +9,9 @@ O plugin transforma as fontes reais de `Plano — <id>` em um projeto executáve
 análise crítica, escopo definitivo em cinco fases, pacote de setup do Ethos, SPECs profundas com
 TDD, loops/agentes, tasks, handoff seguro, execução, validação, medição e aprendizado.
 
-O conteúdo aqui é um espelho de publicação do plugin mantido em
-`Metodologia Consolidada (em andamento)/plugins/adapta` no pacote da metodologia Adapta Native.
-Alterações no plugin devem ser feitas lá e republicadas aqui — não edite os arquivos deste repo
-diretamente como fonte da verdade.
+O repositório é um bundle autossuficiente de instalação. Em runtime, nenhuma skill depende de uma
+cópia local do pacote completo da metodologia; scripts e contratos são resolvidos dentro do
+próprio plugin.
 
 ## Instalação
 

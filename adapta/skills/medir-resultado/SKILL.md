@@ -11,6 +11,9 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `medir-resultado`, não execute este job
 `../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
 a etapa autorizada e preserve o run até os finalizadores.
 
+Carregue `../../references/runtime-paths.md` para executar scripts sem depender do pacote externo
+da metodologia.
+
 ## Entradas
 
 - `.adapta/checks/check-fase-5.md` precisa estar aprovado.
@@ -32,8 +35,9 @@ a etapa autorizada e preserve o run até os finalizadores.
    Diferencie prova de funcionamento (fase 5) de resultado de negócio (comparação antes/depois).
 4. Prepare `.adapta/resultado/case.md`; a entrevista de percepção ocorre depois da comparação.
 5. Atualize `STATUS.md` e `changelog.md`.
-6. Rode `relatorio-metodo.mjs --workspace <pasta-do-cliente-ou-plano> --out
-   <plano>/.adapta/resultado/custo-do-metodo.md`. O script lê recibos em
+6. Rode `../../scripts/relatorio-metodo.mjs`, resolvido a partir desta skill. Passe em
+   `--workspace` a raiz do plano já resolvida e, em `--out`, o arquivo
+   `.adapta/resultado/custo-do-metodo.md` dentro desse plano. O script lê recibos em
    `.adapta/checks/tasks/*.json` e `.adapta/dividas.md`.
 7. Devolva sinais anonimizados ao finalizador de aprendizado do SkillMind. Publicação de
    comparação ou case no repo do cliente exige

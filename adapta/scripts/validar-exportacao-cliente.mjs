@@ -11,7 +11,7 @@ const errors = []
 const warnings = []
 
 if (!target) {
-  console.error("Uso: node plugins/adapta/scripts/validar-exportacao-cliente.mjs <repo-cliente>")
+  console.error("Uso: execute validar-exportacao-cliente.mjs com o caminho do repo do cliente como primeiro argumento")
   process.exit(2)
 }
 

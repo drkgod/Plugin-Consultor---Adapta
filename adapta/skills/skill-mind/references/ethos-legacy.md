@@ -18,9 +18,13 @@ skills ou subagentes confiáveis.
 
 O cron é uma rede de recuperação, não um aprovador nem um gerador autônomo de aprendizados. Rode:
 
-```text
-node <plugin-root>/scripts/skill-mind-run.mjs recover --workspace <Plano — id> --older-than-minutes 30 --write
-```
+1. resolva a raiz do plugin por `../../../references/runtime-paths.md`;
+2. execute `../../scripts/skill-mind-run.mjs` em modo `recover`, a partir do diretório desta skill;
+3. passe em `--workspace` a raiz `Plano — <id>` já resolvida pelo contrato de layout;
+4. use `--older-than-minutes 30 --write`.
+
+Nunca apresente um placeholder de instalação ou um caminho da metodologia como configuração a ser
+preenchida.
 
 Depois instrua o assistente agendado a ler `.adapta/orquestracao/recovery.json`, chamar
 `skill-mind` em modo de recuperação e tratar cada run pendente. O agendamento pode retomar triagem

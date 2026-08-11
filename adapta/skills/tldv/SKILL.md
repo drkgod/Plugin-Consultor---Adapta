@@ -11,7 +11,8 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `tldv`, não execute este job. Carregue
 `../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
 a etapa autorizada e preserve o run até os finalizadores.
 
-Use `../../scripts/tldv-sync.mjs` para HTTP, retry, validação e normalização; o modelo não deve
+Carregue `../../references/runtime-paths.md`. Use `../../scripts/tldv-sync.mjs`, resolvido a partir
+desta skill, para HTTP, retry, validação e normalização; o modelo não deve
 montar `curl`, manipular headers ou escrever JSON bruto manualmente.
 
 ## Entrada e segurança

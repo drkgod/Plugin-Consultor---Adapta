@@ -11,7 +11,8 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `gerar-pasta-cliente`, não execute este
 `../skill-mind/SKILL.md` e entregue a ele o pedido original. Com envelope válido, execute somente
 a etapa autorizada; confirmação externa continua separada.
 
-Carregue `../../contracts/workspace-layout.json` e resolva a raiz do plano antes de ler fontes.
+Carregue `../../contracts/workspace-layout.json` e `../../references/runtime-paths.md`; resolva a
+raiz do plano antes de ler fontes.
 
 ## Entradas
 
@@ -25,7 +26,7 @@ Carregue `../../contracts/workspace-layout.json` e resolva a raiz do plano antes
 
 ## Passos
 
-1. Faça dry-run com `preparar-handoff-cliente.mjs`. O plano selado é salvo em
+1. Faça dry-run com `../../scripts/preparar-handoff-cliente.mjs`, resolvido a partir desta skill. O plano selado é salvo em
    `.adapta/handoff/handoff-plan-fase-N.json`.
 2. Após aprovação, execute sem `--dry-run`. O script copia
    `0N.Fase_N/00-Tasks_Gerais.md → 04_fase-atual/fase.md`, inclui somente as SPECs da fase e
@@ -35,7 +36,8 @@ Carregue `../../contracts/workspace-layout.json` e resolva a raiz do plano antes
 4. Nunca copie `03-Projeto/01-Escopo.md`, `direcoes.md`, `requisitos.md`,
    `revisao-do-escopo.md`, `analise-critica.md`, `analise-do-consultor.md`, `.adapta/`, fases
    futuras, arquivos brutos de reunião ou materiais da metodologia.
-5. Rode `validar-exportacao-cliente.mjs` antes de publicar. Falha bloqueia publicação.
+5. Rode `../../scripts/validar-exportacao-cliente.mjs`, resolvido da mesma forma, antes de
+   publicar. Falha bloqueia publicação.
 6. Confirme que o destino usa `adapta-cliente`; não copie este plugin inteiro.
 7. Criação de repo, commit remoto, push ou convite exige nova confirmação explícita.
 8. Registre o caminho/URL do repo no workspace e em `changelog.md`; depois use

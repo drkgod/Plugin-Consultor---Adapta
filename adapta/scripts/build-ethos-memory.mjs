@@ -79,6 +79,7 @@ ${rows}
 - Jobs e gates: \`contracts/consultor-workflows.json\`.
 - Layout do cliente: \`contracts/workspace-layout.json\`.
 - Fallback de subagentes: \`contracts/subagents.json\`.
+- Resolução portátil dos scripts: \`references/runtime-paths.md\`.
 - Escopo base: \`03-Projeto/01-Escopo.md\`.
 - Escopo definitivo: \`03-Projeto/02-Escopo-Definitivo.md\`.
 - Setup do agente e dos loops: \`03-Projeto/03-Setup-Ethos/\`.
@@ -89,9 +90,10 @@ ${rows}
 
 ## Recuperação sem hooks
 
-Use o cron apenas para detectar runs abandonados e solicitar retomada:
-
-\`node <plugin-root>/scripts/skill-mind-run.mjs recover --workspace <Plano — id> --older-than-minutes 30 --write\`
+Use o cron apenas para detectar runs abandonados e solicitar retomada. Resolva a raiz a partir de
+\`skills/skill-mind/SKILL.md\` conforme \`references/runtime-paths.md\`, execute
+\`scripts/skill-mind-run.mjs\` em modo \`recover\`, passe o plano já resolvido como workspace e use
+30 minutos com escrita do relatório. Nunca peça ao usuário o caminho do plugin ou da metodologia.
 
 O cron não aprova teste, não promove aprendizado e não publica. Ao encontrar pendência, carregue o
 SkillMind e retome do último artefato validado.
