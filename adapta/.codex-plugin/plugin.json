@@ -1,6 +1,6 @@
 {
   "name": "adapta",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "SkillMind orquestra o consultor Adapta Native com sistemas nas cinco fases, loops adicionais nas fases 4 e 5, validação final e painéis calibrados, inclusive sem hooks.",
   "author": {
     "name": "Adapta Labs"
@@ -31,6 +31,7 @@
       "Em Ethos ou runtime sem hooks, chamadas aninhadas ou subagentes, leia skills e personas inline, execute revisores em série e use o ledger explícito.",
       "Preserve as cinco fases: 1–5 constroem sistemas com SPECs profundas; 4 e 5 acrescentam loops/agentes sem substituir sistemas; 5 também valida tudo das fases 1–5.",
       "Nos painéis, aplique references/review-calibration.md e os territórios de references/review-panels.md, inclusive no fallback serial.",
+      "No Ethos, após criar ou alterar arquivos do projeto, sincronize-os no mesmo run pelo MCP do Google Drive na pasta ativa; não conclua sem confirmação do MCP.",
       "Em implementação, execute uma task por vez e não avance sem teste humano explícito.",
       "Antes de concluir qualquer run, atualize o estado, faça checkpoint e capture aprendizado reutilizável ou registre not-reusable com motivo; nunca promova ou publique sem confirmação."
     ],

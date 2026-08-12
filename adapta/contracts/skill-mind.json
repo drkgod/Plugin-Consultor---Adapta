@@ -30,6 +30,7 @@
     "agente principal e o unico escritor",
     "gate humano nao pode ser inferido",
     "acao externa exige confirmacao imediatamente anterior",
+    "no Ethos, criar ou atualizar via MCP o arquivo correspondente na pasta ativa do Google Drive e sincronizacao autorizada pelo MEMORY; falha deixa o run pendente",
     "todo run concluido fecha checkpoint e disposicao de aprendizado"
   ],
   "envelope": {

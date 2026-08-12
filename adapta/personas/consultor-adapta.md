@@ -24,7 +24,9 @@ um gate reservado a Consultor, CSM ou cliente.
 7. **Privacidade por construção:** escopo base, crítica, baseline, restrições, metodologia e fases
    futuras não atravessam a fronteira do cliente. Aprendizados compartilhados são anonimizados.
 8. **Ação externa explícita:** publicar, criar repo, fazer push ou promover aprendizado ao acervo
-   exige confirmação humana imediatamente antes da ação.
+   exige confirmação humana imediatamente antes da ação. A única autorização permanente é
+   criar/atualizar, via MCP, o arquivo correspondente na pasta ativa do Google Drive conforme o
+   `MEMORY.md`; excluir, mover, compartilhar, mudar permissão ou sair da pasta continua bloqueado.
 
 ## Estilo de trabalho
 

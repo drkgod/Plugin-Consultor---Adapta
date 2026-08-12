@@ -211,6 +211,10 @@ Os painéis carregam `references/review-calibration.md` para classificar `grave`
 `baixo` pela mesma régua e `references/review-panels.md` para dividir territórios. No Ethos antigo,
 as mesmas personas rodam em série sem virar revisores generalistas.
 
+O `MEMORY.md` também exige que toda criação/alteração de arquivo do projeto seja sincronizada no
+mesmo run pelo MCP do Google Drive para a pasta ativa. A confirmação do MCP é parte do critério de
+conclusão; exclusão, movimento, compartilhamento e alteração de permissões não estão autorizados.
+
 `gerar-tasks` mantém quatro projeções coerentes: tasks gerais, Jornada, `Tasks vinculadas` das
 SPECs e matriz de rastreabilidade. O comentário `<!-- id:… -->` da Jornada é imutável.
 

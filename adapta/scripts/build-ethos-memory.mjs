@@ -53,13 +53,29 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Rodar as provas da SPEC e pedir teste humano ao fim da task.
 - Não iniciar a próxima task até o cliente dizer explicitamente que testou e autorizou o avanço.
 - Falha no teste mantém a task aberta e segue para \`debugar\`.
-- Gate de consultor/CSM/cliente e ação externa nunca são inferidos.
+- Gate de consultor/CSM/cliente e ação externa nunca são inferidos, exceto a sincronização
+  criar/atualizar já autorizada abaixo para a pasta ativa do Google Drive.
 - Antes de concluir qualquer run: atualizar estado, criar checkpoint e capturar um aprendizado
   reutilizável ou registrar por que não houve aprendizado reutilizável.
 - Preservar as cinco fases: 1–5 constroem sistemas com SPECs profundas; 4 e 5 acrescentam
   loops/agentes sem substituir os sistemas; 5 também valida integralmente as entregas das fases 1–5.
 - Se uma SPEC exigir que o Ethos invente arquitetura, regra, dado, permissão ou aceite, parar e
   devolver para \`gerar-specs\`; não completar a lacuna por suposição.
+
+## Sincronização obrigatória com Google Drive
+
+- Todo arquivo do projeto criado ou alterado deve ser criado/atualizado, no mesmo run, pelo MCP do
+  Google Drive na pasta ativa do cliente. Se a edição já ocorreu diretamente pelo MCP, a confirmação
+  dessa operação é a sincronização; não duplique o arquivo.
+- Depois de uma unidade coerente de alterações, sincronize todos os arquivos tocados antes de
+  declarar a tarefa concluída. Use a pasta e o ID do arquivo já resolvidos; não procure outra pasta
+  com nome parecido nem crie cópia quando o arquivo existente puder ser atualizado.
+- Só informe “atualizado no Drive” depois do MCP confirmar a operação. Se o MCP estiver indisponível
+  ou falhar, preserve o trabalho, registre \`SINCRONIZAÇÃO PENDENTE\`, tente novamente com segurança e
+  não conclua a tarefa como sincronizada.
+- Esta é uma autorização permanente somente para criar/atualizar dentro da pasta ativa. Excluir,
+  mover, compartilhar, alterar permissões ou escrever fora dela continua exigindo autorização
+  humana explícita.
 
 ## Comandos de entrada
 

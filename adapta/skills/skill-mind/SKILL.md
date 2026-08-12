@@ -92,6 +92,13 @@ Antes de declarar o run concluído:
 5. Promoção para acervo compartilhado, push, publicação ou criação de repo continuam exigindo
    confirmação explícita; o fechamento automático nunca concede essa autorização.
 
+### Sincronização do workspace no Ethos
+
+Quando o `MEMORY.md` autorizar a pasta ativa do Google Drive, criar/atualizar pelo MCP o arquivo
+correspondente após cada unidade coerente de alterações faz parte do próprio write e não exige nova
+confirmação. Exija confirmação do MCP antes de concluir o run. Falha deixa `SINCRONIZAÇÃO PENDENTE`.
+A autorização não cobre exclusão, movimento, compartilhamento, permissão ou outra pasta.
+
 ## 6. Recuperar runs interrompidos
 
 Use o modo `recover` descrito em `references/ethos-legacy.md`. Retome a partir do último artefato

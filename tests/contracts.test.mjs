@@ -26,7 +26,7 @@ test("manifests usam a mesma versao e o nome da pasta", () => {
   const marketplace = JSON.parse(read(".claude-plugin/marketplace.json"))
   assert.equal(claude.name, "adapta")
   assert.equal(codex.name, "adapta")
-  assert.equal(claude.version, "0.9.2")
+  assert.equal(claude.version, "0.9.3")
   assert.equal(codex.version, claude.version)
   assert.equal(marketplace.metadata.version, claude.version)
   assert.equal(codex.skills, "./skills/")
@@ -148,6 +148,17 @@ test("runtime resolve scripts pelo bundle sem pedir caminho da metodologia", () 
   assert.ok(!runtimeText.includes(oldPluginRootPlaceholder))
   assert.ok(!runtimeText.includes(oldMethodPathPlaceholder))
   assert.doesNotMatch(runtimeText, /node\s+[^\n]*plugins[\\/]adapta[\\/]scripts/i)
+})
+
+test("MEMORY exige sincronizacao MCP com a pasta ativa do Google Drive", () => {
+  const memory = read("adapta/MEMORY.md")
+  const builder = read("adapta/scripts/build-ethos-memory.mjs")
+  for (const body of [memory, builder]) {
+    assert.match(body, /Sincronização obrigatória com Google Drive/)
+    assert.match(body, /MCP do\s+Google Drive na pasta ativa do cliente/)
+    assert.match(body, /SINCRONIZAÇÃO PENDENTE/)
+    assert.match(body, /Excluir,\s+mover, compartilhar, alterar permissões/)
+  }
 })
 
 test("JSON e referencias locais do contrato sao validos", () => {

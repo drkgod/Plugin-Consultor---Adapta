@@ -32,3 +32,10 @@ Esta versão acrescenta capacidades sem renomear skills ou caminhos existentes.
 - Restaura uma rubrica única para `grave`, `moderado` e `baixo`, separada de confiança.
 - Define territórios exclusivos para os painéis `definir-requisitos`, `revisar-escopo`,
   `escopo-definitivo`, `gerar-specs` e `gerar-tasks`, inclusive no fallback serial do Ethos.
+
+## Correção 0.9.3
+
+- O `MEMORY.md` passa a exigir sincronização, no mesmo run, dos arquivos criados/alterados pelo MCP
+  do Google Drive na pasta ativa do cliente.
+- O agente só declara sincronização após confirmação do MCP; falha mantém a tarefa pendente.
+- A autorização não inclui excluir, mover, compartilhar, mudar permissões ou escrever fora da pasta.

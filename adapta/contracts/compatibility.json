@@ -41,6 +41,9 @@
     "0.9.2": {
       "fases-sistemas-e-loops": "restaura sistemas nas cinco fases e mantem loops como acrescimo nas fases 4 e 5, com validacao adicional na fase 5",
       "calibracao-de-revisao": "restaura a rubrica comum de gravidade e os territorios exclusivos dos paineis multipersona"
+    },
+    "0.9.3": {
+      "sincronizacao-google-drive": "autoriza e exige create/update via MCP na pasta ativa do cliente depois de alteracoes, sem autorizar exclusao, movimento ou compartilhamento"
     }
   },
   "renamedIn": {
