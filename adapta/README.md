@@ -187,9 +187,9 @@ Depois da revisão e da análise autoral do consultor, `escopo-definitivo` produ
 O documento definitivo contém as cinco fases; a execução materializa tasks e SPECs dentro de
 `02-Plano_de_acao/`.
 
-As fases 1–3 continuam construindo os sistemas. A fase 4 acrescenta loops, agentes, skills e
-conectores que operam ou integram essas entregas. A fase 5 valida ponta a ponta tudo que foi feito
-nas fases 1–4; não é uma fase de expansão de escopo.
+As fases 1–5 continuam construindo os sistemas. As fases 4 e 5 acrescentam loops, agentes, skills
+e conectores que operam ou integram essas entregas, sem substituir o incremento do sistema. A fase
+5 também valida ponta a ponta tudo que foi feito nas fases 1–5; validação não expande o escopo.
 
 `gerar-setup-ethos` cria arquivos separados `SOUL.md`, `IDENTITY.md` e `USER.md`, além das sugestões
 de conectores/automações e fichas de loops. O `MEMORY.md` distribuído com o plugin continua sendo o
@@ -203,9 +203,13 @@ Cada fase tem:
 - `01-SPECs/`: contratos e TDD da fase;
 - `00.tasks_per_fase/fase_N.md`: projeção em checkboxes consumida pela Jornada de Execução.
 
-Nas fases 1–3, cada SPEC explicita estado atual e desejado, atores, permissões, dados, integrações,
+Nas fases 1–5, cada SPEC de sistema explicita estado atual e desejado, atores, permissões, dados, integrações,
 regras, sequência, exceções, rollback, critérios, provas e pontos de parada. Lacuna material volta
 ao consultor; o Ethos não deve completá-la por suposição.
+
+Os painéis carregam `references/review-calibration.md` para classificar `grave`, `moderado` e
+`baixo` pela mesma régua e `references/review-panels.md` para dividir territórios. No Ethos antigo,
+as mesmas personas rodam em série sem virar revisores generalistas.
 
 `gerar-tasks` mantém quatro projeções coerentes: tasks gerais, Jornada, `Tasks vinculadas` das
 SPECs e matriz de rastreabilidade. O comentário `<!-- id:… -->` da Jornada é imutável.

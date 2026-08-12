@@ -26,7 +26,7 @@ test("manifests usam a mesma versao e o nome da pasta", () => {
   const marketplace = JSON.parse(read(".claude-plugin/marketplace.json"))
   assert.equal(claude.name, "adapta")
   assert.equal(codex.name, "adapta")
-  assert.equal(claude.version, "0.9.1")
+  assert.equal(claude.version, "0.9.2")
   assert.equal(codex.version, claude.version)
   assert.equal(marketplace.metadata.version, claude.version)
   assert.equal(codex.skills, "./skills/")
@@ -84,10 +84,49 @@ test("contratos preservam o metodo e acrescentam a arquitetura Ethos", () => {
   const scope = read("adapta/skills/escopo-definitivo/references/contrato-fases-ethos.md")
   const specs = read("adapta/skills/gerar-specs/references/contrato-spec.md")
   assert.match(workflow, /gerar-setup-ethos/)
-  assert.match(scope, /Fases 1–3 — construir os sistemas/)
-  assert.match(scope, /Fase 4 — operar e integrar por loops/)
-  assert.match(scope, /Fase 5 — validar o conjunto completo/)
+  assert.match(scope, /Fases 1–5 — evoluir os sistemas/)
+  assert.match(scope, /Fases 4 e 5 — acrescentar loops de valor/)
+  assert.match(scope, /Fase 5 — concluir sistemas, loops e validação/)
+  assert.match(read("adapta/skills/gerar-specs/SKILL.md"), /ao menos uma\s+SPEC de sistema/)
   assert.match(specs, /escolher arquitetura, inventar regra, adivinhar campo, ampliar/)
+})
+
+test("paineis compartilham calibracao de gravidade e territorios exclusivos", () => {
+  const subagents = JSON.parse(read("adapta/contracts/subagents.json"))
+  const calibration = read(path.join("adapta", subagents.severityCalibration))
+  const territories = read(path.join("adapta", subagents.territoryContract))
+  const template = read("adapta/references/subagent-template.md")
+  assert.match(calibration, /Gravidade mede o\s+impacto/)
+  for (const severity of ["grave", "moderado", "baixo"]) assert.ok(calibration.includes(`| \`${severity}\` |`))
+  for (const panelName of ["definir-requisitos", "revisar-escopo", "escopo-definitivo", "gerar-specs", "gerar-tasks"]) {
+    const panel = subagents.panels[panelName]
+    assert.equal(panel.territorySection, panelName)
+    assert.match(territories, new RegExp(`## ${panelName}\\b`))
+    for (const member of panel.members) assert.ok(territories.includes(`| \`${member.id}\` |`), `${panelName}: território ausente para ${member.id}`)
+  }
+  assert.match(template, /\{\{territory\}\}/)
+  assert.match(template, /\{\{exclusions\}\}/)
+  assert.match(template, /\{\{handoff_to\}\}/)
+  const schemas = [
+    "adapta/skills/definir-requisitos/schemas/revisao-requisitos.schema.json",
+    "adapta/skills/escopo-definitivo/schemas/revisao-escopo.schema.json",
+    "adapta/skills/gerar-specs/schemas/revisao-spec.schema.json",
+    "adapta/skills/gerar-tasks/schemas/revisao-tasks.schema.json",
+    "adapta/skills/revisar-escopo/schemas/achado-revisao-escopo.schema.json"
+  ].map((file) => JSON.parse(read(file)))
+  function severityEnums(node, found = []) {
+    if (!node || typeof node !== "object") return found
+    for (const [key, value] of Object.entries(node)) {
+      if (["severity", "gravidade"].includes(key) && Array.isArray(value?.enum)) found.push(value.enum)
+      severityEnums(value, found)
+    }
+    return found
+  }
+  for (const schema of schemas) {
+    const enums = severityEnums(schema)
+    assert.ok(enums.length > 0)
+    for (const values of enums) assert.deepEqual(new Set(values), new Set(["grave", "moderado", "baixo"]))
+  }
 })
 
 test("runtime resolve scripts pelo bundle sem pedir caminho da metodologia", () => {

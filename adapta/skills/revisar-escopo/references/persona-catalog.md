@@ -3,6 +3,9 @@
 Esta skill usa prompt assets locais, nao agentes globais como dependencia operacional. Os arquivos
 em `plugins/adapta/agents/` continuam como espelho/documentacao do painel.
 
+A divisão completa `Revisa / Não revisa / Encaminha para` é canônica em
+`../../../references/review-panels.md`. A gravidade segue `../../../references/review-calibration.md`.
+
 ## Núcleo sempre ativo
 
 | Persona | Prompt asset | Foco |

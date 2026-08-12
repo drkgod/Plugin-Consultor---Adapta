@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Marketplace do plugin do consultor Adapta Native, com SkillMind e perfil portátil para runtimes sem hooks.",
-    "version": "0.9.1"
+    "version": "0.9.2"
   },
   "plugins": [
     {
       "name": "adapta",
       "source": "./adapta",
-      "description": "Jobs do CONSULTOR Adapta Native orquestrados pelo SkillMind: setup do Ethos, SPECs profundas, loops/agentes, validação integral, memória, ledger e handoff seguro."
+      "description": "Jobs do CONSULTOR Adapta Native orquestrados pelo SkillMind: sistemas nas cinco fases, loops adicionais nas fases 4 e 5, validação final, painéis calibrados, memória, ledger e handoff seguro."
     }
   ]
 }

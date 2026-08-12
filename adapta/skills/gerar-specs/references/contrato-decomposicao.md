@@ -15,9 +15,9 @@ fixam invariantes. O corte SPEC → tasks pertence a
 - Toda fase em `02-Escopo-Definitivo.md` tem a seção **"Fora desta fase"**: o que não construir agora, com motivo
   curto ("fase futura" / "fora do programa"). Declarar o out-of-scope protege o champion de
   improvisar.
-- Fases 1–3 são incrementos dos sistemas; fase 4 configura loops/agentes/conectores que operam
-  esses incrementos; fase 5 valida transversalmente as fases 1–4. Essa especialização não cria
-  fases adicionais nem remove os gates existentes.
+- Fases 1–5 são incrementos dos sistemas. As fases 4 e 5 acrescentam loops/agentes/conectores que
+  operam esses incrementos; a fase 5 também valida transversalmente as fases 1–5. Esses acréscimos
+  não criam fases adicionais, não removem os gates existentes e não substituem a entrega de sistema.
 
 ## Fase → SPECs
 
@@ -30,8 +30,9 @@ Uma SPEC é a menor unidade com **resultado observável próprio**. Cortes:
 5. **Mesma SPEC vs. nova:** especificação que não muda o resultado observável nem adiciona
    critério de aceite é detalhe da SPEC existente; resultado ou critério novo é SPEC nova.
 6. Ancoragem: 3–7 SPECs por fase é o range saudável — fora disso, suspeite do corte da fase.
-7. Na fase 4, separar loops com metas diferentes e dependências compartilhadas com resultado
-   próprio. Na fase 5, cortar por superfícies de risco/validação sem deixar entrega anterior órfã.
+7. Nas fases 4 e 5, separe as SPECs de sistema das SPECs de loop; loops com metas diferentes têm
+   SPECs distintas. Na fase 5, corte também as SPECs de validação por superfície de risco sem deixar
+   entrega anterior órfã.
 
 ## Degrau da solução (D18/D20)
 

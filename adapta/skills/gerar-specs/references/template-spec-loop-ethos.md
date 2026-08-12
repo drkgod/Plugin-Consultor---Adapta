@@ -1,4 +1,4 @@
-# Extensão de SPEC — fase 4, loop/agente no Ethos
+# Extensão de SPEC — fases 4 e 5, loop/agente no Ethos
 
 Use o contrato base de SPEC e acrescente este bloco. Uma SPEC pode configurar um loop completo ou
 uma dependência operacional compartilhada, desde que tenha resultado observável próprio.
@@ -6,7 +6,7 @@ uma dependência operacional compartilhada, desde que tenha resultado observáve
 ## Configuração no Ethos
 
 - **Tipo:** loop | agente | conector compartilhado | automação de apoio
-- **Sistemas das fases 1–3 usados:** [IDs/SPECs]
+- **Sistemas usados:** [IDs/SPECs das fases 1–5]
 - **Agente responsável:** [assistente principal ou agente especializado]
 
 ### Meta

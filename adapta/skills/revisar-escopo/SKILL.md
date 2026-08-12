@@ -12,7 +12,8 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `revisar-escopo`, não execute este job.
 a etapa autorizada e preserve o run até os finalizadores.
 
 Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout.json`,
-`../../contracts/subagents.json`, `references/persona-catalog.md` e
+`../../contracts/subagents.json`, `../../references/review-calibration.md`,
+`../../references/review-panels.md`, `references/persona-catalog.md` e
 `schemas/achado-revisao-escopo.schema.json`.
 
 ## Entradas
@@ -28,7 +29,8 @@ Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout
 1. Monte um pacote de contexto por caminhos e gere `run_id`.
 2. Rode o painel `revisar-escopo`, read-only, com no máximo três membros simultâneos: núcleo de
    plano, adversarial e viabilidade; guardião de escopo e alternativas entram quando aplicável.
-3. Cada achado cita evidência, cenário de falha, gravidade, confiança e decisão necessária.
+3. Cada achado cita evidência, cenário de falha, gravidade calibrada pela rubrica comum, confiança
+   e decisão necessária. Cada persona permanece no território da tabela `revisar-escopo`.
 4. Deduplicate por consequência real.
 5. Escreva `03-Projeto/revisao-do-escopo.md` com cobertura, achados `RV-NNN`, decisões humanas,
    alternativas, riscos residuais e pontos sólidos.

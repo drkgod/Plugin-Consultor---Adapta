@@ -28,15 +28,16 @@ resultado esperado, evidência objetiva e regressão manual. Não mantenha matri
 paralelo; a rastreabilidade vive no próprio arquivo da SPEC e em
 `02-Plano_de_acao/matriz-de-rastreabilidade.md`.
 
-Nas fases 1–3, “detalhado” é um critério observável: uma pessoa ou agente que tenha os acessos
+Nas fases 1–5, “detalhado” é um critério observável: uma pessoa ou agente que tenha os acessos
 declarados consegue executar sem escolher arquitetura, inventar regra, adivinhar campo, ampliar
 permissão ou definir o próprio aceite. `A definir`, `etc.`, `conforme necessário` e equivalentes
 são bloqueios quando afetam a execução. A SPEC pode citar uma fonte de verdade em vez de duplicar
 conteúdo, desde que informe arquivo/seção exatos.
 
-Na fase 4, a SPEC inclui a configuração completa do loop/agente/conector. Na fase 5, a SPEC é um
-contrato de validação transversal e rastreia as entregas das fases 1–4. O TDD da fase 5 prova o
-conjunto integrado e não repete apenas testes unitários já executados.
+Nas fases 4 e 5, as SPECs de sistema continuam obrigatórias e usam este contrato completo. As SPECs
+de loop/agente/conector são adicionais e incluem sua configuração completa. Na fase 5, as SPECs de
+validação também são adicionais, rastreiam as entregas das fases 1–5 e provam o conjunto integrado,
+sem repetir apenas testes unitários já executados.
 
 Para a fase 1, o resultado palpável é obrigatório: uma tela, fluxo, automação, artefato ou decisão
 operacional que o cliente consiga demonstrar e usar no primeiro ciclo. Fundação sem demonstração

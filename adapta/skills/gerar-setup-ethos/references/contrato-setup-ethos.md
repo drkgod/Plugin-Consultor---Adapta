@@ -53,9 +53,9 @@ frequência, condição de parada e comportamento em erro.
 
 ### Mapa de agentes e loops
 
-Mostre qual agente executa cada loop, quais sistemas das fases 1–3 ele usa e qual SPEC da fase 4
-configura a integração. Um agente pode operar mais de um loop somente quando missão, acessos e
-contexto são compatíveis.
+Mostre qual agente executa cada loop, quais sistemas das fases 1–5 ele usa e qual SPEC adicional
+das fases 4 ou 5 configura a integração. Um agente pode operar mais de um loop somente quando
+missão, acessos e contexto são compatíveis.
 
 ## Índice e gate da call
 

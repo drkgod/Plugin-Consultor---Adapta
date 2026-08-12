@@ -23,3 +23,12 @@ Esta versão acrescenta capacidades sem renomear skills ou caminhos existentes.
 - Remove dos comandos os placeholders antigos de raiz do plugin e do pacote da metodologia.
 - Resolve scripts a partir do `SKILL.md` carregado por `references/runtime-paths.md`.
 - O ETHOS não deve pedir ao consultor o caminho do pacote da metodologia.
+
+## Correção 0.9.2
+
+- Restaura a evolução dos sistemas nas cinco fases, como no fluxo anterior: loops/agentes são
+  acréscimos nas fases 4 e 5, e a validação é outro acréscimo da fase 5.
+- Fases 4 e 5 exigem ao menos uma SPEC de sistema; SPEC de loop ou validação não satisfaz esse gate.
+- Restaura uma rubrica única para `grave`, `moderado` e `baixo`, separada de confiança.
+- Define territórios exclusivos para os painéis `definir-requisitos`, `revisar-escopo`,
+  `escopo-definitivo`, `gerar-specs` e `gerar-tasks`, inclusive no fallback serial do Ethos.

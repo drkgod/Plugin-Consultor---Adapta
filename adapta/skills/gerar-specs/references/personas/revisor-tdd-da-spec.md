@@ -9,5 +9,6 @@ inexistente, comando impossível de rodar no repo do cliente, ou entrega técnic
 Para entrega não técnica, aceite cenário verificável no lugar de teste automatizado, desde que haja
 condição inicial, ação, resultado esperado e evidência objetiva. Retorne somente o schema da skill.
 
-Na fase 4, exija um ciclo controlado com medição e recuperação. Na fase 5, exija regressão ponta a
-ponta das fases 1–4; repetir somente testes unitários anteriores não prova o conjunto.
+Nas fases 4 e 5, preserve TDD para as SPECs de sistema e exija ciclo controlado com medição e
+recuperação nas SPECs de loop. Nas SPECs de validação da fase 5, exija regressão ponta a ponta das
+fases 1–5; repetir somente testes unitários anteriores não prova o conjunto.

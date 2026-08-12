@@ -34,12 +34,12 @@ informação de persona, acesso, métrica ou autonomia não estiver confirmada, 
 4. Gere `mapa-de-agentes-e-loops.md`, separando o assistente principal dos agentes especializados.
    Cada agente precisa ter missão, entradas, saídas, skills, conectores, limites e relação com as
    fases. Não duplique um agente quando uma skill no assistente principal resolve o trabalho.
-5. Para cada loop candidato da fase 4, gere `loops/LOOP-NN-<slug>.md` pelo template. Um loop persegue
+5. Para cada loop candidato das fases 4 e 5, gere `loops/LOOP-NN-<slug>.md` pelo template. Um loop persegue
    uma única meta mensurável; não use “concluir o projeto” ou “fazer todas as fases” como meta.
 6. Gere `00-INDICE.md` com estado `RASCUNHO`, fontes, pendências da call e checklist de configuração.
-7. Confira coerência com as fases 1–5: loops usam ou integram entregas das fases 1–3; a fase 5
-   valida sistemas, agentes, conectores e loops. Corrija apenas inconsistência segura; mudança de
-   intenção volta ao consultor.
+7. Confira coerência com as fases 1–5: todas entregam sistemas; as fases 4 e 5 acrescentam loops que
+   usam ou integram esses sistemas; e a fase 5 também valida sistemas, agentes, conectores e loops.
+   Corrija apenas inconsistência segura; mudança de intenção volta ao consultor.
 8. Atualize `STATUS.md` e `changelog.md` e devolva o pacote para revisão do consultor.
 
 ## Limites
@@ -47,7 +47,8 @@ informação de persona, acesso, métrica ou autonomia não estiver confirmada, 
 - Não preencher segredo, token, credencial, dado pessoal desnecessário ou transcrição bruta.
 - Não afirmar que um conector, skill ou automação existe no Ethos sem evidência.
 - Não criar loop, conectar conta, instalar skill ou ativar autonomia por inferência.
-- Não transformar a fase 4 em nova construção dos sistemas nem a fase 5 em expansão de escopo.
+- Não deixar loops substituírem a entrega dos sistemas nas fases 4 e 5 nem usar a validação para
+  expandir o escopo.
 - Persona desconhecida permanece como pendência explícita; nunca vira perfil genérico inventado.
 
 ## Pronto quando

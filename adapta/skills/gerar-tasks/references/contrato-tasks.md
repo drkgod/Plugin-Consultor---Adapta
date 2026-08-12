@@ -18,7 +18,8 @@ capaz de produzir evidência própria.
 8. Dono, evidência e status são obrigatórios.
 9. A task aponta para a subseção exata da SPEC e declara o ponto de parada. Instrução vaga não
    autoriza o executor a completar regra, arquitetura, campo, permissão ou aceite ausente.
-10. Task da fase 4 trata uma meta/loop por vez. Task da fase 5 registra a validação e a evidência;
+10. Fases 4 e 5 preservam tasks de sistema e acrescentam tasks de loop separadas, uma meta por vez.
+    Na fase 5, tasks de validação também são adicionais; registram validação e evidência, e uma
     correção descoberta retorna à SPEC de origem ou a uma emenda aprovada.
 
 ## Projeções canônicas

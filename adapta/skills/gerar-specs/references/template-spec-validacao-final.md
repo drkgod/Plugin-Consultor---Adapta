@@ -1,13 +1,14 @@
 # Extensão de SPEC — fase 5, validação transversal
 
-Use o contrato base de SPEC e acrescente este bloco. A fase 5 valida; não cria capacidade nova.
+Use o contrato base de SPEC e acrescente este bloco somente às SPECs de validação. Esta extensão
+não cria capacidade nova e não substitui as SPECs de sistema e de loop previstas para a fase 5.
 
-## Cobertura das fases 1–4
+## Cobertura das fases 1–5
 
 | Fase | Sistema/loop/agente | SPEC/critério de origem | Cenário integrado | Evidência anterior | Prova nesta SPEC |
 |---|---|---|---|---|---|
 
-Nenhuma entrega das fases 1–4 pode ficar sem linha ou justificativa explícita de não aplicabilidade.
+Nenhuma entrega das fases 1–5 pode ficar sem linha ou justificativa explícita de não aplicabilidade.
 
 ## Matriz de validação ponta a ponta
 

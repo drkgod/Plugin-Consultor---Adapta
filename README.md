@@ -57,12 +57,14 @@ nomenclatura permanece em [`MIGRATION-0.8.0.md`](MIGRATION-0.8.0.md).
 - Toda solicitação entra por `skill-mind`; skill especializada sem envelope redireciona para ele.
 - `03-Projeto/01-Escopo.md` é o escopo base; não é o escopo aprovado.
 - A análise autoral do consultor não é preenchida pela IA.
-- `03-Projeto/02-Escopo-Definitivo.md` tem exatamente cinco fases: sistemas nas fases 1–3,
-  loops/agentes na fase 4 e validação das fases 1–4 na fase 5.
+- `03-Projeto/02-Escopo-Definitivo.md` tem exatamente cinco fases de sistemas; fases 4 e 5
+  acrescentam loops/agentes, e a fase 5 também valida as entregas das fases 1–5.
 - O pacote `03-Projeto/03-Setup-Ethos/` prepara SOUL, IDENTITY, USER, conectores e loops sem criar
   outra memória nem ativar acessos por inferência.
 - SPEC define contrato e prova; task executa um recorte desse contrato.
-- SPEC das fases 1–3 precisa ser profunda o bastante para o Ethos não inventar decisões.
+- SPEC de sistema em qualquer fase precisa ser profunda o bastante para o Ethos não inventar decisões.
+- Painéis usam uma rubrica única de gravidade e territórios exclusivos por revisor, inclusive no
+  fallback serial do Ethos.
 - O cliente recebe apenas a fase atual.
 - Execução de código trata uma task por vez e só avança após teste humano explícito.
 - Todo run concluído registra um candidato de aprendizado ou o motivo de não haver aprendizado

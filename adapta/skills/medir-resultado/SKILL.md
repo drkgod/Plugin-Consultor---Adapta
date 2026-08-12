@@ -17,7 +17,8 @@ da metodologia.
 ## Entradas
 
 - `.adapta/checks/check-fase-5.md` precisa estar aprovado.
-- As SPECs da fase 5 precisam conter e concluir a matriz de validação das fases 1–4. Item sem
+- As SPECs da fase 5 precisam concluir o incremento final dos sistemas e conter a matriz de
+  validação das fases 1–5. Item sem
   evidência mantém o fechamento bloqueado, mesmo quando nenhum erro foi relatado.
 - Evidência “depois” fica em `.adapta/resultado/videos_depois/` e deve repetir processo, roteiro
   ou métrica do baseline. Sem comparação válida, não estime resultado.

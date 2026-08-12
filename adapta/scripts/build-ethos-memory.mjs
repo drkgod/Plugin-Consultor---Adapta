@@ -56,8 +56,8 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Gate de consultor/CSM/cliente e ação externa nunca são inferidos.
 - Antes de concluir qualquer run: atualizar estado, criar checkpoint e capturar um aprendizado
   reutilizável ou registrar por que não houve aprendizado reutilizável.
-- Preservar as cinco fases: 1–3 constroem sistemas com SPECs profundas; 4 configura loops/agentes;
-  5 valida integralmente as entregas das fases 1–4.
+- Preservar as cinco fases: 1–5 constroem sistemas com SPECs profundas; 4 e 5 acrescentam
+  loops/agentes sem substituir os sistemas; 5 também valida integralmente as entregas das fases 1–5.
 - Se uma SPEC exigir que o Ethos invente arquitetura, regra, dado, permissão ou aceite, parar e
   devolver para \`gerar-specs\`; não completar a lacuna por suposição.
 

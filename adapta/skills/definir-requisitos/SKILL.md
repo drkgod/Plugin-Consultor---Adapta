@@ -12,7 +12,8 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `definir-requisitos`, não execute este 
 a etapa autorizada e preserve o run até os finalizadores.
 
 Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout.json`,
-`../../contracts/subagents.json`, `references/contrato-requisitos.md` e
+`../../contracts/subagents.json`, `../../references/review-calibration.md`,
+`../../references/review-panels.md`, `references/contrato-requisitos.md` e
 `schemas/revisao-requisitos.schema.json`.
 
 ## Entradas
@@ -29,8 +30,9 @@ Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout
 2. Separe fatos, inferências, decisões já tomadas e alternativas abertas.
 3. Para cada resultado, defina ator, valor observável, limites, regras, fluxo, falhas, sinais de
    sucesso, evidências, dependências, responsáveis e mecanismos candidatos.
-4. Rode o painel `definir-requisitos` e faça teste de pressão contra subjetividade, ausência de
-   evidência e decisão estrutural disfarçada de detalhe.
+4. Rode o painel `definir-requisitos` com os territórios exclusivos do contrato comum e faça teste
+   de pressão contra subjetividade, ausência de evidência e decisão estrutural disfarçada de detalhe.
+   Calibre a gravidade antes de deduplicar.
 5. Escreva `03-Projeto/requisitos.md` com IDs `RQ-NNN`, rastreabilidade para `01-Escopo.md` e
    `direcoes.md`, quando houver.
 6. Atualize `changelog.md` e devolva ao SkillMind a próxima etapa `revisar-escopo`.

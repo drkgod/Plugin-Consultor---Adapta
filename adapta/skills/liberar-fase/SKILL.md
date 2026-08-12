@@ -30,9 +30,10 @@ no ledger e devolve pendência quando algum estiver ausente.
    do cliente em `--cliente` e use `--digest-ativo`.
 5. Registre `.adapta/checks/check-fase-N.md` com aprovador humano, data e
    `active-sha256=<digest>`. Mudança posterior na fase ativa invalida a aprovação.
-6. Se N < 5, encerre este submodo e devolva ao SkillMind a próxima etapa `gerar-specs`. Na
-   transição 3→4, cobre as SPECs de loops/agentes/conectores; na transição 4→5, cobre as SPECs de
-   validação transversal das fases 1–4. Se N = 5, exija cobertura integral da matriz final e
+6. Se N < 5, encerre este submodo e devolva ao SkillMind a próxima etapa `gerar-specs`. Toda
+   transição cobra as SPECs de sistema da fase seguinte. Na transição 3→4, cobre também as SPECs de
+   loops/agentes/conectores; na transição 4→5, cobre também as SPECs de loops/agentes/conectores e
+   de validação transversal das fases 1–5. Se N = 5, exija cobertura integral da matriz final e
    devolva a próxima etapa `medir-resultado`; nunca crie fase 6.
 
 ## Submodo `selar-liberacao`
@@ -41,7 +42,7 @@ Use somente quando N < 5 e os recibos de `gerar-specs` e `gerar-tasks` da fase N
 concluídos.
 
 1. Revalide checklist, aceite, TDD, independência das tasks, matriz e ledger de dívidas. Para a
-   fase 5, qualquer entrega das fases 1–4 sem prova ou justificativa mantém o gate fechado.
+   fase 5, qualquer entrega das fases 1–5 sem prova ou justificativa mantém o gate fechado.
 2. Faça o dry-run determinístico com `../../scripts/preparar-liberacao-fase.mjs`, resolvido a
    partir desta skill. Passe a raiz do plano em `--consultor`, o clone já registrado em
    `--cliente`, a fase atual em `--de`, a seguinte em `--para` e `--dry-run`.
@@ -56,7 +57,8 @@ concluídos.
 
 ## Submodo `encerrar-projeto`
 
-Use somente na fase 5, depois da validação transversal das fases 1–4 e do recibo de
+Use somente na fase 5, depois da entrega do incremento final dos sistemas, da validação transversal
+das fases 1–5 e do recibo de
 `medir-resultado`. Registre o fechamento, resultados, riscos residuais e recomendação de próximo
 ciclo fora do escopo atual. Não invente fase 6 nem publique comparação/case sem confirmação.
 

@@ -1,8 +1,8 @@
 # LOOP-NN — [nome curto]
 
 **Status:** RASCUNHO — validar na call de setup
-**Fase de origem:** Fase 4
-**Sistemas usados:** [entregas das fases 1–3]
+**Fase de origem:** Fase [4 ou 5]
+**Sistemas usados:** [entregas das fases 1–5]
 **Agente responsável:** [assistente principal ou agente especializado]
 
 ## 1. Meta
@@ -56,7 +56,7 @@ limites, como registrar aprendizado e quando pedir validação.]
 - **Pré-condições:**
 - **Riscos:**
 - **Rollback/recuperação:**
-- **SPEC da fase 4:** [ID planejado]
+- **SPEC de loop da fase 4 ou 5:** [ID planejado]
 
 ## Evidências de origem
 

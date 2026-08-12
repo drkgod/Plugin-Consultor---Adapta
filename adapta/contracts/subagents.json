@@ -3,6 +3,8 @@
   "writer": "agente-principal",
   "scratch": "/tmp/adapta/<job>/<run-id>/",
   "promptTemplate": "references/subagent-template.md",
+  "severityCalibration": "references/review-calibration.md",
+  "territoryContract": "references/review-panels.md",
   "fallback": "Executar as mesmas personas em serie, no agente principal, preservando o schema e registrando fallback_serial no ledger do SkillMind.",
   "orchestration": {
     "queuePolicy": "bounded-capacity",
@@ -33,6 +35,7 @@
     },
     "definir-requisitos": {
       "mode": "read-only",
+      "territorySection": "definir-requisitos",
       "maxParallel": 2,
       "scratchByRunId": true,
       "members": [
@@ -42,6 +45,7 @@
     },
     "revisar-escopo": {
       "mode": "read-only",
+      "territorySection": "revisar-escopo",
       "maxParallel": 3,
       "scratchByRunId": true,
       "members": [
@@ -54,6 +58,7 @@
     },
     "escopo-definitivo": {
       "mode": "read-only",
+      "territorySection": "escopo-definitivo",
       "maxParallel": 3,
       "scratchByRunId": true,
       "members": [
@@ -65,6 +70,7 @@
     },
     "gerar-specs": {
       "mode": "read-only",
+      "territorySection": "gerar-specs",
       "maxParallel": 3,
       "scratchByRunId": true,
       "members": [
@@ -76,6 +82,7 @@
     },
     "gerar-tasks": {
       "mode": "read-only",
+      "territorySection": "gerar-tasks",
       "maxParallel": 2,
       "scratchByRunId": true,
       "members": [

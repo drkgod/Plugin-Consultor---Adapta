@@ -12,7 +12,8 @@ Sem `SKILLMIND_ENVELOPE v1` autorizando `gerar-tasks`, não execute este job. Ca
 a decomposição autorizada e preserve o run até os finalizadores.
 
 Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout.json`,
-`../../contracts/subagents.json`, `references/contrato-tasks.md`, as SPECs da fase em foco e
+`../../contracts/subagents.json`, `../../references/review-calibration.md`,
+`../../references/review-panels.md`, `references/contrato-tasks.md`, as SPECs da fase em foco e
 `schemas/revisao-tasks.schema.json`.
 
 ## Gates
@@ -42,13 +43,15 @@ Carregue `../../personas/consultor-adapta.md`, `../../contracts/workspace-layout
    - `03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md`.
    A projeção da Jornada contém título e `[ ]`/`[x]`; os detalhes permanecem no arquivo de tasks
    gerais e nas SPECs.
-6. Rode `revisor-decomposicao` e `revisor-rastreabilidade`; corrija inconsistências seguras.
+6. Rode `revisor-decomposicao` e `revisor-rastreabilidade` nos territórios exclusivos do contrato
+   comum, calibre gravidade, deduplicate por consequência e corrija inconsistências seguras.
 7. Atualize `STATUS.md` e `changelog.md`. Informe que a fase está pronta para handoff ou para o
    dry-run de `liberar-fase`.
 
-Nas fases 1–3, cada task executa somente o detalhe já decidido na SPEC. Na fase 4, não combine dois
-loops ou duas metas na mesma task. Na fase 5, tasks executam a matriz de validação e registram
-resultado positivo ou falha; não corrigem silenciosamente outra fase sem emenda/autorização.
+Nas fases 1–5, cada task executa somente o detalhe já decidido na SPEC. Nas fases 4 e 5, preserve
+tasks de sistema e separe as tasks adicionais de loop; não combine dois loops ou duas metas na
+mesma task. Na fase 5, tasks adicionais executam a matriz de validação e registram resultado
+positivo ou falha; não corrigem silenciosamente outra fase sem emenda/autorização.
 
 ## Emendas
 

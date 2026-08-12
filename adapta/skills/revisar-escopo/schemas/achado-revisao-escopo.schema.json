@@ -27,7 +27,7 @@
           },
           "gravidade": {
             "type": "string",
-            "enum": ["grave", "moderado"]
+            "enum": ["grave", "moderado", "baixo"]
           },
           "tipo": {
             "type": "string",

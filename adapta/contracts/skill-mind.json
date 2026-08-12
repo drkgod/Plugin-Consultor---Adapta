@@ -25,7 +25,7 @@
     "interpretar o objetivo antes de escolher a skill",
     "executar dependencias e condicionais; nao apenas a skill citada pelo usuario",
     "uma task de implementacao por vez",
-    "fases 1 a 3 usam SPECs profundas; fase 4 operacionaliza loops e agentes; fase 5 valida as fases 1 a 4",
+    "fases 1 a 5 entregam sistemas com SPECs profundas; fases 4 e 5 acrescentam loops e agentes; fase 5 tambem valida as fases 1 a 5",
     "nao avancar task sem teste humano explicito quando aplicavel",
     "agente principal e o unico escritor",
     "gate humano nao pode ser inferido",

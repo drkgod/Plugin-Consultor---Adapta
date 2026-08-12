@@ -70,8 +70,9 @@ Quando o pedido executar tasks ou código:
    seguir”. Silêncio, ausência de erro relatado ou pedido em lote não aprovam o gate.
 5. Se o teste falhar, mantenha a task aberta e roteie para `debugar`; depois repita o mesmo gate.
 
-Nas fases 1–3, preserve a profundidade da SPEC; na fase 4, execute um loop/meta por vez; na fase 5,
-registre a validação das fases 1–4 e não corrija silenciosamente o que falhar.
+Nas fases 1–5, preserve a profundidade da SPEC de sistema. Nas fases 4 e 5, respeite o tipo da task:
+tasks de sistema continuam entregando capacidade e tasks de loop executam uma meta por vez. Na fase
+5, tasks de validação registram a cobertura das fases 1–5 e não corrigem silenciosamente o que falhar.
 
 ## 5. Fechar sem perder aprendizado
 

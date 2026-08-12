@@ -1,7 +1,7 @@
 {
   "name": "adapta",
-  "description": "SkillMind e capacidades portáteis do consultor Adapta Native para o layout Plano — <id>, com setup do Ethos, SPECs profundas, loops e validação integral.",
-  "version": "0.9.1",
+  "description": "SkillMind e capacidades portáteis do consultor Adapta Native: sistemas nas cinco fases, loops adicionais nas fases 4 e 5, validação final e painéis calibrados.",
+  "version": "0.9.2",
   "author": {
     "name": "Adapta Labs"
   }
