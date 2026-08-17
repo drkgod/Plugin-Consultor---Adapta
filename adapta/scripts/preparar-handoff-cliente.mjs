@@ -124,12 +124,10 @@ export function buildHandoffPlan({ consultantRoot, clientRoot, templateRoot, pha
 
   const checksRoot = planPath(roots.consultant, "checks")
   const prerequisites = []
-  for (const name of ["check-escopo.md", "check-cliente.md"]) {
-    const source = path.join(checksRoot, name)
-    assertSafeRegularFile(roots.consultant, source)
-    if (!parseCheckStatus(fs.readFileSync(source, "utf8")).canAdvance) throw new Error(`${name} nao permite handoff`)
-    prerequisites.push({ source, sha256: sha256(source), classification: "gate-humano" })
-  }
+  const checkEscopo = path.join(checksRoot, "check-escopo.md")
+  assertSafeRegularFile(roots.consultant, checkEscopo)
+  if (!parseCheckStatus(fs.readFileSync(checkEscopo, "utf8")).canAdvance) throw new Error("check-escopo.md nao permite handoff")
+  prerequisites.push({ source: checkEscopo, sha256: sha256(checkEscopo), classification: "gate-humano" })
   const receipt = path.join(checksRoot, "recibo-handoff-cliente.md")
   assertSafeRegularFile(roots.consultant, receipt)
   const receiptBody = fs.readFileSync(receipt, "utf8")

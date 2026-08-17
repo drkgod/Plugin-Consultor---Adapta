@@ -225,9 +225,11 @@ O gate de input foi removido. O fluxo valida fontes no próprio escopo base.
 Os demais controles humanos permanecem internos em `.adapta/checks/`:
 
 - `check-escopo.md`;
-- `check-cliente.md`;
 - checks de task;
 - `check-fase-N.md`.
+
+O antigo `check-cliente.md` não é mais exigido pelo plugin. O cliente continua recebendo apenas
+as entregas liberadas da fase atual; checks internos e materiais de governança não são exportados.
 
 Um agente prepara e valida checks, mas não se declara aprovador humano.
 

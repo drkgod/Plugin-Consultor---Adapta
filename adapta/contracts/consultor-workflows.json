@@ -64,7 +64,7 @@
     "gerar-specs": {
       "skill": "skills/gerar-specs/SKILL.md",
       "stages": ["ler escopo definitivo e rastreabilidade", "selecionar contrato da fase", "compor SPECs profundas da fase em foco em modo onda", "acoplar TDD executavel", "revisar contrato, aceite e TDD", "atualizar indice e matriz"],
-      "inputs": ["03-Projeto/02-Escopo-Definitivo.md", "fase em foco", "evolucoes aceitas e ledger de dividas quando houver", "check-escopo aprovado", "check-cliente aprovado"],
+      "inputs": ["03-Projeto/02-Escopo-Definitivo.md", "fase em foco", "evolucoes aceitas e ledger de dividas quando houver", "check-escopo aprovado"],
       "outputs": ["03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/spec-*.md", "03-Projeto/02-Plano_de_acao/0N.Fase_N/01-SPECs/00-INDICE.md", "03-Projeto/02-Plano_de_acao/matriz-de-rastreabilidade.md ate a camada SPEC"],
       "gates": ["Consultor e CSM/cliente aprovaram o escopo", "fases 1-5 nao deixam decisao estrutural para o Ethos", "fases 4 e 5 possuem ao menos uma SPEC de sistema e acrescentam SPECs de loop com Meta Validacao Conectores Skills e Arranque", "fase 5 acrescenta validacao de todas as entregas das fases 1-5", "cada SPEC possui checklist, aceite e TDD"],
       "externalActions": []
@@ -81,7 +81,7 @@
       "skill": "skills/gerar-pasta-cliente/SKILL.md",
       "inputs": ["template cliente", "escopo definitivo", "tasks da fase", "SPECs validas com TDD", "ajustes da reuniao incorporados"],
       "outputs": ["pasta cliente", "handoff-manifest.json"],
-      "gates": ["check-escopo e check-cliente aprovados", "recibo vincula reuniao de corte aos hashes atuais", "dry-run aprovado", "confirmacao antes de criar repo ou publicar"],
+      "gates": ["check-escopo aprovado", "recibo vincula reuniao de corte aos hashes atuais", "dry-run aprovado", "confirmacao antes de criar repo ou publicar"],
       "externalActions": ["criar repo", "push"]
     },
     "liberar-fase": {

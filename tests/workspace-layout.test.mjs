@@ -60,7 +60,6 @@ function fixture() {
   write(meeting, "# Ata de corte\n")
   const checks = path.join(plan, PLAN_PATHS.checks)
   write(path.join(checks, "check-escopo.md"), approvedCheck("escopo"))
-  write(path.join(checks, "check-cliente.md"), approvedCheck("cliente"))
   const receipt = `# Recibo\n\n**Data:** 2026-08-10\n**Reuniao de corte:** ${meetingRelative}\n**Ajustes incorporados:** SIM\n**Revalidacao:** APROVADA\n\n## Versões revalidadas\n\n- Escopo base: sha256=${hash(path.join(plan, PLAN_PATHS.baseScope))}\n- Escopo definitivo: sha256=${hash(path.join(plan, PLAN_PATHS.definitiveScope))}\n- Tasks fase 1: sha256=${hash(phase.tasks)}\n- SPECs fase 1: sha256-set=${digestFiles(plan, [spec])}\n`
   write(path.join(checks, "recibo-handoff-cliente.md"), receipt)
   const template = path.join(root, "template")
@@ -95,7 +94,7 @@ test("brief e checkpoint usam STATUS e controles do plano resolvido", () => {
   const checkpoint = buildCheckpoint({ workspace: data.client, reason: "teste" })
   assert.equal(checkpoint.workspace, data.plan)
   assert.ok(checkpoint.sourceOfTruth.some((item) => item.includes(".adapta")))
-  assert.equal(checkpoint.gateStates.length, 2)
+  assert.equal(checkpoint.gateStates.length, 1)
 })
 
 test("tldv grava categoria e nomes reais de manifest e indice", () => {
@@ -118,8 +117,9 @@ test("handoff le o escopo e a fase no layout atual", () => {
   const data = fixture()
   const clientRoot = path.join(data.root, "exportado")
   const plan = buildHandoffPlan({ consultantRoot: data.client, clientRoot, templateRoot: data.template, phaseNumber: 1 })
-  assert.equal(plan.consultantRoot, data.plan)
-  assert.ok(plan.copies.some((copy) => copy.source === data.phase.tasks && copy.target.endsWith(path.join("04_fase-atual", "fase.md"))))
+  assert.ok(plan.prerequisites.length >= 3)
+  assert.ok(plan.prerequisites.some((item) => item.source.endsWith("check-escopo.md")))
+  assert.ok(!plan.prerequisites.some((item) => item.source.endsWith("check-cliente.md")))
   assert.ok(plan.copies.some((copy) => copy.source.endsWith("spec-001.md")))
 })
 

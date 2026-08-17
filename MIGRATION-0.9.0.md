@@ -39,3 +39,10 @@ Esta versão acrescenta capacidades sem renomear skills ou caminhos existentes.
   do Google Drive na pasta ativa do cliente.
 - O agente só declara sincronização após confirmação do MCP; falha mantém a tarefa pendente.
 - A autorização não inclui excluir, mover, compartilhar, mudar permissões ou escrever fora da pasta.
+
+## Correção 0.9.4
+
+- Remove a exigência do `.adapta/checks/check-cliente.md` do fluxo do plugin do consultor.
+- O handoff inicial exige apenas o `check-escopo.md` e seus demais recibos e evidências.
+- Atualiza os contratos, skills e testes para validar handoff sem o check-cliente.
+- O check-cliente continua proibido na exportação externa, junto com os demais controles internos.

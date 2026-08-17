@@ -16,7 +16,7 @@ raiz do plano antes de ler fontes.
 
 ## Entradas
 
-1. `.adapta/checks/check-escopo.md` e `check-cliente.md` aprovados.
+1. `.adapta/checks/check-escopo.md` aprovado.
 2. `03-Projeto/02-Escopo-Definitivo.md` validado e a fase atual com tasks completas em
    `02-Plano_de_acao/0N.Fase_N/00-Tasks_Gerais.md`.
 3. SPECs válidas em `0N.Fase_N/01-SPECs/`, com TDD, checklist e aceite.

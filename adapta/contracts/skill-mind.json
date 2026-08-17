@@ -88,7 +88,7 @@
     },
     "gerar-specs": {
       "defaultVariant": "padrao",
-      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-setup-ethos", "mode": "execute", "when": "pacote de setup Ethos ausente ou obsoleto"}, {"job": "gerar-specs", "mode": "execute", "when": "check-escopo e check-cliente aprovados"}]}
+      "variants": {"padrao": [{"job": "escopo-definitivo", "mode": "execute", "when": "escopo definitivo ausente ou obsoleto e gates humanos permitem"}, {"job": "gerar-setup-ethos", "mode": "execute", "when": "pacote de setup Ethos ausente ou obsoleto"}, {"job": "gerar-specs", "mode": "execute", "when": "check-escopo aprovado"}]}
     },
     "gerar-tasks": {
       "defaultVariant": "padrao",

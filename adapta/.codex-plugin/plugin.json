@@ -1,6 +1,6 @@
 {
   "name": "adapta",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "SkillMind orquestra o consultor Adapta Native com sistemas nas cinco fases, loops adicionais nas fases 4 e 5, validação final e painéis calibrados, inclusive sem hooks.",
   "author": {
     "name": "Adapta Labs"

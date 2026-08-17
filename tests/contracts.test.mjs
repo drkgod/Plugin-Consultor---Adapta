@@ -26,7 +26,7 @@ test("manifests usam a mesma versao e o nome da pasta", () => {
   const marketplace = JSON.parse(read(".claude-plugin/marketplace.json"))
   assert.equal(claude.name, "adapta")
   assert.equal(codex.name, "adapta")
-  assert.equal(claude.version, "0.9.3")
+  assert.match(claude.version, /^0\.9\.4$/)
   assert.equal(codex.version, claude.version)
   assert.equal(marketplace.metadata.version, claude.version)
   assert.equal(codex.skills, "./skills/")

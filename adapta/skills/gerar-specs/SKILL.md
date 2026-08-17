@@ -25,7 +25,7 @@ N+1 durante a fase N via `liberar-fase`.
 
 ## Gates
 
-- Exija `.adapta/checks/check-escopo.md` e `.adapta/checks/check-cliente.md` aprovados.
+- Exija `.adapta/checks/check-escopo.md` aprovado.
 - Se o escopo definitivo mudou depois do corte, exija decisão humana registrada e revalide.
 - Gere e revise somente as SPECs da fase em foco.
 
