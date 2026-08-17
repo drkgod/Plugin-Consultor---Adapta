@@ -44,6 +44,9 @@
     },
     "0.9.3": {
       "sincronizacao-google-drive": "autoriza e exige create/update via MCP na pasta ativa do cliente depois de alteracoes, sem autorizar exclusao, movimento ou compartilhamento"
+    },
+    "0.9.5": {
+      "superficie-de-execucao": "substitui a sincronizacao MCP global por uma escolha explicita: Ethos usa Google Drive MCP; Codex e Claude Code usam somente filesystem"
     }
   },
   "renamedIn": {

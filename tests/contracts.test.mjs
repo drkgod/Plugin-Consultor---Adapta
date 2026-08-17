@@ -26,7 +26,7 @@ test("manifests usam a mesma versao e o nome da pasta", () => {
   const marketplace = JSON.parse(read(".claude-plugin/marketplace.json"))
   assert.equal(claude.name, "adapta")
   assert.equal(codex.name, "adapta")
-  assert.match(claude.version, /^0\.9\.4$/)
+  assert.match(claude.version, /^0\.9\.5$/)
   assert.equal(codex.version, claude.version)
   assert.equal(marketplace.metadata.version, claude.version)
   assert.equal(codex.skills, "./skills/")
@@ -53,6 +53,9 @@ test("workflows apontam para skills existentes e usam somente o layout atual", (
   assert.ok(fs.existsSync(path.join(PLUGIN, contract.routing)))
   assert.match(defaults, /skill-mind/i)
   assert.match(defaults, /SKILLMIND_ENVELOPE v1/)
+  assert.match(defaults, /ADAPTA_EXECUTION_SURFACE/)
+  assert.match(defaults, /Ethos, Codex ou Claude Code/)
+  assert.match(defaults, /Nos perfis Codex e Claude Code.*nunca verifique ou use Google Drive MCP/i)
   for (const [name, job] of Object.entries(contract.jobs)) {
     assert.ok(fs.existsSync(path.join(PLUGIN, job.skill)), `${name}: skill ausente`)
     assert.ok(job.outputs.length > 0, `${name}: outputs ausentes`)
@@ -150,15 +153,24 @@ test("runtime resolve scripts pelo bundle sem pedir caminho da metodologia", () 
   assert.doesNotMatch(runtimeText, /node\s+[^\n]*plugins[\\/]adapta[\\/]scripts/i)
 })
 
-test("MEMORY exige sincronizacao MCP com a pasta ativa do Google Drive", () => {
+test("MEMORY bifurca persistencia entre Ethos, Codex e Claude Code", () => {
   const memory = read("adapta/MEMORY.md")
   const builder = read("adapta/scripts/build-ethos-memory.mjs")
   for (const body of [memory, builder]) {
-    assert.match(body, /Sincronização obrigatória com Google Drive/)
-    assert.match(body, /MCP do\s+Google Drive na pasta ativa do cliente/)
+    assert.match(body, /Regra de entrada: escolher a superfície de execução/)
+    assert.match(body, /Este plugin está sendo\s+usado no Ethos, Codex ou Claude Code\?/)
+    assert.match(body, /ADAPTA_EXECUTION_SURFACE=ETHOS/)
+    assert.match(body, /ADAPTA_EXECUTION_SURFACE=CODEX/)
+    assert.match(body, /não verifique, invoque nem use Google Drive MCP para espelhar, validar ou sincronizar arquivos do\s+projeto/i)
     assert.match(body, /SINCRONIZAÇÃO PENDENTE/)
-    assert.match(body, /Excluir,\s+mover, compartilhar, alterar permissões/)
+    assert.doesNotMatch(body, /Sincronização obrigatória com Google Drive/)
   }
+
+  const contract = JSON.parse(read("adapta/contracts/skill-mind.json"))
+  assert.equal(contract.executionSurfaces.ethos.projectFiles, "google-drive-mcp")
+  assert.equal(contract.executionSurfaces.codex.projectFiles, "filesystem")
+  assert.equal(contract.executionSurfaces["claude-code"].googleDriveMcpForProjectFiles, false)
+  assert.ok(contract.envelope.required.includes("execution_surface"))
 })
 
 test("JSON e referencias locais do contrato sao validos", () => {

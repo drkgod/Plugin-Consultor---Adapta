@@ -13,14 +13,18 @@ hooks ou subagentes, carregue também `references/ethos-legacy.md`.
 
 ## 1. Interpretar antes de executar
 
-1. Preserve o pedido original. Identifique objetivo, job provável, artefatos, fase, ação externa e
+1. Antes do primeiro trabalho, procure `ADAPTA_EXECUTION_SURFACE` na memória persistente ou no
+   contexto da sessão. Se estiver ausente ou ambíguo, pergunte exatamente: **“Este plugin está
+   sendo usado no Ethos, Codex ou Claude Code?”** Normalize para `ETHOS`, `CODEX` ou
+   `CLAUDE_CODE` e preserve a escolha. Não infira pela presença de MCP, conector, shell ou pasta.
+2. Preserve o pedido original. Identifique objetivo, job provável, artefatos, fase, ação externa e
    se há execução de código/task.
-2. Normalize aliases pelo contrato de compatibilidade. Não escolha uma skill apenas porque o
+3. Normalize aliases pelo contrato de compatibilidade. Não escolha uma skill apenas porque o
    usuário pronunciou seu nome: confira o resultado que ele quer e o estado real do plano.
-3. Resolva a raiz `Plano — <id>` e valide pré-condições. Faça pergunta somente quando uma decisão
+4. Resolva a raiz `Plano — <id>` e valide pré-condições. Faça pergunta somente quando uma decisão
    humana muda materialmente a rota; ausência de artefato com produtor conhecido vira etapa do
    plano, não pergunta.
-4. Se houver mais de um job plausível, apresente a leitura em uma frase e escolha o caminho
+5. Se houver mais de um job plausível, apresente a leitura em uma frase e escolha o caminho
    reversível. Não execute ação externa por inferência.
 
 ## 2. Abrir o run e expandir a cadeia
@@ -28,8 +32,9 @@ hooks ou subagentes, carregue também `references/ethos-legacy.md`.
 1. Se houver shell/Node, execute, a partir do diretório desta skill,
    `node ../../scripts/skill-mind-run.mjs plan --job JOB --variant VARIANTE`, substituindo `JOB` e
    `VARIANTE` pela rota já normalizada. Não use o diretório corrente como raiz do plugin.
-2. Abra o ledger com `start`; use `--human-test-required` quando o pedido implementar uma task ou
-   alterar comportamento que o cliente precisa experimentar.
+2. Abra o ledger com `start --execution-surface SURFACE`, usando `ethos`, `codex` ou
+   `claude-code` conforme a escolha já registrada. Use `--human-test-required` quando o pedido
+   implementar uma task ou alterar comportamento que o cliente precisa experimentar.
 3. Emita e preserve este envelope em toda delegação:
 
 ```text
@@ -39,6 +44,7 @@ requested_job: <job normalizado>
 authorized_skill: <skill desta etapa>
 stage_index: <índice>
 runtime_profile: <ethos-legacy|agentic>
+execution_surface: <ethos|codex|claude-code>
 ```
 
 4. Expanda a variante inteira descrita em `contracts/skill-mind.json`. Para `analise-critica`,
@@ -57,12 +63,12 @@ runtime_profile: <ethos-legacy|agentic>
 - Pare em gate humano. O SkillMind coordena a decisão, mas não responde pelo consultor, CSM ou
   cliente.
 
-## 4. Disciplina de execução no Ethos
+## 4. Disciplina de execução das tasks
 
 Quando o pedido executar tasks ou código:
 
 1. Selecione somente uma task elegível e leia sua SPEC, critérios e TDD. Se a SPEC exigir que o
-   Ethos invente arquitetura, regra, dado, acesso ou aceite, não execute: devolva para
+   agente invente arquitetura, regra, dado, acesso ou aceite, não execute: devolva para
    `gerar-specs` com a lacuna concreta.
 2. Implemente apenas esse recorte; não comece a próxima task na mesma resposta.
 3. Rode as provas automatizáveis e explique ao cliente o resultado observável esperado.
@@ -92,12 +98,20 @@ Antes de declarar o run concluído:
 5. Promoção para acervo compartilhado, push, publicação ou criação de repo continuam exigindo
    confirmação explícita; o fechamento automático nunca concede essa autorização.
 
-### Sincronização do workspace no Ethos
+### Persistência do workspace por superfície
 
-Quando o `MEMORY.md` autorizar a pasta ativa do Google Drive, criar/atualizar pelo MCP o arquivo
-correspondente após cada unidade coerente de alterações faz parte do próprio write e não exige nova
-confirmação. Exija confirmação do MCP antes de concluir o run. Falha deixa `SINCRONIZAÇÃO PENDENTE`.
-A autorização não cobre exclusão, movimento, compartilhamento, permissão ou outra pasta.
+- `execution_surface: ethos`: todo acesso aos arquivos do projeto ocorre pelo Google Drive MCP na
+  pasta ativa. Confirme conector e pasta antes do primeiro acesso, não use o filesystem como
+  validação paralela e exija confirmação MCP dos writes antes de concluir. Falha deixa
+  `SINCRONIZAÇÃO PENDENTE`. Excluir, mover, compartilhar, alterar permissões ou sair da pasta
+  continua bloqueado sem autorização humana.
+- `execution_surface: codex` ou `claude-code`: todo acesso aos arquivos do projeto ocorre pelo
+  filesystem do workspace. Não cheque nem invoque Google Drive MCP para espelhar, validar ou
+  sincronizar esses arquivos, mesmo que o conector exista. Valide o write relendo o arquivo local e
+  rodando as provas aplicáveis.
+
+Os caminhos são mutuamente exclusivos durante o run. Se o usuário mudar de ambiente, atualize
+`ADAPTA_EXECUTION_SURFACE` antes de abrir outro ledger; não duplique retroativamente os writes.
 
 ## 6. Recuperar runs interrompidos
 

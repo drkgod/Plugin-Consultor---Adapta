@@ -102,8 +102,12 @@ function addEvent(run, type, details = {}) {
   run.events.push({ at: run.updatedAt, type, ...details })
 }
 
-export function startRun({ workspace, job, variant, runtime = "ethos-legacy", humanTestRequired = false, runId }) {
+export function startRun({ workspace, job, variant, runtime = "ethos-legacy", executionSurface, humanTestRequired = false, runId }) {
   if (!CONTRACT.runtimeProfiles[runtime]) throw new Error(`Perfil de runtime desconhecido: ${runtime}`)
+  const surface = safe(executionSurface, 50).trim().toLowerCase()
+  if (!CONTRACT.executionSurfaces?.[surface]) {
+    throw new Error("Superficie de execucao obrigatoria: ethos, codex ou claude-code")
+  }
   const planRoot = resolvePlanRoot(workspace)
   const plan = buildRunPlan({ job, variant })
   const id = runId || newRunId()
@@ -118,13 +122,14 @@ export function startRun({ workspace, job, variant, runtime = "ethos-legacy", hu
     normalizedJob: plan.normalizedJob,
     variant: plan.variant,
     runtimeProfile: runtime,
+    executionSurface: surface,
     status: "active",
     startedAt: now,
     updatedAt: now,
     stages: plan.stages,
     humanTest: { required: Boolean(humanTestRequired), status: humanTestRequired ? "pending" : "not-applicable" },
     learning: { status: "pending", reference: null, reason: null },
-    events: [{ at: now, type: "run-started" }]
+    events: [{ at: now, type: "run-started", executionSurface: surface }]
   }
   writeJsonAtomic(file, run, planRoot)
   return { file, run }
@@ -247,6 +252,7 @@ function parseArgs(argv) {
     else if (value === "--job") args.job = rest[++index]
     else if (value === "--variant") args.variant = rest[++index]
     else if (value === "--runtime") args.runtime = rest[++index]
+    else if (value === "--execution-surface") args.executionSurface = rest[++index]
     else if (value === "--run-id") args.runId = rest[++index]
     else if (value === "--stage-index") args.stageIndex = rest[++index]
     else if (value === "--status") args.status = rest[++index]

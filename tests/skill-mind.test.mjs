@@ -78,7 +78,9 @@ test("aliases antigos sao normalizados pelo orquestrador", () => {
 
 test("ledger recusa conclusao sem aprendizado e sem teste humano", () => {
   const workspace = fixture()
-  const started = startRun({ workspace, job: "gerar-escopo", humanTestRequired: true, runId: "run-test-001" })
+  assert.throws(() => startRun({ workspace, job: "gerar-escopo", runId: "run-no-surface" }), /Superficie de execucao obrigatoria/)
+  const started = startRun({ workspace, job: "gerar-escopo", executionSurface: "codex", humanTestRequired: true, runId: "run-test-001" })
+  assert.equal(started.run.executionSurface, "codex")
   updateStage({ workspace, runId: started.run.runId, stageIndex: 0, status: "completed", evidence: ["03-Projeto/01-Escopo.md"] })
   assert.throws(() => finishRun({ workspace, runId: started.run.runId, outcome: "completed" }), /learning-status/)
   assert.throws(() => finishRun({
@@ -102,7 +104,7 @@ test("ledger recusa conclusao sem aprendizado e sem teste humano", () => {
 
 test("ledger aceita referencia capturada somente na area de aprendizados", () => {
   const workspace = fixture()
-  const invalid = startRun({ workspace, job: "gerar-escopo", runId: "run-learning-bad" })
+  const invalid = startRun({ workspace, job: "gerar-escopo", executionSurface: "claude-code", runId: "run-learning-bad" })
   updateStage({ workspace, runId: invalid.run.runId, stageIndex: 0, status: "completed" })
   assert.throws(() => finishRun({
     workspace,
@@ -112,7 +114,7 @@ test("ledger aceita referencia capturada somente na area de aprendizados", () =>
     learningRef: "STATUS.md"
   }), /\.adapta\/aprendizados/)
 
-  const valid = startRun({ workspace, job: "gerar-escopo", runId: "run-learning-good" })
+  const valid = startRun({ workspace, job: "gerar-escopo", executionSurface: "ethos", runId: "run-learning-good" })
   updateStage({ workspace, runId: valid.run.runId, stageIndex: 0, status: "completed" })
   const candidate = path.join(workspace, ".adapta", "aprendizados", "candidatos", "AP-001.json")
   fs.mkdirSync(path.dirname(candidate), { recursive: true })
@@ -129,7 +131,7 @@ test("ledger aceita referencia capturada somente na area de aprendizados", () =>
 
 test("recover encontra run interrompido e grava relatorio", () => {
   const workspace = fixture()
-  startRun({ workspace, job: "debugar", runId: "run-recovery-001" })
+  startRun({ workspace, job: "debugar", executionSurface: "codex", runId: "run-recovery-001" })
   const report = recoverRuns({ workspace, olderThanMinutes: 0, write: true })
   assert.equal(report.pending.length, 1)
   assert.equal(report.pending[0].runId, "run-recovery-001")

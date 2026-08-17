@@ -1,7 +1,7 @@
 {
   "name": "adapta",
   "description": "SkillMind e capacidades portáteis do consultor Adapta Native: sistemas nas cinco fases, loops adicionais nas fases 4 e 5, validação final e painéis calibrados.",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "author": {
     "name": "Adapta Labs"
   }

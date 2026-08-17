@@ -1,4 +1,4 @@
-# Memória persistente — Adapta no Ethos
+# Memória persistente — Adapta
 
 Estas são instruções ativas do assistente de codificação durante as cinco fases. Não trate este
 arquivo como histórico do cliente e não grave nele prompts, transcrições, segredos ou dados
@@ -15,14 +15,27 @@ Chamar uma skill significa executar seu fluxo completo. Se o Ethos não suportar
 leia o `SKILL.md` e suas referências aplicáveis e execute-os inline. Se não houver subagentes,
 execute as mesmas personas em série e preserve o schema; nunca omita uma revisão exigida.
 
+## Regra de entrada: escolher a superfície de execução
+
+Antes do primeiro trabalho do plugin, se `ADAPTA_EXECUTION_SURFACE` ainda não estiver registrado
+na memória persistente ou no contexto da sessão, pergunte exatamente: **“Este plugin está sendo
+usado no Ethos, Codex ou Claude Code?”** Aceite somente `ETHOS`, `CODEX` ou `CLAUDE_CODE`,
+normalize a resposta e preserve-a como `ADAPTA_EXECUTION_SURFACE`. No Ethos, grave a escolha na
+memória persistente; no Codex ou Claude Code, mantenha-a ao menos durante toda a sessão. Não
+pergunte novamente enquanto o valor estiver inequívoco. Se o usuário disser que mudou de ambiente,
+substitua o valor antes do próximo write.
+
+Não detecte a superfície pela presença de conector, MCP, shell ou pasta montada. A resposta humana
+é a fonte de verdade e deve constar como `execution_surface` no `SKILLMIND_ENVELOPE v1`.
+
 ## Gates que não podem ser pulados
 
 - Executar no máximo uma task de implementação por vez.
 - Rodar as provas da SPEC e pedir teste humano ao fim da task.
 - Não iniciar a próxima task até o cliente dizer explicitamente que testou e autorizou o avanço.
 - Falha no teste mantém a task aberta e segue para `debugar`.
-- Gate de consultor/CSM/cliente e ação externa nunca são inferidos, exceto a sincronização
-  criar/atualizar já autorizada abaixo para a pasta ativa do Google Drive.
+- Gate de consultor/CSM/cliente e ação externa nunca são inferidos, exceto o write via Google Drive
+  MCP autorizado abaixo quando `ADAPTA_EXECUTION_SURFACE=ETHOS`.
 - Antes de concluir qualquer run: atualizar estado, criar checkpoint e capturar um aprendizado
   reutilizável ou registrar por que não houve aprendizado reutilizável.
 - Preservar as cinco fases: 1–5 constroem sistemas com SPECs profundas; 4 e 5 acrescentam
@@ -30,20 +43,29 @@ execute as mesmas personas em série e preserve o schema; nunca omita uma revis�
 - Se uma SPEC exigir que o Ethos invente arquitetura, regra, dado, permissão ou aceite, parar e
   devolver para `gerar-specs`; não completar a lacuna por suposição.
 
-## Sincronização obrigatória com Google Drive
+## Persistência por superfície de execução
 
-- Todo arquivo do projeto criado ou alterado deve ser criado/atualizado, no mesmo run, pelo MCP do
-  Google Drive na pasta ativa do cliente. Se a edição já ocorreu diretamente pelo MCP, a confirmação
-  dessa operação é a sincronização; não duplique o arquivo.
-- Depois de uma unidade coerente de alterações, sincronize todos os arquivos tocados antes de
-  declarar a tarefa concluída. Use a pasta e o ID do arquivo já resolvidos; não procure outra pasta
-  com nome parecido nem crie cópia quando o arquivo existente puder ser atualizado.
-- Só informe “atualizado no Drive” depois do MCP confirmar a operação. Se o MCP estiver indisponível
-  ou falhar, preserve o trabalho, registre `SINCRONIZAÇÃO PENDENTE`, tente novamente com segurança e
-  não conclua a tarefa como sincronizada.
-- Esta é uma autorização permanente somente para criar/atualizar dentro da pasta ativa. Excluir,
-  mover, compartilhar, alterar permissões ou escrever fora dela continua exigindo autorização
-  humana explícita.
+### `ADAPTA_EXECUTION_SURFACE=ETHOS`
+
+- Localize, leia, crie e atualize todos os arquivos do projeto pelo MCP do Google Drive na pasta
+  ativa do cliente. Confirme o conector e a pasta ativa antes do primeiro acesso; não use probes do
+  filesystem local como substituto ou validação paralela.
+- Depois de uma unidade coerente de alterações, confirme pelo MCP todos os arquivos tocados antes
+  de declarar a tarefa concluída. Reutilize pasta e ID já resolvidos; atualize o arquivo existente
+  sem criar cópia.
+- Só informe “atualizado no Drive” depois do MCP confirmar. Se ele estiver indisponível ou falhar,
+  preserve o trabalho, registre `SINCRONIZAÇÃO PENDENTE` e não conclua a tarefa como sincronizada.
+- A autorização cobre somente criar/atualizar dentro da pasta ativa. Excluir, mover, compartilhar,
+  alterar permissões ou escrever fora dela exige autorização humana explícita.
+
+### `ADAPTA_EXECUTION_SURFACE=CODEX` ou `CLAUDE_CODE`
+
+- Localize, leia, crie e atualize os arquivos diretamente no filesystem do workspace aberto.
+- Não verifique, invoque nem use Google Drive MCP para espelhar, validar ou sincronizar arquivos do
+  projeto, mesmo que o conector esteja disponível. Uma pasta montada pelo Google Drive Desktop
+  continua sendo filesystem para esta regra.
+- Confirme o write relendo o arquivo local e rode as provas aplicáveis. Não crie uma segunda cópia
+  no Drive e não bloqueie o run por ausência de MCP.
 
 ## Comandos de entrada
 

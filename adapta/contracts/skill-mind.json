@@ -21,7 +21,32 @@
       "fallback": "ler skills e personas inline, executar paineis em serie e usar ledger explicito"
     }
   },
+  "executionSurfaces": {
+    "ethos": {
+      "selectionToken": "ETHOS",
+      "persistence": "memoria persistente",
+      "projectFiles": "google-drive-mcp",
+      "filesystemForProjectFiles": false,
+      "writeConfirmation": "confirmacao do Google Drive MCP"
+    },
+    "codex": {
+      "selectionToken": "CODEX",
+      "persistence": "contexto da sessao",
+      "projectFiles": "filesystem",
+      "googleDriveMcpForProjectFiles": false,
+      "writeConfirmation": "releitura local e provas aplicaveis"
+    },
+    "claude-code": {
+      "selectionToken": "CLAUDE_CODE",
+      "persistence": "contexto da sessao",
+      "projectFiles": "filesystem",
+      "googleDriveMcpForProjectFiles": false,
+      "writeConfirmation": "releitura local e provas aplicaveis"
+    }
+  },
   "invariants": [
+    "antes do primeiro trabalho, perguntar se a superficie e Ethos, Codex ou Claude Code quando ADAPTA_EXECUTION_SURFACE estiver ausente ou ambiguo",
+    "nao inferir a superficie pela presenca de MCP, conector, shell ou pasta montada",
     "interpretar o objetivo antes de escolher a skill",
     "executar dependencias e condicionais; nao apenas a skill citada pelo usuario",
     "uma task de implementacao por vez",
@@ -29,13 +54,14 @@
     "nao avancar task sem teste humano explicito quando aplicavel",
     "agente principal e o unico escritor",
     "gate humano nao pode ser inferido",
-    "acao externa exige confirmacao imediatamente anterior",
-    "no Ethos, criar ou atualizar via MCP o arquivo correspondente na pasta ativa do Google Drive e sincronizacao autorizada pelo MEMORY; falha deixa o run pendente",
+    "acao externa exige confirmacao imediatamente anterior, exceto create/update do projeto autorizado no perfil Ethos",
+    "no perfil Ethos, todo acesso a arquivo do projeto usa Google Drive MCP na pasta ativa e a falha de write deixa o run pendente",
+    "nos perfis Codex e Claude Code, todo acesso a arquivo do projeto usa filesystem e Google Drive MCP nao deve ser verificado nem usado para sincronizacao",
     "todo run concluido fecha checkpoint e disposicao de aprendizado"
   ],
   "envelope": {
     "marker": "SKILLMIND_ENVELOPE v1",
-    "required": ["run_id", "requested_job", "authorized_skill", "stage_index", "runtime_profile"]
+    "required": ["run_id", "requested_job", "authorized_skill", "stage_index", "runtime_profile", "execution_surface"]
   },
   "executionDiscipline": {
     "appliesWhen": "o pedido implementa codigo, muda comportamento executavel ou pede uma ou mais tasks da fase",

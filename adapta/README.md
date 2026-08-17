@@ -211,9 +211,11 @@ Os painéis carregam `references/review-calibration.md` para classificar `grave`
 `baixo` pela mesma régua e `references/review-panels.md` para dividir territórios. No Ethos antigo,
 as mesmas personas rodam em série sem virar revisores generalistas.
 
-O `MEMORY.md` também exige que toda criação/alteração de arquivo do projeto seja sincronizada no
-mesmo run pelo MCP do Google Drive para a pasta ativa. A confirmação do MCP é parte do critério de
-conclusão; exclusão, movimento, compartilhamento e alteração de permissões não estão autorizados.
+No primeiro uso, o `MEMORY.md` exige a escolha explícita entre Ethos, Codex e Claude Code. No
+Ethos, todo acesso aos arquivos do projeto ocorre pelo Google Drive MCP na pasta ativa e cada write
+precisa de confirmação. No Codex e no Claude Code, o acesso ocorre pelo filesystem do workspace e
+o MCP não é verificado nem usado para espelhar ou validar arquivos, mesmo que esteja conectado.
+A superfície não é inferida pelas ferramentas disponíveis e permanece no envelope do SkillMind.
 
 `gerar-tasks` mantém quatro projeções coerentes: tasks gerais, Jornada, `Tasks vinculadas` das
 SPECs e matriz de rastreabilidade. O comentário `<!-- id:… -->` da Jornada é imutável.

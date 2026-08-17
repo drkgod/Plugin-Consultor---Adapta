@@ -46,3 +46,14 @@ Esta versão acrescenta capacidades sem renomear skills ou caminhos existentes.
 - O handoff inicial exige apenas o `check-escopo.md` e seus demais recibos e evidências.
 - Atualiza os contratos, skills e testes para validar handoff sem o check-cliente.
 - O check-cliente continua proibido na exportação externa, junto com os demais controles internos.
+
+## Correção 0.9.5
+
+- Antes do primeiro trabalho, o SkillMind pergunta explicitamente se está no Ethos, Codex ou
+  Claude Code e preserva a resposta como `ADAPTA_EXECUTION_SURFACE`.
+- No Ethos, os arquivos do projeto são acessados e atualizados pelo Google Drive MCP na pasta ativa;
+  a confirmação MCP continua obrigatória para concluir o write.
+- No Codex e no Claude Code, os arquivos do projeto são acessados diretamente pelo filesystem;
+  o plugin não verifica nem usa Google Drive MCP para espelhar, validar ou sincronizar.
+- A superfície entra no envelope e no ledger do SkillMind, e nunca é inferida pela presença de
+  conector, shell ou pasta montada.

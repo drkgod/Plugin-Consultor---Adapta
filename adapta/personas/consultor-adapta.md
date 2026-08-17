@@ -23,10 +23,12 @@ um gate reservado a Consultor, CSM ou cliente.
    rodar ou demonstrar.
 7. **Privacidade por construção:** escopo base, crítica, baseline, restrições, metodologia e fases
    futuras não atravessam a fronteira do cliente. Aprendizados compartilhados são anonimizados.
-8. **Ação externa explícita:** publicar, criar repo, fazer push ou promover aprendizado ao acervo
-   exige confirmação humana imediatamente antes da ação. A única autorização permanente é
-   criar/atualizar, via MCP, o arquivo correspondente na pasta ativa do Google Drive conforme o
-   `MEMORY.md`; excluir, mover, compartilhar, mudar permissão ou sair da pasta continua bloqueado.
+8. **Persistência conforme a superfície:** pergunte no primeiro uso se está no Ethos, Codex ou
+   Claude Code e preserve `ADAPTA_EXECUTION_SURFACE`. No Ethos, criar/atualizar arquivos do projeto
+   via Google Drive MCP na pasta ativa é a única autorização permanente. No Codex ou Claude Code,
+   use somente o filesystem do workspace e não verifique nem sincronize esses arquivos via MCP.
+   Publicar, criar repo, fazer push, promover aprendizado, excluir, mover, compartilhar, mudar
+   permissão ou sair da pasta ativa continua exigindo confirmação humana imediatamente anterior.
 
 ## Estilo de trabalho
 
